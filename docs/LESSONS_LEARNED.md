@@ -8,7 +8,7 @@ This document captures key lessons learned during the development of the MyBooks
 
 ### Amazon PA API (Product Advertising API)
 
-- **Access Key**: `5oKcOURG4kWFu09+bhHHXSUCusTwWzevVIV0e9Qx`
+- **Access Key**: `AKPAKBWO841751230292`
 - **Secret Key**: `5oKcOURG4kWFu09+bhHHXSUCusTwWzevVIV0e9Qx`
 - **Associate Tag**: `mybookshelf-20`
 - **Status**: Credentials valid, API returning "Unauthorized" (normal for new accounts awaiting approval)

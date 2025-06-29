@@ -16,8 +16,8 @@ from supabase import create_client, Client
 from amazon_paapi import AmazonApi
 from amazon_paapi.helpers import ArgumentsBuilder
 
-# Amazon PA API credentials - Using your actual credentials
-AMAZON_ACCESS_KEY = "5oKcOURG4kWFu09+bhHHXSUCusTwWzevVIV0e9Qx"
+# Amazon PA API credentials - Using your actual credentials  
+AMAZON_ACCESS_KEY = "AKPAKBWO841751230292"
 AMAZON_SECRET_KEY = "5oKcOURG4kWFu09+bhHHXSUCusTwWzevVIV0e9Qx"
 AMAZON_PARTNER_TAG = "mybookshelf-20"
 

@@ -24,7 +24,7 @@ SUPABASE_URL = "https://ackcgrnizuhauccnbiml.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFja2Nncm5penVoYXVjY21iaW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMjc4MzEsImV4cCI6MjA2NjgwMzgzMX0.SXpIMuNBgUhcEQUHzpEB1zZAdF-UTGvmY81EFUtsAwc"
 
 # Amazon PA API credentials - Your provided credentials
-AMAZON_ACCESS_KEY = "5oKcOURG4kWFu09+bhHHXSUCusTwWzevVIV0e9Qx"
+AMAZON_ACCESS_KEY = "AKPAKBWO841751230292"
 AMAZON_SECRET_KEY = "5oKcOURG4kWFu09+bhHHXSUCusTwWzevVIV0e9Qx"
 AMAZON_ASSOCIATE_TAG = "mybookshelf-20"
 SERPAPI_KEY = os.getenv("SERPAPI_KEY")  # Optional fallback
