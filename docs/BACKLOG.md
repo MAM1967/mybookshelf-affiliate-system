@@ -245,6 +245,13 @@
 - [ ] Post generation system
 - [ ] Email approval workflow
 
+**Hosting & Domain Setup**: ⏳ **NEW PRIORITY**
+
+- [ ] Choose domain name (recommendations: mybookshelf-app.com, wisdomshelf.com)
+- [ ] Deploy to Vercel (recommended over Firebase)
+- [ ] Configure custom domain with SSL
+- [ ] Update LinkedIn OAuth with production redirect URIs
+
 ### Confidence Level: **HIGH** 🚀
 
 The foundation is incredibly solid. With real book covers working and Amazon integration complete, we're well-positioned for the automation pipeline development. The next major milestone is LinkedIn integration.
