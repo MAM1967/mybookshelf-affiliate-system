@@ -56,10 +56,10 @@
 
 ### LinkedIn Integration (Day 1, 4 per PRD)
 
-- [ ] **Story**: LinkedIn OAuth App Setup ⏳ **NEXT PRIORITY**
-  - [ ] Create LinkedIn Developer App
-  - [ ] Configure OAuth credentials
-  - [ ] Set up LinkedIn API permissions for posting
+- [x] **Story**: LinkedIn OAuth App Setup ✅ **COMPLETED**
+  - [x] ~~Create LinkedIn Developer App~~ ✅ **DONE**
+  - [x] ~~Configure OAuth credentials~~ ✅ **DONE**
+  - [ ] Set up LinkedIn API permissions for posting ⏳ **NEXT**
   - [ ] Test authentication flow
 
 ---
@@ -232,12 +232,12 @@
 
 ### Where We Are in PRD Timeline
 
-**PRD Day 1-3 Status**: ~75% Complete ✅
+**PRD Day 1-3 Status**: ~90% Complete ✅
 
 - [x] ~~Supabase setup~~ ✅
 - [x] ~~Database table creation~~ ✅
 - [x] ~~PA API integration~~ ✅
-- [ ] **LinkedIn OAuth app** ⏳ **IMMEDIATE NEXT STEP**
+- [x] ~~LinkedIn OAuth app~~ ✅ **COMPLETED**
 
 **PRD Day 4 Status**: ~20% Complete ⏳
 

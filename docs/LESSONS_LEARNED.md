@@ -21,6 +21,13 @@ This document captures key lessons learned during the development of the MyBooks
 - **Status**: Active and working
 - **Database**: Contains 4 books with IDs 17, 18, 19, 20
 
+### LinkedIn Developer App
+
+- **Client ID**: `78wmrhdd99ssbi`
+- **Client Secret**: `WPL_AP1.hCyy0nkGz9y5i1tP.ExgKnQ==`
+- **Status**: Active and ready for OAuth integration
+- **Purpose**: Automated LinkedIn posting for affiliate recommendations
+
 ### Current Working Book Data (Last Updated: Dec 2024)
 
 1. **ID 17**: The Five Dysfunctions of a Team by Patrick Lencioni - $19.99
