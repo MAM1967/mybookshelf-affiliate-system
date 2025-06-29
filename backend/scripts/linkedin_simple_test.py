@@ -38,8 +38,8 @@ def test_linkedin_app_setup():
     print(f"1. Go to LinkedIn Developer Portal: https://developer.linkedin.com/")
     print(f"2. Find your app: MyBookshelf")
     print(f"3. Add these redirect URIs in 'OAuth 2.0 settings':")
-    print(f"   - http://localhost:8000/auth/linkedin/callback")
-    print(f"   - https://yourdomain.com/auth/linkedin/callback")
+    print(f"   - http://localhost:8000/auth/linkedin/callback (development)")
+    print(f"   - https://mybookshelf.shop/auth/linkedin/callback (production)")
     print(f"4. Enable these permissions:")
     print(f"   - r_liteprofile (to read basic profile)")
     print(f"   - w_member_social (to post on LinkedIn)")
@@ -57,7 +57,7 @@ def show_manual_oauth_steps():
     auth_params = {
         'response_type': 'code',
         'client_id': LINKEDIN_CLIENT_ID,
-        'redirect_uri': 'http://localhost:8000/auth/linkedin/callback',
+        'redirect_uri': 'https://mybookshelf.shop/auth/linkedin/callback',
         'scope': 'r_liteprofile w_member_social',
         'state': 'mybookshelf_test'
     }
@@ -65,10 +65,10 @@ def show_manual_oauth_steps():
     auth_url = f"https://www.linkedin.com/oauth/v2/authorization?{urlencode(auth_params)}"
     print(f"   {auth_url}")
     
-    print(f"\n2. After login, LinkedIn will try to redirect to:")
-    print(f"   http://localhost:8000/auth/linkedin/callback?code=AUTHORIZATION_CODE")
+    print(f"\n2. After login, LinkedIn will redirect to:")
+    print(f"   https://mybookshelf.shop/auth/linkedin/callback?code=AUTHORIZATION_CODE")
     
-    print(f"\n3. The page will fail (404) but copy the 'code' parameter")
+    print(f"\n3. Extract the 'code' parameter from the URL")
     print(f"4. Use that code to get an access token")
     
     print(f"\nThis confirms the LinkedIn app is working!")
@@ -83,6 +83,7 @@ def main():
     show_manual_oauth_steps()
     
     print(f"\n🎯 Status: LinkedIn Developer App Ready!")
+    print(f"🌐 Domain Choice: mybookshelf.shop ($0.98/year)")
     print(f"📋 Action Required: Add redirect URI in LinkedIn Developer Portal")
 
 if __name__ == "__main__":

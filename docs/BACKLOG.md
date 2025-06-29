@@ -247,7 +247,7 @@
 
 **Hosting & Domain Setup**: ⏳ **NEW PRIORITY**
 
-- [ ] Choose domain name (recommendations: mybookshelf-app.com, wisdomshelf.com)
+- [ ] Choose domain name ✅ **DECISION: mybookshelf.shop ($0.98/year)**
 - [ ] Deploy to Vercel (recommended over Firebase)
 - [ ] Configure custom domain with SSL
 - [ ] Update LinkedIn OAuth with production redirect URIs

@@ -20,13 +20,21 @@
 
 ## Domain Name Recommendations
 
-### Suggested Domains (~$12/year)
+### Recommended Domain ⭐
+
+**`mybookshelf.shop`** - $0.98/year ✅ **PERFECT CHOICE**
+
+- ✅ Extremely affordable (vs $12/year alternatives)
+- ✅ Perfect .shop TLD for affiliate/e-commerce
+- ✅ Matches your brand exactly
+- ✅ Short and memorable
+
+### Alternative Domains (~$12/year)
 
 1. `mybookshelf-app.com` - Clear, professional
 2. `leadershiplibrary.app` - Focused on niche
 3. `christianbookshelf.com` - Explicit Christian focus
 4. `wisdomshelf.com` - Broader appeal
-5. `proverbs16bookshelf.com` - Scripture reference
 
 ### Where to Register
 
@@ -60,7 +68,7 @@ git push origin main
 
 1. Buy domain from Namecheap/Google Domains
 2. In Vercel dashboard → Settings → Domains
-3. Add your domain (e.g., `mybookshelf-app.com`)
+3. Add your domain (`mybookshelf.shop`)
 4. Update DNS records as instructed by Vercel
 5. SSL certificate auto-generated
 
@@ -70,7 +78,7 @@ After domain is live, update LinkedIn app:
 
 1. Go to LinkedIn Developer Portal
 2. Add production redirect URI:
-   - `https://yourdomain.com/auth/linkedin/callback`
+   - `https://mybookshelf.shop/auth/linkedin/callback`
 3. Keep localhost for development
 
 ### 5. Environment Variables
@@ -129,9 +137,9 @@ Create `frontend/mini-app/auth/linkedin/callback.html`:
 ### Monthly Costs
 
 - **Vercel**: $0 (free tier sufficient)
-- **Domain**: $1/month ($12/year)
+- **Domain**: $0.08/month ($0.98/year for mybookshelf.shop)
 - **Supabase**: $0 (free tier)
-- **Total**: ~$1/month
+- **Total**: ~$0.08/month (basically free!)
 
 ### Upgrade Path
 
@@ -210,5 +218,5 @@ vercel --prod --confirm
 ---
 
 **Estimated Setup Time**: 2-3 hours
-**Monthly Cost**: ~$1 (domain only)
+**Monthly Cost**: ~$0.08 (mybookshelf.shop domain)
 **Scalability**: Handles thousands of users on free tier
