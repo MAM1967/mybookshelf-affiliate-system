@@ -324,6 +324,34 @@ class MyBookshelfSystem:
         except Exception as e:
             logger.error(f"❌ Error fetching recommendations: {str(e)}")
             return []
+
+    def update_book_image(self, book_title: str, author: str, image_data_url: str) -> bool:
+        """Update a book's image in the database"""
+        try:
+            # Find the book by title and author
+            response = self.supabase.table('books_accessories').select('*').eq('title', book_title).eq('author', author).execute()
+            
+            if not response.data:
+                logger.warning(f"Book not found: {book_title} by {author}")
+                return False
+            
+            book_id = response.data[0]['id']
+            
+            # Update the image
+            update_response = self.supabase.table('books_accessories').update({
+                'image_url': image_data_url
+            }).eq('id', book_id).execute()
+            
+            if update_response.data:
+                logger.info(f"✅ Updated image for: {book_title}")
+                return True
+            else:
+                logger.error(f"❌ Failed to update image for: {book_title}")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Error updating book image: {e}")
+            return False
     
     def run_weekly_update(self) -> Dict:
         """Main function to run the weekly book and accessory update"""

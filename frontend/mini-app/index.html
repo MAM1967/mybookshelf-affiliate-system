@@ -269,13 +269,8 @@
       const SUPABASE_ANON_KEY =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFja2Nncm5penVoYXVjY25iaW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMjc4MzEsImV4cCI6MjA2NjgwMzgzMX0.SXpIMuNBgUhcEQUHzpEB1zZAdF-UTGvmY81EFUtsAwc";
 
-      // PERMANENT BASE64 IMAGE DATA URLS - No external dependencies!
-      const PERMANENT_IMAGES = {
-        9: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAEsBAMAAAB01OGNAAAAG1BMVEVKkOL///+71fTo8fvR4/eNuexgneV3q+mkx/BjUjTRAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAB90lEQVR4nO3Uz46aUBTH8ROLyGOQm4g8QNM1cWG3ZFra7Y0x1CVxZsQloe3oY/fwV2ymSNMmTZrvJ5nRAwd+9x5FEQAAAAAAAAAAAAAAAAAAAAAAAAAAgP+RHanGuBP7ZuatiaNrZVauPzxrsr6Yh/HwylRkO3k5gUgf4li52YnW5bW4ve48fSevhAxoPe+X/9O6z5MTmpCNeS97UzQhbrGIZXEswzZ0U+ihgwn2Xy9ZIZ68mJWOMdivL3YvYoz1tiZb6OudkLV1ZCMnvWmaWv1MIpnt7KINjSLxMt2ru0v1hCNr/Vtp+T3Vvc0yN3L0Amcsod2JeEe/mrlzuRQacpbtth5iFeIneiZqxlWFvJNZ6jfj2lbHkjdWggkhutbnZfKxHZevl54fkqQN0VWe5OFTH6LNX4ouRHd/0oCX+XJ0Wm1IvsrzPkTvdMjzrA3xMm05+K+GPLchsjATQo7VBLqQ+bFovkpae7EbNNO5htTj+tyNqw7Rz+1+SLYZhEhomy+z/r9olXUhgXyomm3VnFQh2rD5jZBduLyGGHHXpT4gTv3EP+qBsh7XU1nWIbtwJbtSj7jrb1kVMgvHx9VJb0vX9m918N3PgB0022Hb9If/F6I/vcF97mF02n8pJL7fAwAAAAAAAAAAAAAAAAAAAAAAAADAv/UDCshiTZSwMCgAAAAASUVORK5CYII=", // The Five Dysfunctions (ID 9)
-        10: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAEsBAMAAAB01OGNAAAAG1BMVEVKkOL///93q+mkx/CNuey71fRgneXR4/fo8fuKQoJcAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACqUlEQVR4nO3VTVPaUBSH8QMhgSVosVs6tY7LtMq0S6pDZclUHLsEteoynUphSRUGPnbPuSEoRSIdZdN5fr6RQ+793zeiCAAAAAAAAAAAAAAAAAAAAAAAAAAAgHq7Z2qZ9sI7+8mL6kuElB8NyU7SQ7zFYaXZ0J/FEP9TJTWkUHm0/G8hmfPm+kOOguLLh7zrWqvcaWtavdEvVT9uV8WzIZzLRbX7RSTMnX5NQuKKNgpqemu39kTI9+Hhpu726OAocsVgSz7qn+vW9l1V8qFNKCjvb/fbQbF38D6UH6VSqTit9A/qw4HstrZ7T4R0RTptudax/HTFXGTXcqcnYCS5gVZurZwPg9ehZIv3y5UPfd28ziAYSjyYlBAdf77mBr8bt63Zt+t95AKy9lK8KCjHgUmIF9l+egMvSu5ZHqJN/NBtQ3wGOm4yNkg5cd9+GE9Q19E2bBaSizr2e6BDEtlKD9GetUdbkrh11W2La1l1kXZHvdeP3KE7Tm6ziguJ3PXtKiElYx3LWB82d1KYhmjYkS5k6/JiPsRVbCcKYcaavlp1Jk52U0O+zWaiK3cjwa1brgchcSVbrlyMn/rcPAgZJjW3GZlKfHZt5bRvq3lzIXHFb/X0E+ImvVLISVJz4/KbdmRc8dhrugOanwuJK/Ec/OZCx0tC3rSnNXeOswM7Slk7s7vak3XTuA+pybTi3+xos+zyk/VXiKeLfCbT0Yuunj6KG/a60NBuNsQbzkL8KKlIvf9bP7R6a1BZJUQa4/4wqVlUbtL/ZQ9IT5858nk8uj9dwaTXjCtu5k29tTeppc5m5uxy/jrYeXBxufBOUrF1DWzV1mr5x/DlBOnb/nx2Uq7SD/DzXY32Pm6uOUP/Px5+WHsGAAAAAAAAAAAAAAAAAAAAAAAAgP/DH+3gfUc83QGdAAAAAElFTkSuQmCC", // The Advantage (ID 10)
-        11: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAEsBAMAAAB01OGNAAAAG1BMVEVKkOL///+kx/CNuex3q+no8fu71fRgneXR4/cvmpPyAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACY0lEQVR4nO3Uz2/aMBjH4RdICcetY0uPiG7AMZOg3ZEKQa8tPzaOSBusxzBadUe2ipQ/e7YTIEmTCGnaZfo8rUxwbH9tx0EEAAAAAAAAAAAAAAAAAAAAAAAAAAD8pfPMO07kuqmLXuKOI0eyJvsx8kJGumilhKT2TCp/6KpynHYr2j81pJnVM6nwY3ZM09QQOTbkk/3q34c8qb9d0wvfFSnajaYMfC/YjQv/fSxk1fAvVUjp7ptEtstqLC5zMmxHda28VkQennrzriz77flqNHDMfFVVKxpivzvvbTyp+u3OTDcIe87bvbuckNJall44n6H66sjyWcpzTxYmZJiyXZWavHXNLSdcifUlf7cqrv43TUs3qljI0hXrjUhfj2GqjFs95TNzWVzLqYQNgp6qJtfSLMY0VTPUXdXC9Fm4MrtRS1mJal9VH4XuYSU3kqthHotpeuLqUE/F6pClDjFV8ZCL7WZtRlcbsAuRjZsy9MG0Xq8Pg6ZqaqqIhZiqWEj/6+MqDKkdQkq/fnvZGdapCpmHK+m+XEkyxB6b7UqGiAyq2SHlWbCE/XZdSe526fbFIOTEjYZIJzvETFX1HO8CW7EQUxUN0SehEjx4dUCiIYXs/errQh0OPYblmMGiIdb+9yOyks5azswXcXY3gswsi3AE876q3+Of61iIrrKiIVZViiP1njzr19aE6J6WK/Y2e7uqYdTD1FdPdLIZSjykNNlOoiHycfpZn67+dtoNQnRPez69/Z4dsnevV2tfv6i3rxPb8Bhpf7i6zznBAAAAAAAAAAAAAAAAAAAAAAAAAAAA8H/4A2MRrFBTNecMAAAAASUVORK5CYII=", // Atomic Habits (ID 11)
-        12: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAEsBAMAAAB01OGNAAAAG1BMVEUop0X///9dvXNCslyT06J4yIrk9OfJ6dCu3rmFuCizAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAB/UlEQVR4nO3TS2/aQBSG4SNfYH6G1USF5TRIhSVSIbC0qqh0ybJLC4rspUVI7Z/dM4xxrFQIr6o2eh+BL8PhfJ4ZEAEAAAAAAAAAAAAAAAAAAAAAAAAAAHhv7t7cx0n3LrJ6MJ2BhyttzJVxb/m2OvnjbtAZeLrSZnBlvHdI178essrnsskLd/E9ifKfYiarZFYUYu7zvQzFzPTUhMR5YY3bBFfzvMptnOdlj5BoLi9iJUrjUh6ThZjUbBLZSSjmIJ+1gdnJ1DYh68mzoXt0V1OlQRa6JrdDtEK/JkHpLpKtSGYyET2LKWVotV8q8bwJ0eGjD9Gak9bq6LhHyPicc78up9r2Q6n9taus7XlPTKL9rD6BDwm16ZMP0Zpn9woWdY+Qj3VdyejrQzlzIT/qOnMbHlRfOiGuuQtxYWMfkviQ4HDXcyYie33Yy0xcV7XphviZLF1IMxPrQ4a213KdKzKJ2j1pQoy9hLR7cnR7stS+n15DdGV7hBjXYCujUn9m35JTGzJsQ/YyPVeHW1noykWp/GpDBhIUN0Iec/1bVKcXGVXHUqpqkZhinboG6/rQLteo3mnttM71vqhsWFSjNiQoilvL5U30fX54dwjt66BnrL+eXD6+lPjp9QjowdjbNf9HSPQ3QgAAAAAAAAAAAAAAAAAAAAAAAAAA79NveR1bxWhe2yEAAAAASUVORK5CYII=", // Leadership Journal (ID 12)
-      };
+      // Note: Now using direct image_url from database instead of hardcoded mappings
+      const PERMANENT_IMAGES = {};
 
       // Initialize Supabase client
       const supabase = window.supabase.createClient(
@@ -425,12 +420,22 @@
       }
 
       function getImageUrl(originalUrl, title, category, itemId) {
-        // Use permanent base64 images - 100% reliable, no external dependencies
+        // Priority 1: Use the actual image_url from database if it exists and is not a placeholder
+        if (
+          originalUrl &&
+          originalUrl.trim() &&
+          !originalUrl.includes("placeholder") &&
+          !originalUrl.includes("example")
+        ) {
+          return originalUrl;
+        }
+
+        // Priority 2: Use permanent base64 images as fallback
         if (PERMANENT_IMAGES[itemId]) {
           return PERMANENT_IMAGES[itemId];
         }
 
-        // Fallback to CSS-generated image (pure CSS, no external calls)
+        // Priority 3: Fallback to CSS-generated image (pure CSS, no external calls)
         const bgColor = category === "Books" ? "#4A90E2" : "#28A745";
         return `data:image/svg+xml;base64,${btoa(`
           <svg xmlns="http://www.w3.org/2000/svg" width="200" height="300">
