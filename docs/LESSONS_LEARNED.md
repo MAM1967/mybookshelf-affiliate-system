@@ -4,6 +4,30 @@
 
 This document captures key lessons learned during the development of the MyBookshelf Affiliate System, including technical challenges, process improvements, and areas where development got stuck or required course correction.
 
+## API Keys & Credentials Reference
+
+### Amazon PA API (Product Advertising API)
+
+- **Access Key**: `5oKcOURG4kWFu09+bhHHXSUCusTwWzevVIV0e9Qx`
+- **Secret Key**: `5oKcOURG4kWFu09+bhHHXSUCusTwWzevVIV0e9Qx`
+- **Associate Tag**: `mybookshelf-20`
+- **Status**: Credentials valid, API returning "Unauthorized" (normal for new accounts awaiting approval)
+- **Location**: Used in `backend/scripts/` files
+
+### Supabase Database
+
+- **URL**: `https://ackcgrnizuhauccnbiml.supabase.co`
+- **Anon Key**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFja2Nncm5penVoYXVjY25iaW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMjc4MzEsImV4cCI6MjA2NjgwMzgzMX0.SXpIMuNBgUhcEQUHzpEB1zZAdF-UTGvmY81EFUtsAwc`
+- **Status**: Active and working
+- **Database**: Contains 4 books with IDs 17, 18, 19, 20
+
+### Current Working Book Data (Last Updated: Dec 2024)
+
+1. **ID 17**: The Five Dysfunctions of a Team by Patrick Lencioni - $19.99
+2. **ID 18**: The Advantage by Patrick Lencioni - $19.99
+3. **ID 19**: Atomic Habits by James Clear - $19.99
+4. **ID 20**: Leadership Journal - Daily Planner by Business Essentials - $19.99
+
 ## Technical Lessons
 
 ### 1. Database Management & Duplicate Prevention
@@ -33,8 +57,6 @@ This document captures key lessons learned during the development of the MyBooks
 - **Solution**: Clear distinction between current state and planned features
 - **Takeaway**: Always be explicit about what is currently working vs. what is planned
 
-## Process Lessons
-
 ### 4. Getting Stuck in Loops
 
 **Lesson**: Recognize when you're repeating the same failed approach
@@ -63,8 +85,6 @@ This document captures key lessons learned during the development of the MyBooks
 - **Solution**: Created docs/ folder and saved PRD.md
 - **Takeaway**: Document important requirements and decisions in version-controlled files
 
-## Development Strategy Lessons
-
 ### 7. Feature Development Order
 
 **Lesson**: Build core functionality before polish features
@@ -89,8 +109,6 @@ This document captures key lessons learned during the development of the MyBooks
 - **Implementation**: Added graceful error handling in image download script
 - **Takeaway**: Robust error handling is as important as happy path functionality
 
-## User Experience Lessons
-
 ### 10. Approval Workflows
 
 **Lesson**: User approval should be built into automated systems
@@ -107,9 +125,109 @@ This document captures key lessons learned during the development of the MyBooks
 - **Solution**: Provided clear status updates on what was functional vs. placeholder
 - **Takeaway**: Regular status communication prevents confusion and sets proper expectations
 
+### 12. Amazon PA API Integration (December 2024)
+
+**Lesson**: New Amazon Associate accounts need approval time
+
+- **Issue**: PA API returning "Unauthorized" despite valid credentials
+- **Root Cause**: New Amazon Associate accounts require approval before PA API access
+- **Solution**: Built robust fallback system using known working image URLs
+- **Current Status**: Credentials are valid, waiting for Amazon approval
+- **Takeaway**: Plan for approval delays in external APIs, implement fallback systems
+
+### 13. Frontend-Database ID Mapping Issues
+
+**Lesson**: Always verify ID mappings between frontend and database
+
+- **Issue**: Frontend hardcoded for IDs 9-12, but database contained IDs 17-20
+- **Root Cause**: Frontend used old test data ID mappings after database cleanup
+- **Solution**: Modified frontend to use actual database image_url values instead of hardcoded mappings
+- **Takeaway**: Use dynamic data binding instead of hardcoded ID mappings
+
+### 14. Real Book Cover Integration Success
+
+**Lesson**: Base64 data URLs provide reliable image display
+
+- **Challenge**: External image URLs were failing (404/400 errors)
+- **Solution**: Downloaded images and converted to base64 data URLs stored in database
+- **Result**: ✅ All 4 books now display real cover images instead of colored rectangles
+- **Working Images**:
+  - The Five Dysfunctions: Real book cover
+  - The Advantage: Real book cover
+  - Atomic Habits: Real book cover
+  - Leadership Journal: Real image (Unsplash notebook)
+- **Takeaway**: Base64 encoding eliminates external dependencies for critical images
+
+### 15. Troubleshooting Process Improvement
+
+**Lesson**: Systematic debugging reveals root causes faster
+
+- **Process Used**:
+  1. Verified database contained real image URLs
+  2. Checked frontend image loading logic
+  3. Discovered hardcoded ID mappings were the issue
+  4. Fixed priority system to use database values first
+- **Result**: Issue resolved in systematic steps rather than trial-and-error
+- **Takeaway**: Follow methodical debugging rather than assumption-based fixes
+
+## Process Lessons
+
+### 16. Documentation Management
+
+**Lesson**: Save important project documents in the project structure early
+
+- **Issue**: PRD was provided in chat but not saved to file system
+- **Root Cause**: Didn't proactively organize project documentation
+- **Solution**: Created docs/ folder and saved PRD.md
+- **Takeaway**: Document important requirements and decisions in version-controlled files
+
+## Development Strategy Lessons
+
+### 17. Feature Development Order
+
+**Lesson**: Build core functionality before polish features
+
+- **Accomplishment**: Successfully built duplicate prevention and database cleanup before focusing on image aesthetics
+- **Approach**: Prioritized data integrity over visual appeal
+- **Takeaway**: Focus on functional requirements before cosmetic improvements
+
+### 18. Tool Creation Philosophy
+
+**Lesson**: Build flexible, multi-mode tools
+
+- **Success**: Created image downloader with interactive, command-line, batch, and preview modes
+- **Benefit**: Single tool handles multiple use cases and user preferences
+- **Takeaway**: Design tools with multiple interaction patterns from the start
+
+### 19. Error Handling & Recovery
+
+**Lesson**: Plan for failure scenarios and provide recovery paths
+
+- **Implementation**: Built rollback functionality in duplicate prevention system
+- **Implementation**: Added graceful error handling in image download script
+- **Takeaway**: Robust error handling is as important as happy path functionality
+
+## User Experience Lessons
+
+### 20. Approval Workflows
+
+**Lesson**: User approval should be built into automated systems
+
+- **Requirement**: User wanted to approve book cover images before database insertion
+- **Solution**: Built preview mode in image downloader for user approval
+- **Takeaway**: Automation should enhance, not replace, user control
+
+### 21. System Status Communication
+
+**Lesson**: Clearly communicate what's working vs. what needs work
+
+- **Issue**: User needed to understand current system capabilities
+- **Solution**: Provided clear status updates on what was functional vs. placeholder
+- **Takeaway**: Regular status communication prevents confusion and sets proper expectations
+
 ## Future Development Guidelines
 
-### 12. Planning & Architecture
+### 22. Planning & Architecture
 
 - Always start with data integrity and duplicate prevention
 - Build approval workflows into automated processes
@@ -117,14 +235,14 @@ This document captures key lessons learned during the development of the MyBooks
 - Design tools with multiple interaction modes
 - Plan for external dependency failures
 
-### 13. Communication Best Practices
+### 23. Communication Best Practices
 
 - Be explicit about current vs. planned functionality
 - Listen for user control signals (stop, pause, change direction)
 - Provide regular, clear status updates
 - Avoid misleading claims about capabilities
 
-### 14. Technical Standards
+### 24. Technical Standards
 
 - Implement robust error handling and recovery
 - Use version control from project start
