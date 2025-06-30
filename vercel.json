@@ -58,6 +58,22 @@
       "dest": "/frontend/mini-app/admin.html"
     },
     {
+      "src": "/privacy.html",
+      "dest": "/frontend/mini-app/privacy.html"
+    },
+    {
+      "src": "/terms.html",
+      "dest": "/frontend/mini-app/terms.html"
+    },
+    {
+      "src": "/index.html",
+      "dest": "/frontend/mini-app/index.html"
+    },
+    {
+      "src": "/",
+      "dest": "/frontend/mini-app/index.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/frontend/mini-app/$1"
     }
