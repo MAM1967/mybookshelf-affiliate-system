@@ -3,11 +3,19 @@
 
 const https = require("https");
 const querystring = require("querystring");
+const { createClient } = require("@supabase/supabase-js");
 
 // LinkedIn OAuth configuration
 const LINKEDIN_CLIENT_ID = process.env.LINKEDIN_CLIENT_ID || "78wmrhdd99ssbi";
 const LINKEDIN_CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET;
 const REDIRECT_URI = "https://mybookshelf.shop/api/linkedin-callback"; // Force apex domain
+
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const supabase =
+  SUPABASE_URL && SUPABASE_ANON_KEY
+    ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
 
 async function exchangeCodeForToken(authCode) {
   return new Promise((resolve, reject) => {
@@ -100,7 +108,31 @@ async function getUserProfile(accessToken) {
   });
 }
 
-function generateSuccessHTML(profile) {
+async function storeTokenInSupabase(tokenInfo, profile) {
+  if (!supabase) return { success: false, error: "Supabase not configured" };
+  try {
+    const { data, error } = await supabase.from("linkedin_tokens").upsert(
+      {
+        access_token: tokenInfo.access_token,
+        token_type: tokenInfo.token_type || "Bearer",
+        expires_in: tokenInfo.expires_in,
+        scope: tokenInfo.scope,
+        linkedin_user_id: profile.sub,
+        linkedin_name: profile.name,
+        linkedin_email: profile.email,
+        created_at: new Date().toISOString(),
+        is_active: true,
+      },
+      { onConflict: ["linkedin_user_id"] }
+    );
+    if (error) return { success: false, error: error.message };
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
+}
+
+function generateSuccessHTML(profile, dbResult) {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -109,51 +141,18 @@ function generateSuccessHTML(profile) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LinkedIn OAuth Success - MyBookshelf</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #f5f5f5;
-        }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .success {
-            color: #16a34a;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        .button {
-            display: inline-block;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            color: white;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            margin: 10px;
-        }
-        .info {
-            background: #f0f9ff;
-            border: 1px solid #0ea5e9;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: left;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 50px auto; padding: 20px; background: #f5f5f5; }
+        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); text-align: center; }
+        .success { color: #16a34a; font-size: 24px; margin-bottom: 20px; }
+        .button { display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 10px; }
+        .info { background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 20px 0; text-align: left; }
+        .db-success { color: #16a34a; font-weight: bold; }
+        .db-error { color: #dc2626; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="success">✅ LinkedIn Authorization Successful!</div>
-        
         <div class="info">
             <h3>🎉 Connection Complete!</h3>
             <p><strong>Connected Account:</strong> ${
@@ -161,32 +160,24 @@ function generateSuccessHTML(profile) {
             }</p>
             <p><strong>Email:</strong> ${profile.email || "Unknown"}</p>
             <p><strong>LinkedIn ID:</strong> ${profile.sub || "Unknown"}</p>
-            
             <h4>✅ Next Steps Completed:</h4>
             <ul>
                 <li>✅ Authorization code received</li>
                 <li>✅ Access token obtained</li>
                 <li>✅ User profile retrieved</li>
-                <li>🔄 Token stored via emergency script</li>
+                <li>${
+                  dbResult.success
+                    ? "✅ Token stored in database"
+                    : `<span class='db-error'>❌ Token storage failed: ${dbResult.error}</span>`
+                }</li>
             </ul>
         </div>
-        
         <p>🚀 Your LinkedIn automation is now ready!</p>
         <a href="/admin" class="button">Go to Admin Dashboard</a>
-        
-        <div style="margin-top: 30px; padding: 15px; background: #fef3c7; border-radius: 8px;">
-            <h4>🔧 Manual Token Storage Required:</h4>
-            <p>Due to domain configuration, please run this command to complete setup:</p>
-            <code style="background: #374151; color: #f3f4f6; padding: 8px; border-radius: 4px; display: block; margin: 10px 0;">
-                python3 backend/scripts/emergency_oauth_complete.py "${
-                  process.env.REDIRECT_URI
-                }?code=YOUR_CODE&state=YOUR_STATE"
-            </code>
-        </div>
     </div>
 </body>
 </html>
-    `;
+  `;
 }
 
 function generateErrorHTML(errorMessage) {
@@ -292,11 +283,14 @@ export default async function handler(req, res) {
       // Get user profile
       const profile = await getUserProfile(tokenInfo.access_token);
 
-      // Return success page with profile info
+      // Store token in Supabase
+      const dbResult = await storeTokenInSupabase(tokenInfo, profile);
+
+      // Return success page with profile info and DB result
       return res
         .status(200)
         .setHeader("Content-Type", "text/html")
-        .send(generateSuccessHTML(profile));
+        .send(generateSuccessHTML(profile, dbResult));
     } catch (exchangeError) {
       console.error("OAuth exchange error:", exchangeError);
       return res
