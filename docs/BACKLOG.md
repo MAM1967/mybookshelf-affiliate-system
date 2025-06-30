@@ -283,25 +283,27 @@
     - [ ] Mobile conversion rate parity with desktop
     - [ ] Bounce rate optimization (<50% on mini-site)
 
-- [ ] **Story**: Mini-Site as Leadership Development Hub (Secondary Path - 10% of traffic, HIGH value)
+- [ ] **Story**: Mini-Site as Christian Leadership Community Hub (Secondary Path - 10% of traffic, HIGH value)
 
-  **Purpose**: Email list building and ongoing community engagement, NOT conversion funnel
+  **Purpose**: Community building, prayer support, and ongoing engagement beyond book recommendations
 
-  - [ ] **Task**: Build standalone value proposition:
+  - [ ] **Task**: Build community-focused value proposition:
     - [ ] "Your Complete Library of Christian-Vetted Leadership Books"
+    - [ ] **Prayer & Community Support Platform**
     - [ ] Complete archive of all weekly recommendations (searchable)
     - [ ] Leadership principles library with biblical applications
-    - [ ] Author background research and Christian worldview verification
-  - [ ] **Task**: Email signup optimization (PRIMARY GOAL):
-    - [ ] "Weekly Leadership Principles in Action" newsletter
-    - [ ] Join 500+ Christian leaders value proposition
-    - [ ] Simple email-only signup form (no extra fields)
+    - [ ] Work/faith integration discussion space
+  - [ ] **Task**: Multi-purpose email signup optimization:
+    - [ ] "Weekly Leadership Principles + Sunday Encouragement" newsletter options
+    - [ ] "Join 500+ Christian leaders in community" value proposition
+    - [ ] Email preferences: Books only, Encouragement only, or Both
     - [ ] Target: 15-25% signup rate from mini-site visitors
-  - [ ] **Task**: Content strategy for email subscribers:
-    - [ ] Weekly email with leadership insights from recommended books
-    - [ ] Biblical foundations for each principle
-    - [ ] Practical applications and discussion questions
-    - [ ] Early access to new book recommendations
+  - [ ] **Task**: Community engagement strategy:
+    - [ ] Prayer request submission and community support
+    - [ ] Work/faith discussion topics and responses
+    - [ ] Sunday encouragement emails (separate from book content)
+    - [ ] Community highlights and answered prayer testimonies
+    - [ ] Biblical leadership discussion forums
 
 **Business Impact**: Transform direct conversion model with sustainable email list building for long-term revenue
 **Revenue Potential**: Direct path = immediate conversions, mini-site = long-term community and diversified revenue
@@ -535,6 +537,71 @@
     - [ ] No explicit/implicit embrace of other world religions (Hinduism, Buddhism, Islam) as business principles
     - [ ] Focus on biblical leadership, productivity, and business principles
   - [ ] **Quality Assurance**: Multi-layer review process (automated + human approval + final email review)
+
+### Community Platform & Prayer System 🆕 **HIGH PRIORITY**
+
+- [ ] **Story**: Prayer & Community Page Development
+
+  **Phase 1: Prayer Request System**
+
+  - [ ] **Task**: Create `prayer_requests` table in Supabase
+    - [ ] User name, email, request text, category fields
+    - [ ] Anonymous option for sensitive requests
+    - [ ] Status tracking (active, answered, archived)
+    - [ ] Admin response capability
+    - [ ] Prayer count engagement tracking
+  - [ ] **Task**: Build prayer request submission form
+    - [ ] Categories: work, personal, leadership, business, family
+    - [ ] Anonymous checkbox option
+    - [ ] Email notification to admin (mcddsl@icloud.com)
+    - [ ] User-friendly submission confirmation
+  - [ ] **Task**: Create public prayer feed interface
+    - [ ] Display active prayer requests (respecting anonymity)
+    - [ ] "Praying for you" engagement button
+    - [ ] Prayer count display for community support
+    - [ ] Admin response display when available
+
+  **Phase 2: Community Discussion Platform**
+
+  - [ ] **Task**: Create `community_posts` table for work/faith discussions
+    - [ ] Title, content, category, anonymous option
+    - [ ] Admin featuring capability
+    - [ ] Engagement tracking
+  - [ ] **Task**: Build community discussion interface
+    - [ ] Categories: leadership, faith-at-work, biblical-business, workplace-witness
+    - [ ] Discussion submission form
+    - [ ] Community engagement features (support, amen responses)
+    - [ ] Admin moderation and featuring system
+  - [ ] **Task**: Implement admin community management
+    - [ ] Review and respond to prayer requests
+    - [ ] Feature valuable community discussions
+    - [ ] Monitor and moderate content for Christian values
+    - [ ] Community engagement analytics
+
+### Sunday Encouragement Email System 🆕 **SEPARATE FROM BOOK CONTENT**
+
+- [ ] **Story**: Weekly Encouragement Email (Non-Book Related)
+
+  - [ ] **Task**: Design Sunday encouragement email template
+    - [ ] Inspirational Christian leadership content
+    - [ ] Scripture-based encouragement for workplace challenges
+    - [ ] Prayer points for the week ahead
+    - [ ] Community highlights and answered prayers
+    - [ ] NO book recommendations or affiliate links
+  - [ ] **Task**: Build email content management system
+    - [ ] Admin interface for creating weekly encouragement content
+    - [ ] Template library for different encouragement themes
+    - [ ] Preview and scheduling functionality
+    - [ ] Email analytics and engagement tracking
+  - [ ] **Task**: Integrate with existing email list
+    - [ ] Separate Sunday encouragement from book recommendation emails
+    - [ ] Subscription preferences (books + encouragement, or encouragement only)
+    - [ ] Unsubscribe options for each email type
+  - [ ] **Task**: Create encouragement content calendar
+    - [ ] Weekly themes: Monday motivation, workplace witness, leadership challenges
+    - [ ] Seasonal content: Christian holidays, new year, etc.
+    - [ ] Community prayer highlight rotation
+    - [ ] Scripture series for professional development
 
 ### Pipedream Automation (Day 4 per PRD)
 

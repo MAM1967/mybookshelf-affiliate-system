@@ -117,22 +117,26 @@ End the week strong with tools for kingdom-centered leadership:
 
 1. **Complete Book Archive**: All weekly recommendations in searchable format
 2. **Leadership Principles Library**: Key insights and actionable principles from each book
-3. **Email Newsletter Signup**: Weekly leadership principles in action
-4. **Author Background Research**: Why each author aligns with Christian values
+3. **Prayer & Community Platform**: Submit prayer requests and engage in work/faith discussions
+4. **Dual Email Options**: Weekly book insights + Sunday encouragement (separate streams)
+5. **Author Background Research**: Why each author aligns with Christian values
+6. **Community Support**: Prayer requests, workplace witness discussions, leadership challenges
 
 #### Top Section - Welcome & Value Proposition
 
 ```
 [MyBookshelf Christian Leadership Logo]
 
-"Your Complete Library of Christian-Vetted Leadership Books"
+"Your Complete Library of Christian-Vetted Leadership Books + Community"
 
 📚 200+ Books Recommended Since 2024
 ✅ All Vetted for Biblical Alignment
-📧 Weekly Leadership Principles in Your Inbox
+🙏 Prayer & Community Support Platform
+📧 Weekly Leadership Insights + Sunday Encouragement
 🎯 Curated by Practicing Christian Leaders
 
-[📧 GET WEEKLY LEADERSHIP INSIGHTS - Email Signup CTA]
+[📧 GET WEEKLY INSIGHTS + ENCOURAGEMENT - Email Signup CTA]
+[🙏 SUBMIT PRAYER REQUEST - Community CTA]
 ```
 
 #### Main Content Area - Book Archive with Leadership Insights
@@ -156,15 +160,22 @@ Key Scripture: "Whoever wants to become great among you must be your servant." -
 #### Bottom Section - Community Building
 
 ```
-📧 Join 500+ Christian Leaders Getting Weekly Insights
+📧 Join 500+ Christian Leaders in Community
 
-Get practical leadership principles from our book recommendations:
-• How to apply biblical wisdom in business
-• Real-world examples from successful Christian leaders
-• Discussion questions for leadership teams
+Get practical leadership insights + encouragement + prayer support:
+• Weekly book insights: Biblical wisdom in business (Tue/Wed/Thu)
+• Sunday encouragement: Inspiration for workplace challenges
+• Prayer requests: Community support for work/faith integration
+• Discussion forum: Leadership challenges and biblical solutions
 
-[EMAIL SIGNUP: Simple form with just email field]
-"No spam, unsubscribe anytime, new insights three times weekly"
+[EMAIL SIGNUP OPTIONS]
+☐ Weekly book insights (Tue/Wed/Thu)
+☐ Sunday encouragement (non-book related)
+☐ Both (recommended)
+
+[🙏 SUBMIT PRAYER REQUEST] [💬 JOIN DISCUSSION]
+
+"No spam, unsubscribe anytime, community-focused content"
 ```
 
 ### Technical Performance Requirements
@@ -408,13 +419,15 @@ Visual Story: "Your Perfect Leadership Setup"
 
 ## 🎯 Weekly Content Calendar Integration
 
-### Sunday: Admin Approval & Scheduling Day
+### Sunday: Admin Approval & Community Day
 
 ```
 8:00 AM - Weekly scraping and content generation
 10:00 AM - Email to admin (mcddsl@icloud.com) with approval site link
 12:00 PM - Admin reviews and schedules items for Tue/Wed/Thu posts
 2:00 PM - Publishing calendar finalized for upcoming week
+4:00 PM - Sunday encouragement email sent to community (non-book content)
+6:00 PM - Review and respond to week's prayer requests
 ```
 
 ### Tuesday/Wednesday/Thursday: Primary Publishing Days

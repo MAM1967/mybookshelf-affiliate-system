@@ -47,8 +47,10 @@
     - **Thursday**: 1-2 books + 1 accessory with comprehensive recommendations
   - **Sunday Approval Workflow**: Email admin with approval link, schedule posts for upcoming Tue/Wed/Thu after approval
   - Use Pipedream to email post for approval (yes/no), then schedule posts via LinkedIn OAuth app.
-- **Mini-App**:
+- **Mini-App & Community Platform**:
   - Supabase-hosted webpage (Next.js or HTML) to browse recommendations (title, author, link).
+  - **Prayer/Community Page**: Platform for prayer requests and work/faith discussions among Christian professionals.
+  - **Sunday Encouragement Emails**: Weekly inspirational content (non-book related) for community building.
   - Accessible via LinkedIn bio/post links.
 - **Organic Growth**:
   - Manual daily posts (100-200 words), 5 Group comments/day, 20 invites/day to gain 2-5 followers.
@@ -73,8 +75,8 @@
 
 ## 3. Technical Architecture
 
-- **Frontend**: Mini-app + Admin Dashboard (Supabase API, Next.js/HTML, hosted on Vercel).
-- **Backend**: Supabase Postgres (tables: `books_accessories`, `scraping_queue`, `admin_sessions`), Python SDK for CRUD.
+- **Frontend**: Mini-app + Community Platform + Admin Dashboard (Supabase API, Next.js/HTML, hosted on Vercel).
+- **Backend**: Supabase Postgres (tables: `books_accessories`, `scraping_queue`, `admin_sessions`, `prayer_requests`, `community_posts`), Python SDK for CRUD.
 - **Script**: Python (PA API/ScrapingBee), hosted on Pipedream.
 - **Automation**: Pipedream workflow (data fetch → post generation → approval → LinkedIn).
 - **APIs**: Amazon PA API, Canva API, LinkedIn API, Supabase API.
@@ -128,6 +130,46 @@ CREATE TABLE approval_log (
   admin_email VARCHAR(100),
   timestamp TIMESTAMP DEFAULT NOW()
 );
+
+-- Prayer requests for community page
+CREATE TABLE prayer_requests (
+  id SERIAL PRIMARY KEY,
+  user_name VARCHAR(100) NOT NULL,
+  user_email VARCHAR(200),
+  request_text TEXT NOT NULL,
+  category VARCHAR(50), -- work, personal, leadership, business, etc.
+  is_anonymous BOOLEAN DEFAULT FALSE,
+  status VARCHAR(20) DEFAULT 'active', -- active, answered, archived
+  created_at TIMESTAMP DEFAULT NOW(),
+  admin_response TEXT,
+  admin_responded_at TIMESTAMP,
+  prayer_count INTEGER DEFAULT 0 -- community engagement tracking
+);
+
+-- Community discussions for work/faith integration
+CREATE TABLE community_posts (
+  id SERIAL PRIMARY KEY,
+  user_name VARCHAR(100) NOT NULL,
+  user_email VARCHAR(200),
+  title VARCHAR(300) NOT NULL,
+  content TEXT NOT NULL,
+  category VARCHAR(50), -- leadership, faith-at-work, biblical-business, etc.
+  is_anonymous BOOLEAN DEFAULT FALSE,
+  status VARCHAR(20) DEFAULT 'active', -- active, archived, featured
+  created_at TIMESTAMP DEFAULT NOW(),
+  admin_featured BOOLEAN DEFAULT FALSE,
+  engagement_count INTEGER DEFAULT 0
+);
+
+-- Community engagement tracking
+CREATE TABLE community_engagement (
+  id SERIAL PRIMARY KEY,
+  post_id INTEGER REFERENCES community_posts(id),
+  prayer_id INTEGER REFERENCES prayer_requests(id),
+  user_email VARCHAR(200),
+  engagement_type VARCHAR(20), -- prayer, comment, support, amen
+  created_at TIMESTAMP DEFAULT NOW()
+);
 ```
 
 **Admin Dashboard Components:**
@@ -152,6 +194,14 @@ POST /api/admin/schedule-posts     - Schedule approved items for Tue/Wed/Thu
 GET  /api/admin/history           - Approval history
 POST /api/admin/promote-approved   - Move approved items to live database
 GET  /api/admin/generate-content   - Generate post content with examples + biblical wisdom
+POST /api/admin/encouragement      - Send weekly Sunday encouragement email
+GET  /api/admin/prayer-requests    - View and respond to community prayer requests
+POST /api/admin/feature-post       - Feature community discussion posts
+GET  /api/community/prayers        - Public prayer request feed
+POST /api/community/submit-prayer  - Submit new prayer request
+GET  /api/community/discussions    - Community work/faith discussion feed
+POST /api/community/submit-post    - Submit new community discussion
+POST /api/community/engage         - Record prayer/support engagement
 ```
 
 ## 3.2 Publishing Calendar & Content Generation System
