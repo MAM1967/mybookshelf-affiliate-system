@@ -9,7 +9,7 @@
   ],
   "routes": [
     {
-      "src": "/admin/linkedin-callback",
+      "src": "/admin/linkedin-callback(.*)",
       "dest": "/frontend/mini-app/linkedin-callback.html"
     },
     {
