@@ -686,6 +686,95 @@
       </footer>
     </div>
 
+    <!-- Passwordless Login Modal -->
+    <div
+      id="login-modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        style="
+          background: #fff;
+          padding: 40px 30px;
+          border-radius: 12px;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+          max-width: 350px;
+          margin: auto;
+        "
+      >
+        <h2 style="margin-bottom: 18px; color: #ff9800">Admin Login</h2>
+        <p style="margin-bottom: 12px; color: #795548">
+          Enter the one-time code sent to your email.
+        </p>
+        <button
+          id="send-code-btn"
+          onclick="sendLoginCode()"
+          style="
+            width: 100%;
+            padding: 10px;
+            background: #6366f1;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1em;
+            margin-bottom: 14px;
+          "
+          disabled
+        >
+          Send Code
+        </button>
+        <div
+          id="send-code-status"
+          style="color: #059669; margin-bottom: 10px; display: none"
+        ></div>
+        <input
+          id="login-code"
+          type="text"
+          maxlength="6"
+          placeholder="6-digit code"
+          style="
+            width: 100%;
+            padding: 10px;
+            font-size: 1.1em;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 16px;
+          "
+        />
+        <button
+          id="login-btn"
+          onclick="submitLoginCode()"
+          style="
+            width: 100%;
+            padding: 12px;
+            background: #ff9800;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1em;
+          "
+        >
+          Login
+        </button>
+        <div
+          id="login-error"
+          style="color: #dc2626; margin-top: 10px; display: none"
+        ></div>
+      </div>
+    </div>
+
     <script>
       // Supabase Configuration
       const SUPABASE_URL = "https://ackcgrnizuhauccnbiml.supabase.co";
@@ -1189,6 +1278,93 @@
       function nextWeek() {
         alert("Next week navigation would be implemented here");
       }
+
+      // Show modal on load if not authenticated
+      function showLoginModal() {
+        document.getElementById("login-modal").style.display = "flex";
+      }
+      function hideLoginModal() {
+        document.getElementById("login-modal").style.display = "none";
+      }
+      function isAuthenticated() {
+        return !!localStorage.getItem("admin_session_token");
+      }
+      async function submitLoginCode() {
+        const code = document.getElementById("login-code").value.trim();
+        const errorDiv = document.getElementById("login-error");
+        errorDiv.style.display = "none";
+        if (!code || code.length !== 6) {
+          errorDiv.textContent = "Please enter the 6-digit code.";
+          errorDiv.style.display = "block";
+          return;
+        }
+        // Call backend to verify code
+        try {
+          const res = await fetch("/api/verify-login-code", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ code }),
+          });
+          const data = await res.json();
+          if (data.success && data.session_token) {
+            localStorage.setItem("admin_session_token", data.session_token);
+            hideLoginModal();
+            location.reload();
+          } else {
+            errorDiv.textContent = data.message || "Invalid code.";
+            errorDiv.style.display = "block";
+          }
+        } catch (e) {
+          errorDiv.textContent = "Network error.";
+          errorDiv.style.display = "block";
+        }
+      }
+      async function sendLoginCode() {
+        const btn = document.getElementById("send-code-btn");
+        const statusDiv = document.getElementById("send-code-status");
+        const codeInput = document.getElementById("login-code");
+        const loginBtn = document.getElementById("login-btn");
+        statusDiv.style.display = "none";
+        btn.disabled = true;
+        btn.textContent = "Sending...";
+        codeInput.disabled = true;
+        loginBtn.disabled = true;
+        try {
+          const res = await fetch("/api/request-login-code", {
+            method: "POST",
+          });
+          const data = await res.json();
+          if (data.success) {
+            statusDiv.textContent = "Code sent! Check your email.";
+            statusDiv.style.display = "block";
+            codeInput.disabled = false;
+            loginBtn.disabled = false;
+            btn.textContent = "Resend Code";
+          } else {
+            statusDiv.textContent = data.message || "Failed to send code.";
+            statusDiv.style.display = "block";
+            btn.textContent = "Send Code";
+          }
+        } catch (e) {
+          statusDiv.textContent = "Network error.";
+          statusDiv.style.display = "block";
+          btn.textContent = "Send Code";
+        }
+        btn.disabled = false;
+      }
+      // On page load, show modal if not authenticated
+      window.addEventListener("DOMContentLoaded", function () {
+        if (!isAuthenticated()) {
+          showLoginModal();
+          // Block dashboard UI
+          document.querySelector(".container").style.filter = "blur(4px)";
+          document.querySelector(".container").style.pointerEvents = "none";
+        } else {
+          hideLoginModal();
+          document.querySelector(".container").style.filter = "";
+          document.querySelector(".container").style.pointerEvents = "";
+        }
+      });
 
       // Initialize dashboard when page loads
       document.addEventListener("DOMContentLoaded", initDashboard);
