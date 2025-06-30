@@ -3,7 +3,11 @@
   "version": 2,
   "builds": [
     {
-      "src": "frontend/mini-app/**/*",
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "admin/**/*",
       "use": "@vercel/static"
     }
   ],
@@ -20,7 +24,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/mini-app/$1"
+      "dest": "/$1"
     }
   ],
   "functions": {

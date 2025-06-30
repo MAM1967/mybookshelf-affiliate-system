@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LinkedIn OAuth - MyBookshelf Admin</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      .success {
+        color: #16a34a;
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      .error {
+        color: #dc2626;
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      .loading {
+        color: #2563eb;
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+      .button {
+        display: inline-block;
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: white;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        margin: 10px;
+        cursor: pointer;
+        border: none;
+      }
+      .button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      }
+      .code {
+        background: #f3f4f6;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-family: monospace;
+        margin: 10px 0;
+      }
+      .info-box {
+        background: #f0f9ff;
+        border: 1px solid #0ea5e9;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: left;
+      }
+      .debug-info {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 10px;
+        margin: 10px 0;
+        font-family: monospace;
+        font-size: 12px;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔗 LinkedIn OAuth Handler</h1>
+      <div id="status" class="loading">
+        🔄 Processing LinkedIn authorization...
+      </div>
+      <div id="content"></div>
+      <div id="debug" class="debug-info" style="display: none"></div>
+    </div>
+
+    <script>
+      // LinkedIn OAuth Handler - Based on official LinkedIn developers examples
+      // https://github.com/linkedin-developers
+
+      function debugLog(message) {
+        console.log(message);
+        const debugDiv = document.getElementById("debug");
+        debugDiv.innerHTML +=
+          new Date().toISOString() + ": " + message + "<br>";
+        debugDiv.style.display = "block";
+      }
+
+      function showError(title, message, details = null) {
+        const statusDiv = document.getElementById("status");
+        const contentDiv = document.getElementById("content");
+
+        statusDiv.className = "error";
+        statusDiv.innerHTML = "❌ " + title;
+
+        let errorContent = `<p><strong>Error:</strong> ${message}</p>`;
+        if (details) {
+          errorContent += `<p><strong>Details:</strong> ${details}</p>`;
+        }
+        errorContent += `<a href="/admin" class="button">Return to Admin Dashboard</a>`;
+
+        contentDiv.innerHTML = errorContent;
+      }
+
+      function showSuccess(authCode, state) {
+        const statusDiv = document.getElementById("status");
+        const contentDiv = document.getElementById("content");
+
+        statusDiv.className = "success";
+        statusDiv.innerHTML = "✅ LinkedIn Authorization Successful!";
+
+        // Store auth code for token exchange
+        try {
+          localStorage.setItem("linkedin_auth_code", authCode);
+          localStorage.setItem("linkedin_auth_state", state);
+          localStorage.setItem(
+            "linkedin_auth_timestamp",
+            Date.now().toString()
+          );
+          localStorage.setItem(
+            "linkedin_auth_domain",
+            window.location.hostname
+          );
+
+          debugLog("Auth code stored in localStorage successfully");
+        } catch (e) {
+          debugLog("Warning: Could not store in localStorage: " + e.message);
+        }
+
+        contentDiv.innerHTML = `
+                <div class="info-box">
+                    <h3>🎉 Authorization Complete!</h3>
+                    <p>LinkedIn has successfully authorized MyBookshelf to access your account.</p>
+                    
+                    <p><strong>Authorization Code:</strong></p>
+                    <div class="code">${authCode.substring(0, 20)}...</div>
+                    
+                    <p><strong>Next Steps:</strong></p>
+                    <ol style="text-align: left;">
+                        <li>✅ Authorization code received and stored</li>
+                        <li>⏳ Exchange code for access token (automated)</li>
+                        <li>💾 Store access token securely in database</li>
+                        <li>🧪 Test LinkedIn posting integration</li>
+                        <li>🚀 Enable automated LinkedIn posts</li>
+                    </ol>
+                </div>
+                
+                <h3>🔧 Admin Actions:</h3>
+                <a href="/admin" class="button">Go to Admin Dashboard</a>
+                <button class="button" onclick="copyAuthCode()">Copy Auth Code</button>
+                <button class="button" onclick="exchangeToken()">Exchange for Token</button>
+                
+                <h3>📋 Technical Details:</h3>
+                <div class="debug-info">
+                    <strong>Domain:</strong> ${window.location.hostname}<br>
+                    <strong>Full URL:</strong> ${window.location.href}<br>
+                    <strong>State:</strong> ${state}<br>
+                    <strong>Timestamp:</strong> ${new Date().toISOString()}<br>
+                    <strong>User Agent:</strong> ${navigator.userAgent.substring(
+                      0,
+                      100
+                    )}...
+                </div>
+            `;
+      }
+
+      function copyAuthCode() {
+        const authCode = localStorage.getItem("linkedin_auth_code");
+        if (authCode && navigator.clipboard) {
+          navigator.clipboard
+            .writeText(authCode)
+            .then(() => {
+              alert("✅ Authorization code copied to clipboard!");
+            })
+            .catch((err) => {
+              alert("❌ Could not copy to clipboard. Code: " + authCode);
+            });
+        } else {
+          alert("❌ No authorization code found or clipboard not available");
+        }
+      }
+
+      function exchangeToken() {
+        debugLog("Starting token exchange process...");
+
+        const authCode = localStorage.getItem("linkedin_auth_code");
+        const state = localStorage.getItem("linkedin_auth_state");
+
+        if (!authCode) {
+          showError(
+            "Missing Authorization Code",
+            "No authorization code found in localStorage"
+          );
+          return;
+        }
+
+        const exchangeData = {
+          grant_type: "authorization_code",
+          code: authCode,
+          redirect_uri: window.location.origin + window.location.pathname,
+          client_id: "78wmrhdd99ssbi", // Your LinkedIn Client ID
+        };
+
+        debugLog(
+          "Token exchange data prepared: " + JSON.stringify(exchangeData)
+        );
+
+        // Note: In production, the client_secret should be handled server-side
+        // This is a demo of the process - actual token exchange should happen on your backend
+
+        const statusDiv = document.getElementById("status");
+        statusDiv.className = "loading";
+        statusDiv.innerHTML =
+          "🔄 Exchanging authorization code for access token...";
+
+        // Simulate backend call (replace with actual backend endpoint)
+        setTimeout(() => {
+          showError(
+            "Token Exchange",
+            "Token exchange must be completed on the backend server with your client_secret.",
+            "Use the emergency_oauth_complete.py script or implement the token exchange in your backend API."
+          );
+        }, 2000);
+      }
+
+      // Main OAuth processing logic
+      function processOAuthCallback() {
+        debugLog("Processing OAuth callback...");
+        debugLog("Current URL: " + window.location.href);
+        debugLog("Current domain: " + window.location.hostname);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const authCode = urlParams.get("code");
+        const state = urlParams.get("state");
+        const error = urlParams.get("error");
+        const errorDescription = urlParams.get("error_description");
+
+        debugLog("URL parameters parsed:");
+        debugLog(
+          "- code: " + (authCode ? authCode.substring(0, 20) + "..." : "null")
+        );
+        debugLog("- state: " + state);
+        debugLog("- error: " + error);
+        debugLog("- error_description: " + errorDescription);
+
+        if (error) {
+          showError(
+            "LinkedIn Authorization Error",
+            error,
+            errorDescription || "Please try the authorization process again."
+          );
+          return;
+        }
+
+        if (!authCode) {
+          showError(
+            "Missing Authorization Code",
+            "No authorization code found in the callback URL.",
+            "Please restart the LinkedIn authorization process."
+          );
+          return;
+        }
+
+        if (!state || state !== "mybookshelf_production_oauth") {
+          showError(
+            "Invalid State Parameter",
+            "The state parameter does not match the expected value.",
+            "This could indicate a security issue. Please restart the authorization process."
+          );
+          return;
+        }
+
+        debugLog("All OAuth parameters validated successfully");
+        showSuccess(authCode, state);
+      }
+
+      // Initialize when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        debugLog("LinkedIn OAuth callback handler initialized");
+        processOAuthCallback();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyBookshelf - Weekly Recommendations [STAGING]</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #fff;
+        min-height: 100vh;
+        padding: 20px;
+        color: #222;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+        overflow: hidden;
+      }
+
+      .header {
+        background: #fff;
+        color: #795548;
+        padding: 32px 0 16px 0;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+      }
+      .header-logo {
+        width: 90px;
+        height: auto;
+        margin-bottom: 10px;
+      }
+      .header h1 {
+        font-size: 2.2em;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #ff9800;
+      }
+      .header p {
+        font-size: 1.1em;
+        color: #795548;
+        opacity: 0.85;
+      }
+      .verse {
+        background: #f8f9fa;
+        padding: 20px;
+        text-align: center;
+        border-bottom: 1px solid #e9ecef;
+        font-style: italic;
+        color: #795548;
+      }
+      .content {
+        padding: 40px;
+      }
+      .filters {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+      .filter-btn {
+        background: #fff3e0;
+        border: 2px solid #ff9800;
+        color: #ff9800;
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+      .filter-btn:hover,
+      .filter-btn.active {
+        background: #ff9800;
+        color: #fff;
+        border-color: #ff9800;
+      }
+      .recommendations-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+      }
+      .recommendation-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        border: 1px solid #f1f3f4;
+      }
+      .recommendation-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 24px rgba(255, 152, 0, 0.1);
+      }
+      .card-image {
+        width: 100%;
+        height: 200px;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6c757d;
+        font-size: 14px;
+        overflow: hidden;
+      }
+      .card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+        max-width: 100%;
+        max-height: 100%;
+      }
+      .card-content {
+        padding: 20px;
+      }
+      .card-title {
+        font-size: 1.3em;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #795548;
+      }
+      .card-author {
+        color: #6c757d;
+        margin-bottom: 12px;
+        font-size: 0.95em;
+      }
+      .card-price {
+        font-size: 1.4em;
+        font-weight: 700;
+        color: #ff9800;
+        margin-bottom: 15px;
+      }
+      .card-category {
+        display: inline-block;
+        background: #e9ecef;
+        color: #495057;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.8em;
+        margin-bottom: 15px;
+      }
+      .affiliate-btn {
+        background: linear-gradient(90deg, #ff9800 0%, #ffb74d 100%);
+        color: #fff;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        width: 100%;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(255, 152, 0, 0.08);
+      }
+      .affiliate-btn:hover {
+        background: #795548;
+        color: #fff;
+      }
+      .loading {
+        text-align: center;
+        padding: 60px;
+        color: #6c757d;
+      }
+      .error {
+        text-align: center;
+        padding: 40px;
+        color: #dc3545;
+        background: #f8d7da;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+      .footer {
+        background: #fff3e0;
+        color: #795548;
+        text-align: center;
+        padding: 24px 0 12px 0;
+        font-size: 1em;
+        border-top: 1px solid #eee;
+      }
+      .footer a {
+        color: #ff9800;
+        text-decoration: underline;
+        margin: 0 10px;
+      }
+      .footer a:hover {
+        color: #795548;
+      }
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 2em;
+        }
+        .content {
+          padding: 20px;
+        }
+        .recommendations-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <img
+          src="/mybookshelf-logo.png"
+          alt="MyBookshelf Logo"
+          class="header-logo"
+        />
+        <h1>myBookshelf</h1>
+        <p>Curated weekly book recommendations for Christian leaders</p>
+      </header>
+
+      <div class="verse">
+        <p>
+          "Commit to the LORD whatever you do, and he will establish your
+          plans." - Proverbs 16:3
+        </p>
+      </div>
+
+      <div class="content">
+        <div class="filters">
+          <button class="filter-btn active" data-filter="all">All Items</button>
+          <button class="filter-btn" data-filter="Books">Books</button>
+          <button class="filter-btn" data-filter="Accessories">
+            Accessories
+          </button>
+        </div>
+
+        <div id="loading" class="loading">
+          <p>📖 Loading recommendations...</p>
+        </div>
+
+        <div id="error" class="error" style="display: none">
+          <p>❌ Unable to load recommendations. Please try again later.</p>
+        </div>
+
+        <div
+          id="recommendations"
+          class="recommendations-grid"
+          style="display: none"
+        >
+          <!-- Recommendations will be loaded here -->
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div>
+          &copy; 2025 MyBookshelf. All rights reserved. &middot;
+          <a href="/frontend/mini-app/privacy.html">Privacy Policy</a> &middot;
+          <a href="/frontend/mini-app/terms.html">Terms of Service</a>
+        </div>
+        <div style="margin-top: 8px; font-size: 0.95em">
+          Powered by MyBookshelf
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // Configuration - Replace with your actual Supabase credentials
+      const SUPABASE_URL = "https://ackcgrnizuhauccnbiml.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFja2Nncm5penVoYXVjY25iaW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMjc4MzEsImV4cCI6MjA2NjgwMzgzMX0.SXpIMuNBgUhcEQUHzpEB1zZAdF-UTGvmY81EFUtsAwc";
+
+      // Note: Now using direct image_url from database instead of hardcoded mappings
+      const PERMANENT_IMAGES = {};
+
+      // Initialize Supabase client
+      const supabase = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+      let allRecommendations = [];
+      let currentFilter = "all";
+
+      async function loadRecommendations() {
+        const loadingEl = document.getElementById("loading");
+        const errorEl = document.getElementById("error");
+        const recommendationsEl = document.getElementById("recommendations");
+
+        try {
+          // Show loading state
+          loadingEl.style.display = "block";
+          errorEl.style.display = "none";
+          recommendationsEl.style.display = "none";
+
+          // If Supabase credentials are not configured, show mock data
+          if (SUPABASE_URL === "YOUR_SUPABASE_URL") {
+            console.log(
+              "Using mock data - configure Supabase credentials for live data"
+            );
+            allRecommendations = getMockData();
+          } else {
+            // Fetch from Supabase
+            console.log("🔍 Attempting to fetch data from Supabase...");
+            const { data, error } = await supabase
+              .from("books_accessories")
+              .select("*")
+              .order("timestamp", { ascending: false })
+              .limit(10);
+
+            if (error) {
+              console.error("❌ Supabase Error:", error);
+              // If CORS or connection error, fall back to mock data temporarily
+              if (
+                error.message.includes("cors") ||
+                error.message.includes("network") ||
+                error.code === "PGRST116"
+              ) {
+                console.log("🔄 Using fallback data due to CORS/network issue");
+                allRecommendations = getMockData();
+              } else {
+                throw error;
+              }
+            } else {
+              console.log("✅ Successfully fetched data:", data);
+              allRecommendations = data || [];
+            }
+          }
+
+          // Hide loading, show content
+          loadingEl.style.display = "none";
+          recommendationsEl.style.display = "grid";
+
+          // Render recommendations
+          await renderRecommendations();
+        } catch (error) {
+          console.error("Error loading recommendations:", error);
+          loadingEl.style.display = "none";
+          errorEl.style.display = "block";
+        }
+      }
+
+      function getMockData() {
+        return [
+          {
+            id: 17,
+            title: "The Five Dysfunctions of a Team",
+            author: "Patrick Lencioni",
+            price: 19.99,
+            affiliate_link:
+              "https://amazon.com/dp/EXAMPLE123?tag=mybookshelf-20",
+            image_url: "https://covers.openlibrary.org/b/isbn/0787960756-L.jpg",
+            category: "Books",
+            timestamp: new Date().toISOString(),
+          },
+          {
+            id: 18,
+            title: "The Advantage",
+            author: "Patrick Lencioni",
+            price: 19.99,
+            affiliate_link:
+              "https://amazon.com/dp/EXAMPLE124?tag=mybookshelf-20",
+            image_url: "https://covers.openlibrary.org/b/isbn/0470941529-L.jpg",
+            category: "Books",
+            timestamp: new Date().toISOString(),
+          },
+          {
+            id: 19,
+            title: "Atomic Habits",
+            author: "James Clear",
+            price: 19.99,
+            affiliate_link:
+              "https://amazon.com/dp/EXAMPLE125?tag=mybookshelf-20",
+            image_url: "https://m.media-amazon.com/images/I/513Y5o-DYtL.jpg",
+            category: "Books",
+            timestamp: new Date().toISOString(),
+          },
+          {
+            id: 20,
+            title: "Leadership Journal - Daily Planner",
+            author: "Business Essentials",
+            price: 19.99,
+            affiliate_link:
+              "https://amazon.com/dp/EXAMPLE456?tag=mybookshelf-20",
+            image_url:
+              "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=300&h=400&fit=crop",
+            category: "Accessories",
+            timestamp: new Date().toISOString(),
+          },
+        ];
+      }
+
+      function renderRecommendations() {
+        const container = document.getElementById("recommendations");
+        const filteredItems =
+          currentFilter === "all"
+            ? allRecommendations
+            : allRecommendations.filter(
+                (item) => item.category === currentFilter
+              );
+
+        container.innerHTML = filteredItems
+          .map((item) => {
+            const imageUrl = getImageUrl(
+              item.image_url,
+              item.title,
+              item.category,
+              item.id
+            );
+
+            return `
+              <div class="recommendation-card">
+                <div class="card-image">
+                                  <img src="${imageUrl}" alt="${item.title}" 
+                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMzAwIj4KICAgIDxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjNkM3NTdEIi8+CiAgICA8dGV4dCB4PSIxMDAiIHk9IjE1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCI+Qm9vazwvdGV4dD4KICA8L3N2Zz4='; this.onerror=null;">
+                </div>
+                <div class="card-content">
+                  <div class="card-category">${item.category}</div>
+                  <h3 class="card-title">${item.title}</h3>
+                  <p class="card-author">by ${item.author}</p>
+                  <div class="card-price">$${parseFloat(item.price).toFixed(
+                    2
+                  )}</div>
+                  <a href="${
+                    item.affiliate_link
+                  }" target="_blank" class="affiliate-btn">
+                    🛒 View on Amazon
+                  </a>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      function getImageUrl(originalUrl, title, category, itemId) {
+        // Priority 1: Use the actual image_url from database if it exists and is not a placeholder
+        if (
+          originalUrl &&
+          originalUrl.trim() &&
+          !originalUrl.includes("placeholder") &&
+          !originalUrl.includes("example")
+        ) {
+          return originalUrl;
+        }
+
+        // Priority 2: Use permanent base64 images as fallback
+        if (PERMANENT_IMAGES[itemId]) {
+          return PERMANENT_IMAGES[itemId];
+        }
+
+        // Priority 3: Fallback to CSS-generated image (pure CSS, no external calls)
+        const bgColor = category === "Books" ? "#4A90E2" : "#28A745";
+        return `data:image/svg+xml;base64,${btoa(`
+          <svg xmlns="http://www.w3.org/2000/svg" width="200" height="300">
+            <rect width="200" height="300" fill="${bgColor}"/>
+            <text x="100" y="150" text-anchor="middle" fill="white" font-family="Arial" font-size="14">
+              ${title.substring(0, 15)}
+            </text>
+          </svg>
+        `)}`;
+      }
+
+      function setupFilters() {
+        const filterBtns = document.querySelectorAll(".filter-btn");
+
+        filterBtns.forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            // Update active state
+            filterBtns.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            // Update filter and re-render
+            currentFilter = btn.dataset.filter;
+            await renderRecommendations();
+          });
+        });
+      }
+
+      // Initialize app
+      document.addEventListener("DOMContentLoaded", async () => {
+        setupFilters();
+        await loadRecommendations();
+      });
+    </script>
+  </body>
+</html>
