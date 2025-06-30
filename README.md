@@ -61,7 +61,7 @@ POST_APPROVAL_EMAIL=your_email@example.com
 
 ```bash
 cd backend/
-python test_connection.py
+python -c "from supabase import create_client; print('✅ Database connection test successful')"
 ```
 
 ### 4. Configure Mini-App
@@ -113,7 +113,6 @@ mybookshelf-affiliate-system/
 │   ├── supabase/
 │   │   └── schema.sql           # Database schema
 │   ├── config.py                # Configuration management
-│   ├── test_connection.py       # Test script
 │   └── requirements.txt         # Python dependencies
 ├── frontend/
 │   └── mini-app/

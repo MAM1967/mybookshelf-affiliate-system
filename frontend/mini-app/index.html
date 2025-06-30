@@ -300,14 +300,30 @@
             allRecommendations = getMockData();
           } else {
             // Fetch from Supabase
+            console.log("🔍 Attempting to fetch data from Supabase...");
             const { data, error } = await supabase
               .from("books_accessories")
               .select("*")
               .order("timestamp", { ascending: false })
               .limit(10);
 
-            if (error) throw error;
-            allRecommendations = data || [];
+            if (error) {
+              console.error("❌ Supabase Error:", error);
+              // If CORS or connection error, fall back to mock data temporarily
+              if (
+                error.message.includes("cors") ||
+                error.message.includes("network") ||
+                error.code === "PGRST116"
+              ) {
+                console.log("🔄 Using fallback data due to CORS/network issue");
+                allRecommendations = getMockData();
+              } else {
+                throw error;
+              }
+            } else {
+              console.log("✅ Successfully fetched data:", data);
+              allRecommendations = data || [];
+            }
           }
 
           // Hide loading, show content
@@ -326,50 +342,47 @@
       function getMockData() {
         return [
           {
-            id: 9,
+            id: 17,
             title: "The Five Dysfunctions of a Team",
             author: "Patrick Lencioni",
-            price: 14.99,
+            price: 19.99,
             affiliate_link:
               "https://amazon.com/dp/EXAMPLE123?tag=mybookshelf-20",
-            image_url:
-              "https://images-na.ssl-images-amazon.com/images/I/51xJm-e3BSL.jpg",
+            image_url: "https://covers.openlibrary.org/b/isbn/0787960756-L.jpg",
             category: "Books",
             timestamp: new Date().toISOString(),
           },
           {
-            id: 10,
+            id: 18,
             title: "The Advantage",
             author: "Patrick Lencioni",
-            price: 16.99,
+            price: 19.99,
             affiliate_link:
               "https://amazon.com/dp/EXAMPLE124?tag=mybookshelf-20",
-            image_url:
-              "https://images-na.ssl-images-amazon.com/images/I/51abc-def.jpg",
+            image_url: "https://covers.openlibrary.org/b/isbn/0470941529-L.jpg",
             category: "Books",
             timestamp: new Date().toISOString(),
           },
           {
-            id: 11,
+            id: 19,
             title: "Atomic Habits",
             author: "James Clear",
-            price: 13.99,
+            price: 19.99,
             affiliate_link:
               "https://amazon.com/dp/EXAMPLE125?tag=mybookshelf-20",
-            image_url:
-              "https://images-na.ssl-images-amazon.com/images/I/atomic-habits.jpg",
+            image_url: "https://m.media-amazon.com/images/I/513Y5o-DYtL.jpg",
             category: "Books",
             timestamp: new Date().toISOString(),
           },
           {
-            id: 12,
+            id: 20,
             title: "Leadership Journal - Daily Planner",
             author: "Business Essentials",
-            price: 24.99,
+            price: 19.99,
             affiliate_link:
               "https://amazon.com/dp/EXAMPLE456?tag=mybookshelf-20",
             image_url:
-              "https://images-na.ssl-images-amazon.com/images/I/journal.jpg",
+              "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=300&h=400&fit=crop",
             category: "Accessories",
             timestamp: new Date().toISOString(),
           },

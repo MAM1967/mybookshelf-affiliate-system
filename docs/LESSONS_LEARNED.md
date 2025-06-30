@@ -245,9 +245,84 @@ Product Access Required:
 
 **Takeaway**: Always verify API documentation for current version and don't assume examples from tutorials are up-to-date. OAuth standards evolve and deprecated scopes will fail silently or with confusing errors.
 
+### 17. Dangerous Test Scripts: test_connection.py Creating Duplicates (December 2024)
+
+**Lesson**: Test scripts should NEVER insert production data - they should be read-only
+
+- **Issue**: `test_connection.py` was creating duplicate records every time it ran
+- **Root Cause**: Test script called `system.run_weekly_update()` which inserts actual data
+- **Discovery**: User reported "production site is fetching 8 books instead of 4 with completely incorrect cover"
+- **Impact**: Created 8 duplicate records in production database
+
+**❌ Problematic Code in test_connection.py:**
+
+```python
+def test_mock_data_insertion():
+    """Test inserting mock data"""  # <-- MISLEADING NAME!
+    print("\n📝 Testing Mock Data Insertion...")
+
+    try:
+        system = MyBookshelfSystem()
+
+        # Run weekly update (will use mock data if Amazon API not configured)
+        result = system.run_weekly_update()  # <-- THIS ACTUALLY INSERTS DATA!
+
+        if result['success']:
+            print(f"✅ {result['message']}")
+            print(f"📚 Items processed: {len(result.get('items', []))}")
+
+            # Show what was added
+            for item in result.get('items', []):
+                print(f"  - {item['title']} by {item['author']} (${item['price']})")
+```
+
+**Problem Analysis:**
+
+- **Function name**: `test_mock_data_insertion()` implies testing, but actually inserts
+- **Method called**: `run_weekly_update()` is a production method that writes to database
+- **No safety checks**: No dry-run mode or confirmation prompts
+- **Mixed wrong data**: Inserted old mock data with wrong prices ($14.99, $16.99, $13.99, $24.99) instead of correct $19.99
+
+**✅ Solution Applied:**
+
+1. Used `duplicate_prevention.py cleanup` to remove 8 duplicate records
+2. Used `grok_book_cover_simple_test.py` to restore correct data (all $19.99 with real covers)
+3. **DELETED test_connection.py** to prevent future issues
+4. Updated dependencies (setup.py, README.md) to remove references
+
+**✅ Safe Alternative for Database Testing:**
+
+```python
+# Read-only database check
+python3 -c "
+from supabase import create_client
+SUPABASE_URL = 'https://ackcgrnizuhauccnbiml.supabase.co'
+SUPABASE_ANON_KEY = 'your_key'
+supabase = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
+response = supabase.table('books_accessories').select('id, title, author, price').execute()
+print(f'Database state: {len(response.data)} records')
+"
+```
+
+**Key Takeaways:**
+
+- **Test scripts should NEVER modify production data**
+- **Use descriptive names**: "test_insertion" should not actually insert
+- **Implement dry-run modes** for any script that could modify data
+- **Separate read-only tests** from write operations
+- **Always review test scripts** before running in production environments
+- **Delete dangerous scripts** rather than hoping people won't run them
+
+**Immediate Actions Taken:**
+
+- ✅ Deleted `backend/test_connection.py`
+- ✅ Updated `setup.py` to remove dependency
+- ✅ Updated `README.md` to remove references
+- ✅ Database restored to correct state (4 records, all $19.99, real covers)
+
 ## Process Lessons
 
-### 17. Documentation Management
+### 18. Documentation Management
 
 **Lesson**: Save important project documents in the project structure early
 
@@ -258,7 +333,7 @@ Product Access Required:
 
 ## Development Strategy Lessons
 
-### 18. Feature Development Order
+### 19. Feature Development Order
 
 **Lesson**: Build core functionality before polish features
 
@@ -266,7 +341,7 @@ Product Access Required:
 - **Approach**: Prioritized data integrity over visual appeal
 - **Takeaway**: Focus on functional requirements before cosmetic improvements
 
-### 19. Tool Creation Philosophy
+### 20. Tool Creation Philosophy
 
 **Lesson**: Build flexible, multi-mode tools
 
@@ -274,7 +349,7 @@ Product Access Required:
 - **Benefit**: Single tool handles multiple use cases and user preferences
 - **Takeaway**: Design tools with multiple interaction patterns from the start
 
-### 20. Error Handling & Recovery
+### 21. Error Handling & Recovery
 
 **Lesson**: Plan for failure scenarios and provide recovery paths
 
@@ -284,7 +359,7 @@ Product Access Required:
 
 ## User Experience Lessons
 
-### 21. Approval Workflows
+### 22. Approval Workflows
 
 **Lesson**: User approval should be built into automated systems
 
@@ -292,7 +367,7 @@ Product Access Required:
 - **Solution**: Built preview mode in image downloader for user approval
 - **Takeaway**: Automation should enhance, not replace, user control
 
-### 22. System Status Communication
+### 23. System Status Communication
 
 **Lesson**: Clearly communicate what's working vs. what needs work
 
@@ -302,7 +377,7 @@ Product Access Required:
 
 ## Future Development Guidelines
 
-### 23. Planning & Architecture
+### 24. Planning & Architecture
 
 - Always start with data integrity and duplicate prevention
 - Build approval workflows into automated processes
@@ -310,14 +385,14 @@ Product Access Required:
 - Design tools with multiple interaction modes
 - Plan for external dependency failures
 
-### 24. Communication Best Practices
+### 25. Communication Best Practices
 
 - Be explicit about current vs. planned functionality
 - Listen for user control signals (stop, pause, change direction)
 - Provide regular, clear status updates
 - Avoid misleading claims about capabilities
 
-### 25. Technical Standards
+### 26. Technical Standards
 
 - Implement robust error handling and recovery
 - Use version control from project start

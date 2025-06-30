@@ -52,25 +52,34 @@ SCRAPINGBEE_API_KEY=your_scrapingbee_api_key
     else:
         print(f"✅ {env_path} already exists")
     
-    # Run tests
-    print("\n🧪 Running system tests...")
+    # Run safe database connection test
+    print("\n🧪 Testing database connection...")
     try:
         os.chdir('backend')
-        result = subprocess.run([sys.executable, 'test_connection.py'], capture_output=True, text=True)
+        # Safe read-only database test
+        test_code = '''
+from supabase import create_client
+SUPABASE_URL = "https://ackcgrnizuhauccnbiml.supabase.co"
+SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFja2Nncm5penVoYXVjY25iaW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMjc4MzEsImV4cCI6MjA2NjgwMzgzMX0.SXpIMuNBgUhcEQUHzpEB1zZAdF-UTGvmY81EFUtsAwc"
+supabase = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
+response = supabase.table("books_accessories").select("id").limit(1).execute()
+print("✅ Database connection successful")
+'''
+        result = subprocess.run([sys.executable, '-c', test_code], capture_output=True, text=True)
         print(result.stdout)
         if result.stderr:
-            print(result.stderr)
+            print(f"⚠️  Connection test warning: {result.stderr}")
     except Exception as e:
-        print(f"⚠️  Could not run tests: {e}")
+        print(f"⚠️  Could not run connection test: {e}")
     
     # Final instructions
     print("\n🎉 Setup Complete!")
     print("\n📋 Next Steps:")
     print("1. Edit backend/.env with your Supabase credentials")
     print("2. Edit frontend/mini-app/index.html with your Supabase credentials")
-    print("3. Run: cd backend && python test_connection.py")
-    print("4. Open frontend/mini-app/index.html in your browser")
-    print("5. Configure Amazon PA API for live data")
+    print("3. Open frontend/mini-app/index.html in your browser")
+    print("4. Configure Amazon PA API for live data")
+    print("5. Set up automation workflows as needed")
     
     return 0
 
