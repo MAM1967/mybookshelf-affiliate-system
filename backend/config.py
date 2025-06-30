@@ -23,6 +23,10 @@ class Config:
     LINKEDIN_CLIENT_ID: Optional[str] = os.getenv('LINKEDIN_CLIENT_ID')
     LINKEDIN_CLIENT_SECRET: Optional[str] = os.getenv('LINKEDIN_CLIENT_SECRET')
     
+    # Email Service Configuration
+    RESEND_API_KEY: Optional[str] = os.getenv('RESEND_API_KEY')
+    ADMIN_EMAIL: Optional[str] = os.getenv('ADMIN_EMAIL')
+    
     # Application Settings
     MAX_BOOKS_PER_WEEK: int = 3
     MAX_ACCESSORIES_PER_WEEK: int = 1
@@ -63,6 +67,10 @@ AMAZON_ASSOCIATE_ID=your_amazon_associate_tag
 # LinkedIn Configuration (for automation)
 LINKEDIN_CLIENT_ID=your_linkedin_client_id
 LINKEDIN_CLIENT_SECRET=your_linkedin_client_secret
+
+# Email Service Configuration
+RESEND_API_KEY=your_resend_api_key
+ADMIN_EMAIL=your_admin_email@example.com
 
 # Email for post approval
 POST_APPROVAL_EMAIL=your_email@example.com
