@@ -9,40 +9,10 @@
   ],
   "routes": [
     {
-      "src": "/admin/linkedin-callback(.*)",
-      "dest": "/frontend/mini-app/linkedin-callback.html",
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate"
-      }
-    },
-    {
-      "src": "/admin/oauth/linkedin(.*)",
-      "dest": "/frontend/mini-app/linkedin-callback.html",
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate"
-      }
-    },
-    {
-      "src": "/auth/linkedin/callback(.*)",
-      "dest": "/frontend/mini-app/linkedin-callback.html",
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate"
-      }
-    },
-    {
-      "src": "/admin/(.*)",
-      "dest": "/frontend/mini-app/admin.html"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/frontend/mini-app/index.html"
+      "dest": "/frontend/mini-app/$1"
     }
   ],
-  "functions": {
-    "frontend/mini-app/linkedin-callback.html": {
-      "includeFiles": "frontend/mini-app/linkedin-callback.html"
-    }
-  },
   "env": {
     "SUPABASE_URL": "@supabase-url",
     "SUPABASE_ANON_KEY": "@supabase-anon-key",
