@@ -22,27 +22,23 @@ class MyBookshelfSystem:
         if not all([self.supabase_url, self.supabase_key]):
             raise ValueError("Missing required Supabase environment variables")
         
-        self.supabase: Client = create_client(self.supabase_url, self.supabase_key)
+        self.supabase: Client = create_client(str(self.supabase_url), str(self.supabase_key))
         
         # Amazon PA API setup
         self.use_real_amazon_api = bool(self.amazon_access_key and self.amazon_secret_key)
         if self.use_real_amazon_api:
             try:
-                from paapi5_python_sdk.api.default_api import DefaultApi
-                from paapi5_python_sdk.models.search_items_request import SearchItemsRequest
-                from paapi5_python_sdk.models.search_items_resource import SearchItemsResource
-                from paapi5_python_sdk.models.partner_type import PartnerType
+                from paapi5_python_sdk import DefaultApi, SearchItemsRequest, SearchItemsResource, PartnerType
                 from paapi5_python_sdk.rest import ApiException
-                from paapi5_python_sdk.configuration import Configuration
                 
                 # Configure PA API
-                self.configuration = Configuration()
-                self.configuration.access_key = self.amazon_access_key
-                self.configuration.secret_key = self.amazon_secret_key
-                self.configuration.host = "webservices.amazon.com"
-                self.configuration.region = "us-east-1"
+                self.amazon_api = DefaultApi(
+                    access_key=self.amazon_access_key,
+                    secret_key=self.amazon_secret_key,
+                    host="webservices.amazon.com",
+                    region="us-east-1"
+                )
                 
-                self.api_instance = DefaultApi()
                 self.partner_tag = self.amazon_associate_id
                 logger.info("✅ Amazon PA API configured successfully")
                 
@@ -71,31 +67,30 @@ class MyBookshelfSystem:
         books_and_accessories = []
         
         try:
-            from paapi5_python_sdk.models.search_items_request import SearchItemsRequest
-            from paapi5_python_sdk.models.search_items_resource import SearchItemsResource
-            from paapi5_python_sdk.models.partner_type import PartnerType
+            from paapi5_python_sdk import SearchItemsRequest, SearchItemsResource, PartnerType
             from paapi5_python_sdk.rest import ApiException
             
             # Define search queries for Christian leadership books
             book_searches = [
-                ("Patrick Lencioni", "Books"),
-                ("Christian leadership", "Books"), 
-                ("productivity habits", "Books")
+                "Patrick Lencioni",
+                "Christian leadership", 
+                "productivity habits"
             ]
             
             accessory_searches = [
-                ("leadership journal", "OfficeProducts")
+                "leadership journal"
             ]
             
             # Search for books
-            for keyword, category in book_searches:
+            for keyword in book_searches:
                 try:
+                    # Use official paapi5_python_sdk API
                     search_items_request = SearchItemsRequest(
                         partner_tag=self.partner_tag,
                         partner_type=PartnerType.ASSOCIATES,
                         keywords=keyword,
-                        search_index=category,
-                        item_count=2,
+                        search_index="Books",
+                        item_count=1,
                         resources=[
                             SearchItemsResource.ITEMINFO_TITLE,
                             SearchItemsResource.ITEMINFO_BYLINEINFO,
@@ -104,7 +99,7 @@ class MyBookshelfSystem:
                         ]
                     )
                     
-                    response = self.api_instance.search_items(search_items_request)
+                    response = self.amazon_api.search_items(search_items_request)
                     
                     if response.search_result and response.search_result.items:
                         for item in response.search_result.items[:1]:  # Take first result
@@ -120,13 +115,13 @@ class MyBookshelfSystem:
                     continue
             
             # Search for accessories
-            for keyword, category in accessory_searches:
+            for keyword in accessory_searches:
                 try:
                     search_items_request = SearchItemsRequest(
                         partner_tag=self.partner_tag,
                         partner_type=PartnerType.ASSOCIATES,
                         keywords=keyword,
-                        search_index=category,
+                        search_index="OfficeProducts", 
                         item_count=1,
                         resources=[
                             SearchItemsResource.ITEMINFO_TITLE,
@@ -136,13 +131,13 @@ class MyBookshelfSystem:
                         ]
                     )
                     
-                    response = self.api_instance.search_items(search_items_request)
+                    response = self.amazon_api.search_items(search_items_request)
                     
                     if response.search_result and response.search_result.items:
-                        item = response.search_result.items[0]
-                        accessory_data = self._parse_amazon_item(item, "Accessories")
-                        if accessory_data:
-                            books_and_accessories.append(accessory_data)
+                        for item in response.search_result.items[:1]:
+                            accessory_data = self._parse_amazon_item(item, "Accessories")
+                            if accessory_data:
+                                books_and_accessories.append(accessory_data)
                             
                 except ApiException as e:
                     logger.warning(f"Amazon API error for accessory '{keyword}': {e}")
@@ -166,6 +161,7 @@ class MyBookshelfSystem:
     def _parse_amazon_item(self, item, category: str) -> Optional[Dict]:
         """Parse Amazon API item response into our format"""
         try:
+            # Official paapi5_python_sdk returns item objects with attributes
             title = item.item_info.title.display_value if item.item_info and item.item_info.title else "Unknown Title"
             
             # Get author/brand
@@ -192,16 +188,25 @@ class MyBookshelfSystem:
             if item.images and item.images.primary and item.images.primary.medium:
                 image_url = item.images.primary.medium.url
             
+            # Get ASIN
+            asin = item.asin if item.asin else 'EXAMPLE123'
+            
             # Generate affiliate link
-            affiliate_link = f"https://amazon.com/dp/{item.asin}?tag={self.partner_tag}"
+            affiliate_link = f"https://amazon.com/dp/{asin}?tag={self.partner_tag}"
             
             return {
                 'title': title,
                 'author': author,
+                'category': category,
                 'price': price,
                 'affiliate_link': affiliate_link,
                 'image_url': image_url,
-                'category': category
+                'asin': asin,
+                'last_updated': datetime.now().isoformat(),
+                'content_theme': 'Christian Leadership',
+                'target_audience': 'Christian Professionals',
+                'motivation_level': 'High',
+                'relevance_score': 95
             }
             
         except Exception as e:

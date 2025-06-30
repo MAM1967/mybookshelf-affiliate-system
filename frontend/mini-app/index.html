@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MyBookshelf - Weekly Recommendations [DEV]</title>
+    <title>MyBookshelf - Weekly Recommendations</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
       * {
@@ -14,96 +14,95 @@
 
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #fff;
         min-height: 100vh;
         padding: 20px;
+        color: #222;
       }
 
       .container {
         max-width: 1200px;
         margin: 0 auto;
-        background: white;
+        background: #fff;
         border-radius: 15px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
         overflow: hidden;
       }
 
       .header {
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        color: white;
-        padding: 40px;
+        background: #fff;
+        color: #795548;
+        padding: 32px 0 16px 0;
         text-align: center;
+        border-bottom: 1px solid #eee;
       }
-
-      .header h1 {
-        font-size: 2.5em;
+      .header-logo {
+        width: 210px;
+        height: auto;
         margin-bottom: 10px;
-        font-weight: 300;
       }
-
+      .header h1 {
+        font-size: 2.2em;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #ff9800;
+      }
       .header p {
-        font-size: 1.2em;
-        opacity: 0.9;
+        font-size: 1.1em;
+        color: #795548;
+        opacity: 0.85;
       }
-
       .verse {
         background: #f8f9fa;
         padding: 20px;
         text-align: center;
         border-bottom: 1px solid #e9ecef;
         font-style: italic;
-        color: #6c757d;
+        color: #795548;
       }
-
       .content {
         padding: 40px;
       }
-
       .filters {
         display: flex;
         gap: 15px;
         margin-bottom: 30px;
         flex-wrap: wrap;
       }
-
       .filter-btn {
-        background: #f8f9fa;
-        border: 2px solid #dee2e6;
+        background: #fff3e0;
+        border: 2px solid #ff9800;
+        color: #ff9800;
         padding: 10px 20px;
         border-radius: 25px;
         cursor: pointer;
         transition: all 0.3s ease;
         font-weight: 500;
       }
-
       .filter-btn:hover,
       .filter-btn.active {
-        background: #007bff;
-        color: white;
-        border-color: #007bff;
+        background: #ff9800;
+        color: #fff;
+        border-color: #ff9800;
       }
-
       .recommendations-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 25px;
         margin-top: 30px;
       }
-
       .recommendation-card {
-        background: white;
+        background: #fff;
         border-radius: 12px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
         overflow: hidden;
         transition: transform 0.3s ease;
         border: 1px solid #f1f3f4;
       }
-
       .recommendation-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 10px 24px rgba(255, 152, 0, 0.1);
       }
-
       .card-image {
         width: 100%;
         height: 200px;
@@ -115,7 +114,6 @@
         font-size: 14px;
         overflow: hidden;
       }
-
       .card-image img {
         width: 100%;
         height: 100%;
@@ -124,31 +122,26 @@
         max-width: 100%;
         max-height: 100%;
       }
-
       .card-content {
         padding: 20px;
       }
-
       .card-title {
         font-size: 1.3em;
         font-weight: 600;
         margin-bottom: 8px;
-        color: #2c3e50;
+        color: #795548;
       }
-
       .card-author {
         color: #6c757d;
         margin-bottom: 12px;
         font-size: 0.95em;
       }
-
       .card-price {
         font-size: 1.4em;
         font-weight: 700;
-        color: #28a745;
+        color: #ff9800;
         margin-bottom: 15px;
       }
-
       .card-category {
         display: inline-block;
         background: #e9ecef;
@@ -158,10 +151,9 @@
         font-size: 0.8em;
         margin-bottom: 15px;
       }
-
       .affiliate-btn {
-        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-        color: white;
+        background: linear-gradient(90deg, #ff9800 0%, #ffb74d 100%);
+        color: #fff;
         border: none;
         padding: 12px 25px;
         border-radius: 25px;
@@ -172,19 +164,17 @@
         text-decoration: none;
         display: inline-block;
         text-align: center;
+        box-shadow: 0 2px 8px rgba(255, 152, 0, 0.08);
       }
-
       .affiliate-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        background: #795548;
+        color: #fff;
       }
-
       .loading {
         text-align: center;
         padding: 60px;
         color: #6c757d;
       }
-
       .error {
         text-align: center;
         padding: 40px;
@@ -193,24 +183,29 @@
         border-radius: 8px;
         margin: 20px 0;
       }
-
       .footer {
-        background: #2c3e50;
-        color: white;
+        background: #fff3e0;
+        color: #795548;
         text-align: center;
-        padding: 30px;
-        margin-top: 40px;
+        padding: 24px 0 12px 0;
+        font-size: 1em;
+        border-top: 1px solid #eee;
       }
-
+      .footer a {
+        color: #ff9800;
+        text-decoration: underline;
+        margin: 0 10px;
+      }
+      .footer a:hover {
+        color: #795548;
+      }
       @media (max-width: 768px) {
         .header h1 {
           font-size: 2em;
         }
-
         .content {
           padding: 20px;
         }
-
         .recommendations-grid {
           grid-template-columns: 1fr;
         }
@@ -220,8 +215,13 @@
   <body>
     <div class="container">
       <header class="header">
-        <h1>📚 MyBookshelf</h1>
-        <p>Weekly Leadership & Productivity Recommendations</p>
+        <img
+          src="/mybookshelf-logo.jpg"
+          alt="MyBookshelf Logo"
+          class="header-logo"
+        />
+        <h1>myBookshelf</h1>
+        <p>Curated weekly book recommendations for Christian leaders</p>
       </header>
 
       <div class="verse">
@@ -258,8 +258,14 @@
       </div>
 
       <footer class="footer">
-        <p>Built with ❤️ for Christian professionals seeking growth</p>
-        <p>Powered by Supabase • Amazon Associates Program</p>
+        <div>
+          &copy; 2025 MyBookshelf. All rights reserved. &middot;
+          <a href="/privacy.html">Privacy Policy</a> &middot;
+          <a href="/terms.html">Terms of Service</a>
+        </div>
+        <div style="margin-top: 8px; font-size: 0.95em">
+          Powered by MyBookshelf
+        </div>
       </footer>
     </div>
 

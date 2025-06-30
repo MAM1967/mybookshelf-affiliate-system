@@ -1,0 +1,131 @@
+name: Scheduled Health Check
+
+on:
+  schedule:
+    # Run every hour
+    - cron: "0 * * * *"
+  workflow_dispatch: # Allow manual triggers
+
+env:
+  PYTHON_VERSION: "3.9"
+
+jobs:
+  health-check:
+    name: Production Health Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Run production health check
+        run: |
+          cd backend/scripts
+          python test_deployment.py --url https://mybookshelf.shop --performance
+
+      - name: Run affiliate link health check
+        run: |
+          cd backend/scripts
+          python test_affiliate_links.py --report
+
+      - name: Upload health check reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: health-check-reports-${{ github.run_number }}
+          path: |
+            backend/scripts/deployment_test_report_*.json
+            backend/scripts/affiliate_link_test_report_*.json
+
+      - name: Notify on failures
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Production Health Check Failed - ${new Date().toISOString()}`,
+              body: `
+            ## ❌ Production Health Check Alert
+
+            **Time:** ${new Date().toISOString()}  
+            **Site:** https://mybookshelf.shop  
+            **Workflow:** [${context.runNumber}](${context.payload.repository.html_url}/actions/runs/${context.runId})
+
+            ### Issue Details:
+            The automated health check for MyBookshelf production site has failed.
+
+            ### Immediate Actions Required:
+            1. Check site availability at https://mybookshelf.shop
+            2. Verify affiliate links are working
+            3. Review deployment logs
+            4. Test revenue tracking functionality
+
+            ### Business Impact:
+            ⚠️ Revenue generation may be impacted if affiliate links are broken
+
+            ---
+            *This issue was automatically created by the health check workflow*
+              `,
+              labels: ['bug', 'production', 'urgent', 'automated']
+            });
+
+            // Also try to notify via Slack if webhook is configured
+            if (process.env.SLACK_WEBHOOK_URL) {
+              await fetch(process.env.SLACK_WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  text: `🚨 MyBookshelf Production Health Check Failed`,
+                  attachments: [{
+                    color: 'danger',
+                    fields: [
+                      { title: 'Site', value: 'https://mybookshelf.shop', short: true },
+                      { title: 'Time', value: new Date().toISOString(), short: true },
+                      { title: 'Action', value: 'Check site immediately', short: false }
+                    ]
+                  }]
+                })
+              });
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  weekly-report:
+    name: Weekly Health Report
+    runs-on: ubuntu-latest
+    if: github.event.schedule == '0 9 * * 1' # Mondays at 9 AM
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Generate weekly health report
+        run: |
+          cd backend/scripts
+          python generate_weekly_report.py
+
+      - name: Upload weekly report
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-health-report-${{ github.run_number }}
+          path: backend/scripts/weekly_health_report_*.json

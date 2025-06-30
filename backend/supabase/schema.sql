@@ -8,3 +8,8 @@ CREATE TABLE books_accessories (
     category TEXT NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE pending_books ADD COLUMN IF NOT EXISTS scheduled_post_at timestamp with time zone;
+ALTER TABLE pending_books ADD COLUMN IF NOT EXISTS posted_at timestamp with time zone;
+ALTER TABLE pending_books ADD COLUMN IF NOT EXISTS post_status text DEFAULT 'pending';
+ALTER TABLE pending_books ADD COLUMN IF NOT EXISTS post_content text;

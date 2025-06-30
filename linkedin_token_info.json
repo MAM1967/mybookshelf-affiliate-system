@@ -1,0 +1,23 @@
+{
+  "token_info": {
+    "access_token": "AQXvDVsNgG4EdnS3AsvgatQ-JUThIvZNm71jTdikXPCm30ebKVc-Pc6FvrS8miiCpTLCEJfH6t7syqjpCaV1AIVgLWOd92ofjGuzaRwL_F7TQePOWgu6Qf3d6vdN91H6Xqq5accTqgvX9H65j7xbRcxNBC6IbljYBg5I5Mib16dj07Q3I9eeogc_5Fh-Hr2NlGikGM03vokNH1GpfR-42WOK0TlAXJqrW76UCIZnzgfBUCYJjUVf1YxuUZdzQxCYBNUNSNhK_D-4pHLM9TzDFnw7YAfl0L7MfCv4NpRbWyArlePReqcxn7yXraBFyCT07hTo0BYB9oRvDi3jbRNAZjHL74Ivmw",
+    "expires_in": 5183999,
+    "scope": "email,openid,profile,w_member_social",
+    "token_type": "Bearer",
+    "id_token": "eyJ6aXAiOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImQ5Mjk2NjhhLWJhYjEtNGM2OS05NTk4LTQzNzMxNDk3MjNmZiIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL3d3dy5saW5rZWRpbi5jb20vb2F1dGgiLCJhdWQiOiI3OHdtcmhkZDk5c3NiaSIsImlhdCI6MTc1MTMxMjM4OSwiZXhwIjoxNzUxMzE1OTg5LCJzdWIiOiI5UGpaaS1OSkJ5IiwibmFtZSI6Ik1pY2hhZWwgTWNEZXJtb3R0IiwiZ2l2ZW5fbmFtZSI6Ik1pY2hhZWwiLCJmYW1pbHlfbmFtZSI6Ik1jRGVybW90dCIsInBpY3R1cmUiOiJodHRwczovL21lZGlhLmxpY2RuLmNvbS9kbXMvaW1hZ2UvdjIvRDRFMDNBUUhKNFZLbzhCSm1FQS9wcm9maWxlLWRpc3BsYXlwaG90by1zaHJpbmtfNDAwXzQwMC9CNEVaYU02dGt4SE1BZy0vMC8xNzQ2MTIwOTI0MzUyP2U9MjE0NzQ4MzY0NyZ2PWJldGEmdD1CYUwzT3ozMGpVSFNBV0NjUE9SdHdhTTJpRHFHYjlTRC15U3BwdU8zMHlvIiwiZW1haWwiOiJtaWNoYWVsLm1jZGVybW90dEBjcmVzdGNvbS5jb20iLCJlbWFpbF92ZXJpZmllZCI6InRydWUiLCJsb2NhbGUiOiJlbl9VUyJ9.SB4bS-UB1ttWnYiCjKQGyfdZ14odMQmAHh6NfTuc7fdxWh8FIIZsnAJLNVJ6VChpc_9VK4LjtoASlF2AKOUAMveTFGmfxChhmUI_z6hGvzmOsnssl5GnPV3VK-f5UmmVoCLmO4G-XO9hDiiGOUxwKkk5EKrm6AkPMExOxpWf-ohxxQlpXuA3zmFSrU8DUc2GL7hzQvVBoVL-p3QPQC8MnZlsInmtzwo2t7JmK7SzEmPoVQPCzFLHR7kPsjuS8UcJNTuyE_wIbGWk_AfULvRIYT7XbRWTfjegKdKCfnPwKQaOiR4RypykPNFCFeGwbVrX7ccn_9ncHRoctGCq2XZ7zLXTRDm1fRq-ujL-huDhmLv2BnwrdqOrVSztWCpVLn48u8fBNOiv0c_YEXeX4yGRQykajQEFQzZ7EudKjsT82f0JdATKX0ii9OhD1nmzZRiLXNuxQEW5FaqNTINiYmMD7wi7yLpbOZvrQ7JW_D7mPdsrRJfGAc89Uava5cOUZV82BKMS6QSJyRXfLrbwMYLPfVoRrhsnZ4HssNLcpnWCqH6WNyqAtsREVvKzcbL-uKW6WWLDEM5rf8jygUN9IueJdvc3Qp_nr8iU9_Na1KmwsZz4WiDeZoNDU7MSLi2fA7FoJcwEd160PETH4BZI1p1A2nt4nEWwkkYk9p3pSH1bTB4"
+  },
+  "profile": {
+    "sub": "9PjZi-NJBy",
+    "email_verified": true,
+    "name": "Michael McDermott",
+    "locale": {
+      "country": "US",
+      "language": "en"
+    },
+    "given_name": "Michael",
+    "family_name": "McDermott",
+    "email": "michael.mcdermott@crestcom.com",
+    "picture": "https://media.licdn.com/dms/image/v2/D4E03AQHJ4VKo8BJmEA/profile-displayphoto-shrink_400_400/B4EZaM6tkxHMAg-/0/1746120924352?e=1756944000&v=beta&t=XNzEVcnf2eSkvBh13hG7FQ-NlGtajro29aQL7DqgAuY"
+  },
+  "completion_time": "2025-06-30T15:39:49.383649"
+}

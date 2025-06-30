@@ -1,0 +1,60 @@
+{
+  "report_metadata": {
+    "generated_at": "2025-06-30T11:00:57.092836",
+    "report_type": "weekly_health_report",
+    "period_days": 7,
+    "data_sources": {
+      "deployment_reports": 1,
+      "affiliate_reports": 2,
+      "test_suite_reports": 1
+    }
+  },
+  "executive_summary": {
+    "overall_status": "HEALTHY",
+    "key_metrics": {
+      "deployment_success_rate": 100.0,
+      "avg_response_time_ms": 141.0,
+      "revenue_tracking_rate": 100.0
+    },
+    "critical_issues": 0,
+    "warnings": 0
+  },
+  "detailed_analysis": {
+    "overall_status": "HEALTHY",
+    "deployment_health": {
+      "status": "HEALTHY",
+      "metrics": {
+        "total_tests": 1,
+        "success_rate": 100.0,
+        "avg_response_time_ms": 141.0,
+        "performance_trend": "insufficient_data",
+        "fastest_response": 141,
+        "slowest_response": 141
+      }
+    },
+    "affiliate_link_health": {
+      "status": "HEALTHY",
+      "metrics": {
+        "total_tests": 2,
+        "avg_revenue_tracking_rate": 100.0,
+        "min_revenue_tracking_rate": 100.0,
+        "tests_with_issues": 0
+      }
+    },
+    "period": {
+      "start_date": "2025-06-23T11:00:57.088946",
+      "end_date": "2025-06-30T11:00:57.088946",
+      "days": 7
+    }
+  },
+  "recommendations": [
+    "\u2705 System is healthy - maintain current practices",
+    "\u2022 Continue regular monitoring",
+    "\u2022 Plan for capacity growth"
+  ],
+  "raw_data_summary": {
+    "deployment_tests": 1,
+    "affiliate_tests": 2,
+    "total_monitoring_points": 3
+  }
+}

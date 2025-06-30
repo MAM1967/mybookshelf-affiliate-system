@@ -1,0 +1,90 @@
+{
+  "timestamp": "2025-06-30T15:40:14.043420",
+  "total_tests": 5,
+  "passed": 4,
+  "warnings": 1,
+  "failed": 0,
+  "success_rate": "80.0%",
+  "results": [
+    {
+      "test_name": "Required Fields",
+      "category": "Schema",
+      "status": "PASS",
+      "message": "All required fields present",
+      "details": null,
+      "affected_records": []
+    },
+    {
+      "test_name": "Data Types",
+      "category": "Data Quality",
+      "status": "PASS",
+      "message": "All records have valid data types",
+      "details": null,
+      "affected_records": []
+    },
+    {
+      "test_name": "Affiliate Links",
+      "category": "Business Rules",
+      "status": "WARN",
+      "message": "4 records have affiliate link issues",
+      "details": {
+        "invalid_links": [
+          {
+            "id": 17,
+            "title": "The Five Dysfunctions of a Team",
+            "link": "https://amazon.com/dp/EXAMPLE123?tag=mybookshelf-20",
+            "errors": [
+              "Contains placeholder/example URL"
+            ]
+          },
+          {
+            "id": 18,
+            "title": "The Advantage",
+            "link": "https://amazon.com/dp/EXAMPLE124?tag=mybookshelf-20",
+            "errors": [
+              "Contains placeholder/example URL"
+            ]
+          },
+          {
+            "id": 19,
+            "title": "Atomic Habits",
+            "link": "https://amazon.com/dp/EXAMPLE125?tag=mybookshelf-20",
+            "errors": [
+              "Contains placeholder/example URL"
+            ]
+          },
+          {
+            "id": 20,
+            "title": "Leadership Journal - Daily Planner",
+            "link": "https://amazon.com/dp/EXAMPLE456?tag=mybookshelf-20",
+            "errors": [
+              "Contains placeholder/example URL"
+            ]
+          }
+        ]
+      },
+      "affected_records": [
+        17,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "test_name": "Duplicates",
+      "category": "Data Quality",
+      "status": "PASS",
+      "message": "No duplicate records found",
+      "details": null,
+      "affected_records": []
+    },
+    {
+      "test_name": "Business Rules",
+      "category": "Business Rules",
+      "status": "PASS",
+      "message": "All records comply with business rules",
+      "details": null,
+      "affected_records": []
+    }
+  ]
+}

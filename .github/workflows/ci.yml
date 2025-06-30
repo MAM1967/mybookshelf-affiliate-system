@@ -1,0 +1,242 @@
+name: MyBookshelf CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, staging, dev]
+  pull_request:
+    branches: [main, staging, dev]
+
+env:
+  NODE_VERSION: "18"
+  PYTHON_VERSION: "3.9"
+
+jobs:
+  test:
+    name: Run Test Suite
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Python dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      - name: Run affiliate link tests
+        run: |
+          cd backend/scripts
+          python test_affiliate_links.py --report
+
+      - name: Run database integrity tests
+        run: |
+          cd backend/scripts
+          python test_database_integrity.py --report
+
+      - name: Run unified test suite
+        run: |
+          cd backend/scripts
+          python run_all_tests.py --report --output ci_test_report.json
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports-${{ github.run_number }}
+          path: |
+            backend/scripts/*.json
+
+      - name: Comment test results on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = 'backend/scripts/ci_test_report.json';
+
+            if (fs.existsSync(path)) {
+              const report = JSON.parse(fs.readFileSync(path, 'utf8'));
+              const status = report.overall_status;
+              const icon = status === 'PASSED' ? '✅' : status === 'WARNINGS' ? '⚠️' : '❌';
+              
+              const comment = `
+            ## ${icon} MyBookshelf Test Results
+
+            **Overall Status:** ${status}  
+            **Duration:** ${report.total_duration_seconds}s  
+            **Test Suites:** ${report.test_suites.passed}✅ ${report.test_suites.warnings}⚠️ ${report.test_suites.failed}❌
+
+            ### Test Suite Details:
+            ${report.results.map(r => `- ${r.status === 'PASSED' ? '✅' : r.status === 'WARNINGS' ? '⚠️' : '❌'} **${r.name}**: ${r.status} (${r.duration_seconds}s)`).join('\n')}
+
+            ### Business Impact:
+            ${status === 'PASSED' ? '✅ All systems operational - Revenue tracking optimal' : 
+              status === 'WARNINGS' ? '⚠️ Minor issues detected - Review before merge' : 
+              '❌ Critical issues detected - Do not merge'}
+              `;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-results.sarif"
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: "trivy-results.sarif"
+
+  deploy-staging:
+    name: Deploy to Staging
+    needs: [test, security-scan]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
+
+    environment:
+      name: staging
+      url: https://mybookshelf-affiliate-system-staging.vercel.app
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Vercel (Staging)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: frontend/mini-app
+          vercel-args: "--prod"
+
+      - name: Run post-deployment tests
+        run: |
+          cd backend/scripts
+          # Test staging deployment
+          STAGING_URL="https://mybookshelf-affiliate-system-staging.vercel.app" python test_deployment.py
+
+  deploy-production:
+    name: Deploy to Production
+    needs: [test, security-scan]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    environment:
+      name: production
+      url: https://mybookshelf.shop
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Vercel (Production)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: frontend/mini-app
+          vercel-args: "--prod"
+
+      - name: Run post-deployment tests
+        run: |
+          cd backend/scripts
+          # Test production deployment
+          PRODUCTION_URL="https://mybookshelf.shop" python test_deployment.py
+
+      - name: Notify deployment success
+        uses: 8398a7/action-slack@v3
+        if: success()
+        with:
+          status: success
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+          text: "✅ MyBookshelf deployed to production successfully!"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Notify deployment failure
+        uses: 8398a7/action-slack@v3
+        if: failure()
+        with:
+          status: failure
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+          text: "❌ MyBookshelf production deployment failed!"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  dependency-update:
+    name: Update Dependencies
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Update Python dependencies
+        run: |
+          cd backend
+          pip install --upgrade pip
+          pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
+          pip freeze > requirements.txt
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update Python dependencies"
+          title: "chore: update Python dependencies"
+          body: |
+            Automated dependency update
+
+            This PR updates Python dependencies to their latest versions.
+            Please review the changes and test thoroughly before merging.
+          branch: "chore/update-dependencies"
