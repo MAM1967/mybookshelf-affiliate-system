@@ -310,10 +310,11 @@ class ScheduledLinkedInPoster:
         """Run scheduled posting for today"""
         logger.info("🚀 Starting scheduled LinkedIn posting for today")
         
-        # Load LinkedIn credentials
-        if not self.load_access_token():
-            logger.error("❌ Cannot proceed without valid LinkedIn credentials")
-            return {'status': 'error', 'reason': 'No valid LinkedIn credentials'}
+        # Load LinkedIn credentials (skip validation in dry run mode)
+        if self.access_token != "dry_run_mode":
+            if not self.load_access_token():
+                logger.error("❌ Cannot proceed without valid LinkedIn credentials")
+                return {'status': 'error', 'reason': 'No valid LinkedIn credentials'}
         
         # Get books scheduled for today
         scheduled_books = self.get_scheduled_books_for_today()
