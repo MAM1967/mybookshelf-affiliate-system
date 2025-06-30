@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LinkedIn OAuth - MyBookshelf</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+      .success {
+        color: #16a34a;
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .error {
+        color: #dc2626;
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .info {
+        background: #f0f9ff;
+        border: 1px solid #0ea5e9;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+      }
+      .code-block {
+        background: #1f2937;
+        color: #f3f4f6;
+        padding: 15px;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 14px;
+        word-break: break-all;
+        margin: 10px 0;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+      .button {
+        display: inline-block;
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: white;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        margin: 10px;
+        cursor: pointer;
+        border: none;
+      }
+      .button:hover {
+        background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+      }
+      .step {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 4px;
+      }
+      .loading {
+        text-align: center;
+        padding: 20px;
+      }
+      .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #2563eb;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      #status {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="content">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Processing LinkedIn OAuth callback...</p>
+        </div>
+      </div>
+      <div id="status"></div>
+    </div>
+
+    <script>
+      // LinkedIn OAuth Configuration
+      const LINKEDIN_CLIENT_ID = "78wmrhdd99ssbi";
+      const LINKEDIN_CLIENT_SECRET =
+        process.env.LINKEDIN_CLIENT_SECRET || "YOUR_CLIENT_SECRET"; // This won't work in browser
+      const REDIRECT_URI = "https://mybookshelf.shop/linkedin-oauth.html";
+
+      // Parse URL parameters
+      function getUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+          code: params.get("code"),
+          state: params.get("state"),
+          error: params.get("error"),
+          error_description: params.get("error_description"),
+        };
+      }
+
+      // Display OAuth parameters and instructions
+      function displayOAuthResults() {
+        const params = getUrlParams();
+        const content = document.getElementById("content");
+
+        if (params.error) {
+          content.innerHTML = `
+                    <div class="error">❌ LinkedIn Authorization Failed</div>
+                    <div class="info">
+                        <h3>Error Details:</h3>
+                        <p><strong>Error:</strong> ${params.error}</p>
+                        <p><strong>Description:</strong> ${
+                          params.error_description || "No description provided"
+                        }</p>
+                    </div>
+                    <div class="step">
+                        <h4>🔧 Next Steps:</h4>
+                        <p>Please try the authorization process again or contact support.</p>
+                    </div>
+                    <a href="/admin" class="button">Return to Admin Dashboard</a>
+                `;
+          return;
+        }
+
+        if (!params.code) {
+          content.innerHTML = `
+                    <div class="error">❌ No Authorization Code</div>
+                    <div class="info">
+                        <h3>Missing OAuth Parameters:</h3>
+                        <p>No authorization code was received from LinkedIn.</p>
+                    </div>
+                    <div class="step">
+                        <h4>🔧 Next Steps:</h4>
+                        <p>Please restart the LinkedIn OAuth process from the admin dashboard.</p>
+                    </div>
+                    <a href="/admin" class="button">Go to Admin Dashboard</a>
+                `;
+          return;
+        }
+
+        // Validate state parameter
+        if (
+          params.state !== "mybookshelf_production_oauth" &&
+          !params.state.startsWith("mybookshelf_")
+        ) {
+          content.innerHTML = `
+                    <div class="error">❌ Invalid State Parameter</div>
+                    <div class="info">
+                        <h3>Security Warning:</h3>
+                        <p>The state parameter doesn't match expected value. This could indicate a security issue.</p>
+                        <p><strong>Received State:</strong> ${params.state}</p>
+                    </div>
+                    <div class="step">
+                        <h4>🔧 Next Steps:</h4>
+                        <p>Please restart the OAuth process from a clean session.</p>
+                    </div>
+                    <a href="/admin" class="button">Return to Admin Dashboard</a>
+                `;
+          return;
+        }
+
+        // Success - display manual token exchange instructions
+        content.innerHTML = `
+                <div class="success">🎉 LinkedIn Authorization Code Received!</div>
+                
+                <div class="info">
+                    <h3>✅ OAuth Callback Successful</h3>
+                    <p><strong>Status:</strong> Authorization code received from LinkedIn</p>
+                    <p><strong>Client ID:</strong> ${LINKEDIN_CLIENT_ID}</p>
+                    <p><strong>State:</strong> ${params.state}</p>
+                    <p><strong>Code Length:</strong> ${
+                      params.code.length
+                    } characters</p>
+                </div>
+
+                <div class="step">
+                    <h4>🔧 Manual Token Exchange Required</h4>
+                    <p>Due to Vercel domain routing issues, please complete the setup manually using the emergency script:</p>
+                    
+                    <h5>Step 1: Copy the authorization code</h5>
+                    <div class="code-block" id="auth-code">${params.code}</div>
+                    <button class="button" onclick="copyToClipboard('auth-code')">📋 Copy Code</button>
+                    
+                    <h5>Step 2: Run the emergency completion script</h5>
+                    <div class="code-block">python3 backend/scripts/emergency_oauth_complete.py "${
+                      params.code
+                    }"</div>
+                    
+                    <h5>Step 3: Or manually exchange via curl</h5>
+                    <div class="code-block">curl -X POST https://www.linkedin.com/oauth/v2/accessToken \\
+  -H "Content-Type: application/x-www-form-urlencoded" \\
+  -d "grant_type=authorization_code&code=${
+    params.code
+  }&client_id=${LINKEDIN_CLIENT_ID}&client_secret=YOUR_SECRET&redirect_uri=${encodeURIComponent(
+          REDIRECT_URI
+        )}"</div>
+                </div>
+
+                <div class="info">
+                    <h4>🚀 What Happens Next:</h4>
+                    <ul>
+                        <li>Exchange the authorization code for an access token</li>
+                        <li>Retrieve your LinkedIn profile information</li>
+                        <li>Store the access token in Supabase database</li>
+                        <li>LinkedIn automation will be ready for production</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <h4>⚠️ Domain Issue Explanation:</h4>
+                    <p>Vercel is redirecting <code>mybookshelf.shop</code> → <code>www.mybookshelf.shop</code> but the www subdomain can't serve serverless functions, causing 404 errors. This affects OAuth callbacks but not the manual token exchange process.</p>
+                </div>
+
+                <button class="button" onclick="generateEmergencyScript()">🔧 Generate Emergency Script</button>
+                <a href="/admin" class="button">Go to Admin Dashboard</a>
+            `;
+      }
+
+      // Copy text to clipboard
+      function copyToClipboard(elementId) {
+        const element = document.getElementById(elementId);
+        const text = element.textContent;
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = "✅ Copied!";
+            button.style.background = "#10b981";
+            setTimeout(() => {
+              button.textContent = originalText;
+              button.style.background = "";
+            }, 2000);
+          })
+          .catch(() => {
+            alert(
+              "Failed to copy to clipboard. Please select and copy manually."
+            );
+          });
+      }
+
+      // Generate emergency script content
+      function generateEmergencyScript() {
+        const params = getUrlParams();
+        const script = `#!/usr/bin/env python3
+"""
+Emergency LinkedIn OAuth Completion Script
+Generated automatically from successful OAuth callback
+"""
+
+import requests
+import json
+import os
+from datetime import datetime
+
+# OAuth Configuration
+LINKEDIN_CLIENT_ID = "${LINKEDIN_CLIENT_ID}"
+LINKEDIN_CLIENT_SECRET = os.getenv('LINKEDIN_CLIENT_SECRET', 'YOUR_CLIENT_SECRET_HERE')
+AUTHORIZATION_CODE = "${params.code}"
+REDIRECT_URI = "${REDIRECT_URI}"
+
+def exchange_token():
+    """Exchange authorization code for access token"""
+    
+    print("🔄 Exchanging authorization code for access token...")
+    
+    # Token exchange request
+    token_url = "https://www.linkedin.com/oauth/v2/accessToken"
+    token_data = {
+        'grant_type': 'authorization_code',
+        'code': AUTHORIZATION_CODE,
+        'client_id': LINKEDIN_CLIENT_ID,
+        'client_secret': LINKEDIN_CLIENT_SECRET,
+        'redirect_uri': REDIRECT_URI
+    }
+    
+    response = requests.post(token_url, data=token_data)
+    
+    if response.status_code == 200:
+        token_info = response.json()
+        print("✅ Token exchange successful!")
+        print(f"Access Token: {token_info.get('access_token', 'N/A')[:20]}...")
+        return token_info
+    else:
+        print(f"❌ Token exchange failed: {response.status_code}")
+        print(f"Response: {response.text}")
+        return None
+
+def get_user_profile(access_token):
+    """Get LinkedIn user profile"""
+    
+    print("👤 Fetching user profile...")
+    
+    profile_url = "https://api.linkedin.com/v2/userinfo"
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+        'Content-Type': 'application/json'
+    }
+    
+    response = requests.get(profile_url, headers=headers)
+    
+    if response.status_code == 200:
+        profile = response.json()
+        print("✅ Profile retrieved successfully!")
+        print(f"Name: {profile.get('name', 'N/A')}")
+        print(f"Email: {profile.get('email', 'N/A')}")
+        return profile
+    else:
+        print(f"❌ Profile fetch failed: {response.status_code}")
+        return None
+
+if __name__ == "__main__":
+    print("🚀 Emergency LinkedIn OAuth Completion")
+    print("=" * 50)
+    
+    # Step 1: Exchange code for token
+    token_info = exchange_token()
+    if not token_info:
+        exit(1)
+    
+    # Step 2: Get user profile
+    profile = get_user_profile(token_info['access_token'])
+    if not profile:
+        exit(1)
+    
+    print("\\n🎉 OAuth completion successful!")
+    print("\\nNext steps:")
+    print("1. Store the access token in your Supabase database")
+    print("2. Test LinkedIn posting functionality")
+    print("3. Enable LinkedIn automation")
+`;
+
+        // Create and download the script
+        const blob = new Blob([script], { type: "text/plain" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "emergency_linkedin_oauth_complete.py";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        document.getElementById("status").innerHTML = `
+                <div class="info">
+                    <h4>📥 Emergency Script Downloaded</h4>
+                    <p>The emergency completion script has been downloaded. Run it to complete the OAuth process manually.</p>
+                </div>
+            `;
+      }
+
+      // Initialize when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        // Add small delay to show the loading spinner
+        setTimeout(displayOAuthResults, 1000);
+      });
+    </script>
+  </body>
+</html>

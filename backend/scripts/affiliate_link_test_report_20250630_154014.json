@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-06-30T15:40:14.682623",
+  "total_links": 4,
+  "passed": 3,
+  "warnings": 1,
+  "failed": 0,
+  "success_rate": "75.0%",
+  "revenue_tracking_rate": "100.0%",
+  "avg_response_time_ms": 101,
+  "results": [
+    {
+      "id": 17,
+      "title": "The Five Dysfunctions of a Team",
+      "status_code": 404,
+      "response_time_ms": 284,
+      "has_affiliate_tag": true,
+      "is_amazon_domain": true,
+      "error_message": null,
+      "warnings": [
+        "Unexpected status code: 404",
+        "Product page not found"
+      ],
+      "final_url": "https://www.amazon.com/dp/EXAMPLE123?tag=mybookshelf-20"
+    },
+    {
+      "id": 18,
+      "title": "The Advantage",
+      "status_code": 200,
+      "response_time_ms": 41,
+      "has_affiliate_tag": true,
+      "is_amazon_domain": true,
+      "error_message": null,
+      "warnings": [],
+      "final_url": "https://www.amazon.com/dp/EXAMPLE124?tag=mybookshelf-20"
+    },
+    {
+      "id": 19,
+      "title": "Atomic Habits",
+      "status_code": 200,
+      "response_time_ms": 40,
+      "has_affiliate_tag": true,
+      "is_amazon_domain": true,
+      "error_message": null,
+      "warnings": [],
+      "final_url": "https://www.amazon.com/dp/EXAMPLE125?tag=mybookshelf-20"
+    },
+    {
+      "id": 20,
+      "title": "Leadership Journal - Daily Planner",
+      "status_code": 200,
+      "response_time_ms": 40,
+      "has_affiliate_tag": true,
+      "is_amazon_domain": true,
+      "error_message": null,
+      "warnings": [],
+      "final_url": "https://www.amazon.com/dp/EXAMPLE456?tag=mybookshelf-20"
+    }
+  ]
+}

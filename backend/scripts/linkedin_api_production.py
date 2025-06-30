@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-LinkedIn API Integration for MyBookshelf Production
-Handles token exchange, storage, and posting automation
+LinkedIn API Production Configuration
+Generates OAuth URLs and manages LinkedIn API for production deployment
 """
 
 import os
@@ -12,6 +12,7 @@ import urllib.parse
 from datetime import datetime, timedelta
 from typing import Dict, Optional, List
 import logging
+from urllib.parse import urlencode
 
 # Add parent directory for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -38,13 +39,17 @@ class LinkedInAPIProduction:
         """Initialize LinkedIn API client"""
         self.client_id = os.getenv('LINKEDIN_CLIENT_ID', '78wmrhdd99ssbi')
         self.client_secret = os.getenv('LINKEDIN_CLIENT_SECRET')
-        self.redirect_uri = os.getenv('LINKEDIN_REDIRECT_URI', 'https://mybookshelf.shop/api/linkedin-callback')
+        self.redirect_uri = os.getenv('LINKEDIN_REDIRECT_URI', 'https://mybookshelf.shop/linkedin-oauth')
         
-        # Initialize Supabase for token storage
+        # Initialize Supabase for token storage (optional for URL generation)
+        self.supabase: Optional[Client] = None
         if Config.SUPABASE_URL and Config.SUPABASE_ANON_KEY:
-            self.supabase: Client = create_client(Config.SUPABASE_URL, Config.SUPABASE_ANON_KEY)
+            try:
+                self.supabase = create_client(Config.SUPABASE_URL, Config.SUPABASE_ANON_KEY)
+            except Exception as e:
+                logger.warning(f"⚠️ Supabase initialization failed: {e}")
         else:
-            raise ValueError("Missing Supabase configuration")
+            logger.info("ℹ️ Supabase not configured - some features will be limited")
         
         # LinkedIn API endpoints
         self.auth_url = 'https://www.linkedin.com/oauth/v2/authorization'
@@ -58,7 +63,7 @@ class LinkedInAPIProduction:
     def get_authorization_url(self, state: Optional[str] = None) -> str:
         """Generate LinkedIn authorization URL"""
         if not state:
-            state = f"mybookshelf_{int(datetime.now().timestamp())}"
+            state = f"mybookshelf_production_oauth"
         
         params = {
             'response_type': 'code',
@@ -68,7 +73,7 @@ class LinkedInAPIProduction:
             'scope': ' '.join(self.scopes)
         }
         
-        auth_url = f"{self.auth_url}?{urllib.parse.urlencode(params)}"
+        auth_url = f"{self.auth_url}?{urlencode(params)}"
         logger.info(f"Generated authorization URL: {auth_url}")
         return auth_url
     
@@ -276,49 +281,63 @@ class LinkedInAPIProduction:
             logger.error(f"❌ Error creating post: {e}")
             return False
 
+def generate_linkedin_oauth_url():
+    """Generate LinkedIn OAuth authorization URL for production"""
+    
+    # Production LinkedIn App Configuration
+    client_id = "78wmrhdd99ssbi"
+    redirect_uri = "https://mybookshelf.shop/linkedin-oauth.html"  # Updated to static HTML file
+    scope = "openid profile w_member_social email"
+    state = "mybookshelf_production_oauth"
+    
+    # LinkedIn OAuth 2.0 endpoint
+    auth_url = "https://www.linkedin.com/oauth/v2/authorization"
+    
+    # Build OAuth parameters
+    params = {
+        'response_type': 'code',
+        'client_id': client_id,
+        'redirect_uri': redirect_uri,
+        'state': state,
+        'scope': scope
+    }
+    
+    # Generate full authorization URL
+    oauth_url = f"{auth_url}?{urlencode(params)}"
+    
+    return {
+        'oauth_url': oauth_url,
+        'client_id': client_id,
+        'redirect_uri': redirect_uri,
+        'scope': scope,
+        'state': state
+    }
+
 def main():
-    """Main function for testing and setup"""
-    import argparse
+    """Main function to generate and display OAuth URL"""
+    print("🔗 LinkedIn OAuth Production Configuration")
+    print("=" * 50)
     
-    parser = argparse.ArgumentParser(description='LinkedIn API Production Integration')
-    parser.add_argument('--auth-url', action='store_true', help='Generate authorization URL')
-    parser.add_argument('--exchange-token', help='Exchange authorization code for token')
-    parser.add_argument('--test-connection', action='store_true', help='Test stored token')
-    parser.add_argument('--test-post', help='Create a test post with given text')
+    config = generate_linkedin_oauth_url()
     
-    args = parser.parse_args()
-    
-    linkedin = LinkedInAPIProduction()
-    
-    if args.auth_url:
-        auth_url = linkedin.get_authorization_url()
-        print(f"🔗 Open this URL to authorize LinkedIn access:")
-        print(f"   {auth_url}")
-    
-    elif args.exchange_token:
-        token_info = linkedin.exchange_code_for_token(args.exchange_token)
-        if token_info:
-            if linkedin.store_access_token(token_info):
-                print("✅ Token exchange and storage successful!")
-            else:
-                print("❌ Token storage failed")
-        else:
-            print("❌ Token exchange failed")
-    
-    elif args.test_connection:
-        success = linkedin.test_linkedin_connection()
-        sys.exit(0 if success else 1)
-    
-    elif args.test_post:
-        success = linkedin.create_text_post(args.test_post)
-        if success:
-            print("✅ Test post created successfully!")
-        else:
-            print("❌ Test post failed")
-        sys.exit(0 if success else 1)
-    
-    else:
-        print("Use --help to see available options")
+    print(f"📱 Client ID: {config['client_id']}")
+    print(f"🔄 Redirect URI: {config['redirect_uri']}")
+    print(f"🔐 Scope: {config['scope']}")
+    print(f"🔒 State: {config['state']}")
+    print()
+    print("🚀 OAuth Authorization URL:")
+    print("-" * 30)
+    print(config['oauth_url'])
+    print()
+    print("📋 Instructions:")
+    print("1. Copy the OAuth URL above")
+    print("2. Open it in your browser") 
+    print("3. Authorize the LinkedIn app")
+    print("4. You'll be redirected to the callback endpoint")
+    print("5. The serverless function will handle token exchange")
+    print()
+    print("🔧 LinkedIn App Redirect URI should be set to:")
+    print(f"   {config['redirect_uri']}")
 
 if __name__ == "__main__":
     main()

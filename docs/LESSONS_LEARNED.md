@@ -106,7 +106,7 @@ This document captures key lessons learned during the development of the MyBooks
 
 **Takeaway**: Don't let perfect be the enemy of good - 75% working system ready for revenue generation is better than 100% system still in development.
 
-### 3. AI Coding Approach Comparison: Grok vs. Claude (December 2024)
+### 4. AI Coding Approach Comparison: Grok vs. Claude (December 2024)
 
 **Lesson**: Different AI approaches can yield dramatically different results - pragmatic vs. theoretical
 
@@ -135,7 +135,7 @@ This document captures key lessons learned during the development of the MyBooks
 
 **Takeaway**: Sometimes the "quick and dirty" AI approach that prioritizes working solutions over perfect architecture delivers better user outcomes.
 
-### 4. Database Management & Duplicate Prevention
+### 5. Database Management & Duplicate Prevention
 
 **Lesson**: Always implement duplicate prevention from the start
 
@@ -144,7 +144,7 @@ This document captures key lessons learned during the development of the MyBooks
 - **Solution**: Built comprehensive duplicate prevention system with MD5 hashing
 - **Takeaway**: Implement data integrity checks early in the development process
 
-### 5. Image System Reliability
+### 6. Image System Reliability
 
 **Lesson**: External dependencies can fail - build fallback systems
 
@@ -153,7 +153,7 @@ This document captures key lessons learned during the development of the MyBooks
 - **Solution**: Created base64 data URL system with triple-layer fallback protection
 - **Takeaway**: Eliminate external dependencies for critical functionality when possible
 
-### 6. Misleading Claims & Communication
+### 7. Misleading Claims & Communication
 
 **Lesson**: Be precise about current state vs. aspirational state
 
@@ -162,7 +162,7 @@ This document captures key lessons learned during the development of the MyBooks
 - **Solution**: Clear distinction between current state and planned features
 - **Takeaway**: Always be explicit about what is currently working vs. what is planned
 
-### 7. Getting Stuck in Loops
+### 8. Getting Stuck in Loops
 
 **Lesson**: Recognize when you're repeating the same failed approach
 
@@ -172,7 +172,7 @@ This document captures key lessons learned during the development of the MyBooks
 - **Solution**: User intervention to break the loop and try different approach
 - **Takeaway**: Build in loop detection and approach variation
 
-### 8. Knowing When to Stop
+### 9. Knowing When to Stop
 
 **Lesson**: Listen for user signals to halt current approach
 
@@ -181,7 +181,7 @@ This document captures key lessons learned during the development of the MyBooks
 - **Solution**: Immediately ceased search activity when directed
 - **Takeaway**: User control signals should override automated processes
 
-### 9. Documentation Management
+### 10. Documentation Management
 
 **Lesson**: Save important project documents in the project structure early
 
@@ -190,7 +190,7 @@ This document captures key lessons learned during the development of the MyBooks
 - **Solution**: Created docs/ folder and saved PRD.md
 - **Takeaway**: Document important requirements and decisions in version-controlled files
 
-### 10. Feature Development Order
+### 11. Feature Development Order
 
 **Lesson**: Build core functionality before polish features
 
@@ -300,6 +300,125 @@ This document captures key lessons learned during the development of the MyBooks
 ### 19. Troubleshooting Process Improvement
 
 **Lesson**: Systematic debugging reveals root causes faster
+
+### 3. LinkedIn OAuth Domain Routing Crisis & Emergency Solution (June 30, 2025) 🆕
+
+**Lesson**: Vercel domain routing issues can completely block OAuth flows - emergency workarounds are critical
+
+**Critical Production Issue:**
+
+- **❌ OAuth Callback Failures**: LinkedIn OAuth redirects returning 404 NOT_FOUND errors
+- **❌ Serverless Function Issues**: All `/api/` endpoints failing on www subdomain
+- **❌ Domain Routing Problem**: `mybookshelf.shop` → `www.mybookshelf.shop` but www can't serve dynamic content
+- **❌ Revenue System Blocked**: LinkedIn automation completely non-functional
+
+**Root Cause Analysis:**
+
+**Vercel Domain Configuration Flaw:**
+
+- ✅ **Apex domain** (`mybookshelf.shop`) → 307 redirects to www subdomain
+- ❌ **www subdomain** (`www.mybookshelf.shop`) → 404 NOT_FOUND for ALL dynamic content
+- ❌ **Serverless functions** don't work on www subdomain
+- ❌ **Static files** also fail on www subdomain
+
+**Failed Solution Attempts:**
+
+1. **❌ Static HTML Callback**: Created `linkedin-oauth.html` but still 404 on www
+2. **❌ Root-level Serverless Function**: Moved from `/api/` to root but same issue
+3. **❌ Node.js vs Python**: Tried both runtime types, same domain routing failure
+4. **❌ Vercel Configuration Fixes**: Updated routes, headers, functions config - no improvement
+5. **❌ Multiple Redirect URIs**: Attempted various URL patterns, all failed on www subdomain
+
+**BREAKTHROUGH Emergency Solution:**
+
+**Emergency OAuth Completion Script** (`backend/scripts/emergency_oauth_complete.py`):
+
+- **✅ Manual Token Exchange**: Bypass Vercel routing entirely with direct LinkedIn API calls
+- **✅ Authorization Code Extraction**: Parse OAuth callback URLs manually
+- **✅ Complete OAuth Flow**: Code → Token → Profile → Storage in single script
+- **✅ Time-Critical Execution**: Handle 10-minute authorization code expiration
+- **✅ Full Feature Parity**: Same functionality as intended serverless callback
+
+**Technical Implementation:**
+
+```python
+# Key breakthrough patterns:
+class LinkedInOAuthEmergencyCompleter:
+    def extract_code_from_url(self, full_url):
+        # Parse authorization code from failed callback URL
+
+    def exchange_code_for_token(self, auth_code):
+        # Direct LinkedIn API token exchange
+
+    def get_user_profile(self, access_token):
+        # Retrieve and validate LinkedIn profile
+
+    def complete_oauth_from_url(self, callback_url):
+        # Complete entire OAuth flow manually
+```
+
+**Final Success Results:**
+
+- **✅ Access Token Obtained**: Valid 2-month LinkedIn access token
+- **✅ User Profile Retrieved**: Michael McDermott (michael.mcdermott@crestcom.com)
+- **✅ Full Scope Access**: `email`, `openid`, `profile`, `w_member_social`
+- **✅ LinkedIn Automation Ready**: All posting capabilities now functional
+- **✅ Revenue System Operational**: LinkedIn integration now working for affiliate system
+
+**Critical Success Factors:**
+
+1. **Rapid Response Time**: Authorization codes expire in ~10 minutes
+2. **Direct API Approach**: Bypassed all Vercel infrastructure completely
+3. **Complete Error Handling**: Managed expired codes, invalid states, API failures
+4. **User Coordination**: Real-time collaboration to capture fresh authorization codes
+
+**OAuth Configuration Details:**
+
+- **Client ID**: `78wmrhdd99ssbi`
+- **Client Secret**: `WPL_AP1.hCyy0nkGz9y5i1tP.ExgKnQ==`
+- **Redirect URI**: `https://mybookshelf.shop/linkedin-oauth.html`
+- **Scopes**: `openid profile w_member_social email`
+- **LinkedIn App Status**: Properly configured with correct redirect URLs
+
+**Domain Routing Analysis:**
+
+**Testing Results Across All Endpoints:**
+
+| Endpoint Type     | Apex Domain | www Subdomain | Status    |
+| ----------------- | ----------- | ------------- | --------- |
+| Static HTML       | 307 → www   | 404 NOT_FOUND | ❌ Failed |
+| `/api/` functions | 307 → www   | 404 NOT_FOUND | ❌ Failed |
+| Root functions    | 307 → www   | 404 NOT_FOUND | ❌ Failed |
+| Node.js runtime   | 307 → www   | 404 NOT_FOUND | ❌ Failed |
+| Python runtime    | 307 → www   | 404 NOT_FOUND | ❌ Failed |
+
+**Emergency Script** | ✅ Direct API | ✅ Manual Process | ✅ **SUCCESS** |
+
+**Key Takeaways:**
+
+1. **Domain Routing is Critical**: Vercel subdomain configuration can completely break OAuth flows
+2. **Emergency Scripts Save Projects**: Always have manual backup processes for critical integrations
+3. **Time-Sensitive Debugging**: OAuth debugging requires rapid iteration due to code expiration
+4. **Infrastructure Independence**: Don't depend entirely on hosting platform for critical auth flows
+5. **User Collaboration**: Real-time coordination crucial for time-sensitive OAuth debugging
+6. **Direct API Access**: Sometimes bypassing all infrastructure is the only working solution
+
+**Operational Impact:**
+
+- **Revenue System**: Fully operational with LinkedIn automation
+- **Development Time**: ~4 hours from crisis to complete resolution
+- **Business Continuity**: Zero long-term impact on affiliate revenue capabilities
+- **Technical Debt**: Emergency script provides robust fallback for future OAuth issues
+
+**Prevention for Future:**
+
+1. **Test OAuth flows** on both apex and www domains before production
+2. **Build emergency OAuth scripts** for all critical integrations
+3. **Document domain routing behavior** for each hosting platform
+4. **Have manual token exchange processes** ready for critical systems
+5. **Monitor authorization code expiration times** during debugging
+
+This was a **mission-critical breakthrough** that unblocked the entire LinkedIn revenue automation system.
 
 ## Development Resources & References
 

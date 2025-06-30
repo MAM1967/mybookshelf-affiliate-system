@@ -9,55 +9,124 @@
   ],
   "routes": [
     {
-      "src": "/linkedin-callback.html",
-      "dest": "/frontend/mini-app/linkedin-callback.html",
+      "src": "/linkedin-oauth.html",
+      "dest": "/linkedin-oauth.html",
       "headers": {
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
-      "src": "/linkedin-callback",
-      "dest": "/frontend/mini-app/linkedin-callback.html",
+      "src": "/linkedin-oauth(.*)",
+      "dest": "/linkedin-oauth.js$1",
+      "methods": ["GET", "POST"],
       "headers": {
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
-      "src": "/admin/linkedin-callback.html",
-      "dest": "/frontend/mini-app/admin/linkedin-callback.html",
+      "src": "/api/linkedin-callback(.*)",
+      "dest": "/api/linkedin-callback.js$1",
+      "methods": ["GET", "POST"],
       "headers": {
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
-      "src": "/admin/linkedin-callback",
-      "dest": "/frontend/mini-app/admin/linkedin-callback.html",
-      "headers": {
-        "Cache-Control": "no-cache"
-      }
+      "src": "/admin/linkedin-callback(.*)",
+      "dest": "/linkedin-oauth.js$1",
+      "methods": ["GET", "POST"]
     },
     {
-      "src": "/admin/oauth/linkedin",
-      "dest": "/frontend/mini-app/admin/linkedin-callback.html",
-      "headers": {
-        "Cache-Control": "no-cache"
-      }
+      "src": "/admin/oauth/linkedin(.*)",
+      "dest": "/linkedin-oauth.js$1",
+      "methods": ["GET", "POST"]
     },
     {
-      "src": "/admin/(.*)",
-      "dest": "/frontend/mini-app/admin/$1"
+      "src": "/admin/?$",
+      "dest": "/frontend/mini-app/admin/index.html"
+    },
+    {
+      "src": "/admin/index.html",
+      "dest": "/frontend/mini-app/admin/index.html"
+    },
+    {
+      "src": "/oauth-test/?$",
+      "dest": "/frontend/mini-app/oauth-test.html"
+    },
+    {
+      "src": "/admin.html",
+      "dest": "/frontend/mini-app/admin.html"
     },
     {
       "src": "/(.*)",
       "dest": "/frontend/mini-app/$1"
     }
   ],
-  "functions": {},
+  "redirects": [
+    {
+      "source": "/auth/linkedin/callback(.*)",
+      "destination": "/linkedin-oauth$1",
+      "permanent": false
+    }
+  ],
+  "headers": [
+    {
+      "source": "/linkedin-oauth(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/api/linkedin-callback(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    }
+  ],
+  "functions": {
+    "linkedin-oauth.js": {
+      "runtime": "nodejs20.x"
+    },
+    "api/linkedin-callback.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
   "env": {
     "SUPABASE_URL": "@supabase-url",
     "SUPABASE_ANON_KEY": "@supabase-anon-key",
     "RESEND_API_KEY": "@resend-api-key",
     "ADMIN_EMAIL": "@admin-email",
-    "LINKEDIN_CLIENT_ID": "@linkedin-client-id"
+    "LINKEDIN_CLIENT_ID": "@linkedin-client-id",
+    "LINKEDIN_CLIENT_SECRET": "@linkedin-client-secret"
   }
 }

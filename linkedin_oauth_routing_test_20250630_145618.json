@@ -1,0 +1,209 @@
+{
+  "test_summary": {
+    "timestamp": "2025-06-30T14:56:18.797332",
+    "domains_tested": [
+      "https://mybookshelf.shop",
+      "https://www.mybookshelf.shop"
+    ],
+    "paths_tested": [
+      "/admin/linkedin-callback",
+      "/admin/oauth/linkedin",
+      "/auth/linkedin/callback"
+    ],
+    "total_tests": 3
+  },
+  "test_results": [
+    {
+      "test_name": "Callback Route Accessibility",
+      "timestamp": "2025-06-30T14:56:17.626190",
+      "domain_tests": {
+        "https://mybookshelf.shop": {
+          "routes": {
+            "/admin/linkedin-callback": {
+              "url": "https://mybookshelf.shop/admin/linkedin-callback",
+              "status_code": 307,
+              "headers": {
+                "Cache-Control": "public, max-age=0, must-revalidate",
+                "Content-Type": "text/plain",
+                "Date": "Mon, 30 Jun 2025 18:56:17 GMT",
+                "Location": "https://www.mybookshelf.shop/admin/linkedin-callback",
+                "Server": "Vercel",
+                "Strict-Transport-Security": "max-age=63072000",
+                "X-Vercel-Id": "iad1::6gqkt-1751309777840-c37240322458"
+              },
+              "accessible": true,
+              "redirect_to": "https://www.mybookshelf.shop/admin/linkedin-callback",
+              "redirect_final_status": 404
+            },
+            "/admin/oauth/linkedin": {
+              "url": "https://mybookshelf.shop/admin/oauth/linkedin",
+              "status_code": 307,
+              "headers": {
+                "Cache-Control": "public, max-age=0, must-revalidate",
+                "Content-Type": "text/plain",
+                "Date": "Mon, 30 Jun 2025 18:56:17 GMT",
+                "Location": "https://www.mybookshelf.shop/admin/oauth/linkedin",
+                "Server": "Vercel",
+                "Strict-Transport-Security": "max-age=63072000",
+                "X-Vercel-Id": "iad1::mqjtd-1751309777985-a652070dc75e"
+              },
+              "accessible": true,
+              "redirect_to": "https://www.mybookshelf.shop/admin/oauth/linkedin",
+              "redirect_final_status": 404
+            },
+            "/auth/linkedin/callback": {
+              "url": "https://mybookshelf.shop/auth/linkedin/callback",
+              "status_code": 307,
+              "headers": {
+                "Cache-Control": "public, max-age=0, must-revalidate",
+                "Content-Type": "text/plain",
+                "Date": "Mon, 30 Jun 2025 18:56:18 GMT",
+                "Location": "https://www.mybookshelf.shop/auth/linkedin/callback",
+                "Server": "Vercel",
+                "Strict-Transport-Security": "max-age=63072000",
+                "X-Vercel-Id": "iad1::w7gsr-1751309778122-4bb05eb7084f"
+              },
+              "accessible": true,
+              "redirect_to": "https://www.mybookshelf.shop/auth/linkedin/callback",
+              "redirect_final_status": 404
+            }
+          }
+        },
+        "https://www.mybookshelf.shop": {
+          "routes": {
+            "/admin/linkedin-callback": {
+              "url": "https://www.mybookshelf.shop/admin/linkedin-callback",
+              "status_code": 404,
+              "headers": {
+                "Cache-Control": "public, max-age=0, must-revalidate",
+                "Content-Length": "79",
+                "Content-Type": "text/plain; charset=utf-8",
+                "Date": "Mon, 30 Jun 2025 18:56:18 GMT",
+                "Server": "Vercel",
+                "Strict-Transport-Security": "max-age=63072000",
+                "X-Vercel-Error": "NOT_FOUND",
+                "X-Vercel-Id": "iad1::6dzwj-1751309778242-89288b7c287b"
+              },
+              "accessible": false
+            },
+            "/admin/oauth/linkedin": {
+              "url": "https://www.mybookshelf.shop/admin/oauth/linkedin",
+              "status_code": 404,
+              "headers": {
+                "Cache-Control": "public, max-age=0, must-revalidate",
+                "Content-Length": "79",
+                "Content-Type": "text/plain; charset=utf-8",
+                "Date": "Mon, 30 Jun 2025 18:56:18 GMT",
+                "Server": "Vercel",
+                "Strict-Transport-Security": "max-age=63072000",
+                "X-Vercel-Error": "NOT_FOUND",
+                "X-Vercel-Id": "iad1::rs9w9-1751309778309-ae9521c07c11"
+              },
+              "accessible": false
+            },
+            "/auth/linkedin/callback": {
+              "url": "https://www.mybookshelf.shop/auth/linkedin/callback",
+              "status_code": 404,
+              "headers": {
+                "Cache-Control": "public, max-age=0, must-revalidate",
+                "Content-Length": "79",
+                "Content-Type": "text/plain; charset=utf-8",
+                "Date": "Mon, 30 Jun 2025 18:56:18 GMT",
+                "Server": "Vercel",
+                "Strict-Transport-Security": "max-age=63072000",
+                "X-Vercel-Error": "NOT_FOUND",
+                "X-Vercel-Id": "iad1::jwdzg-1751309778365-5736ae3f991d"
+              },
+              "accessible": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "test_name": "OAuth URL Generation",
+      "timestamp": "2025-06-30T14:56:18.221157",
+      "oauth_urls": {
+        "https://mybookshelf.shop/admin/linkedin-callback": {
+          "redirect_uri": "https://mybookshelf.shop/admin/linkedin-callback",
+          "oauth_url": "https://www.linkedin.com/oauth/v2/authorization?client_id=78wmrhdd99ssbi&response_type=code&scope=openid+profile+w_member_social+email&state=mybookshelf_routing_test&redirect_uri=https%3A%2F%2Fmybookshelf.shop%2Fadmin%2Flinkedin-callback",
+          "valid": true
+        },
+        "https://mybookshelf.shop/admin/oauth/linkedin": {
+          "redirect_uri": "https://mybookshelf.shop/admin/oauth/linkedin",
+          "oauth_url": "https://www.linkedin.com/oauth/v2/authorization?client_id=78wmrhdd99ssbi&response_type=code&scope=openid+profile+w_member_social+email&state=mybookshelf_routing_test&redirect_uri=https%3A%2F%2Fmybookshelf.shop%2Fadmin%2Foauth%2Flinkedin",
+          "valid": true
+        },
+        "https://mybookshelf.shop/auth/linkedin/callback": {
+          "redirect_uri": "https://mybookshelf.shop/auth/linkedin/callback",
+          "oauth_url": "https://www.linkedin.com/oauth/v2/authorization?client_id=78wmrhdd99ssbi&response_type=code&scope=openid+profile+w_member_social+email&state=mybookshelf_routing_test&redirect_uri=https%3A%2F%2Fmybookshelf.shop%2Fauth%2Flinkedin%2Fcallback",
+          "valid": true
+        },
+        "https://www.mybookshelf.shop/admin/linkedin-callback": {
+          "redirect_uri": "https://www.mybookshelf.shop/admin/linkedin-callback",
+          "oauth_url": "https://www.linkedin.com/oauth/v2/authorization?client_id=78wmrhdd99ssbi&response_type=code&scope=openid+profile+w_member_social+email&state=mybookshelf_routing_test&redirect_uri=https%3A%2F%2Fwww.mybookshelf.shop%2Fadmin%2Flinkedin-callback",
+          "valid": true
+        },
+        "https://www.mybookshelf.shop/admin/oauth/linkedin": {
+          "redirect_uri": "https://www.mybookshelf.shop/admin/oauth/linkedin",
+          "oauth_url": "https://www.linkedin.com/oauth/v2/authorization?client_id=78wmrhdd99ssbi&response_type=code&scope=openid+profile+w_member_social+email&state=mybookshelf_routing_test&redirect_uri=https%3A%2F%2Fwww.mybookshelf.shop%2Fadmin%2Foauth%2Flinkedin",
+          "valid": true
+        },
+        "https://www.mybookshelf.shop/auth/linkedin/callback": {
+          "redirect_uri": "https://www.mybookshelf.shop/auth/linkedin/callback",
+          "oauth_url": "https://www.linkedin.com/oauth/v2/authorization?client_id=78wmrhdd99ssbi&response_type=code&scope=openid+profile+w_member_social+email&state=mybookshelf_routing_test&redirect_uri=https%3A%2F%2Fwww.mybookshelf.shop%2Fauth%2Flinkedin%2Fcallback",
+          "valid": true
+        }
+      }
+    },
+    {
+      "test_name": "Callback Page Content",
+      "timestamp": "2025-06-30T14:56:18.221411",
+      "content_tests": {
+        "https://mybookshelf.shop/admin/linkedin-callback": {
+          "url": "https://mybookshelf.shop/admin/linkedin-callback?code=test_authorization_code_12345&state=mybookshelf_routing_test",
+          "status_code": 404,
+          "content_type": "text/plain; charset=utf-8",
+          "has_oauth_handling": false,
+          "has_error_handling": false
+        },
+        "https://mybookshelf.shop/admin/oauth/linkedin": {
+          "url": "https://mybookshelf.shop/admin/oauth/linkedin?code=test_authorization_code_12345&state=mybookshelf_routing_test",
+          "status_code": 404,
+          "content_type": "text/plain; charset=utf-8",
+          "has_oauth_handling": false,
+          "has_error_handling": false
+        },
+        "https://mybookshelf.shop/auth/linkedin/callback": {
+          "url": "https://mybookshelf.shop/auth/linkedin/callback?code=test_authorization_code_12345&state=mybookshelf_routing_test",
+          "status_code": 404,
+          "content_type": "text/plain; charset=utf-8",
+          "has_oauth_handling": false,
+          "has_error_handling": false
+        },
+        "https://www.mybookshelf.shop/admin/linkedin-callback": {
+          "url": "https://www.mybookshelf.shop/admin/linkedin-callback?code=test_authorization_code_12345&state=mybookshelf_routing_test",
+          "status_code": 404,
+          "content_type": "text/plain; charset=utf-8",
+          "has_oauth_handling": false,
+          "has_error_handling": false
+        },
+        "https://www.mybookshelf.shop/admin/oauth/linkedin": {
+          "url": "https://www.mybookshelf.shop/admin/oauth/linkedin?code=test_authorization_code_12345&state=mybookshelf_routing_test",
+          "status_code": 404,
+          "content_type": "text/plain; charset=utf-8",
+          "has_oauth_handling": false,
+          "has_error_handling": false
+        },
+        "https://www.mybookshelf.shop/auth/linkedin/callback": {
+          "url": "https://www.mybookshelf.shop/auth/linkedin/callback?code=test_authorization_code_12345&state=mybookshelf_routing_test",
+          "status_code": 404,
+          "content_type": "text/plain; charset=utf-8",
+          "has_oauth_handling": false,
+          "has_error_handling": false
+        }
+      }
+    }
+  ],
+  "working_oauth_urls": []
+}
