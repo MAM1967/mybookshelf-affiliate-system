@@ -17,7 +17,7 @@ import logging
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
-    from supabase import create_client, Client
+    from supabase.client import create_client, Client
     from config import Config
 except ImportError as e:
     print(f"❌ Import error: {e}")
@@ -38,7 +38,7 @@ class LinkedInAPIProduction:
         """Initialize LinkedIn API client"""
         self.client_id = os.getenv('LINKEDIN_CLIENT_ID', '78wmrhdd99ssbi')
         self.client_secret = os.getenv('LINKEDIN_CLIENT_SECRET')
-        self.redirect_uri = os.getenv('LINKEDIN_REDIRECT_URI', 'https://mybookshelf.shop/admin/linkedin-callback')
+        self.redirect_uri = os.getenv('LINKEDIN_REDIRECT_URI', 'https://mybookshelf.shop/api/linkedin-callback')
         
         # Initialize Supabase for token storage
         if Config.SUPABASE_URL and Config.SUPABASE_ANON_KEY:
@@ -55,7 +55,7 @@ class LinkedInAPIProduction:
         # Required scopes
         self.scopes = ['openid', 'profile', 'w_member_social', 'email']
     
-    def get_authorization_url(self, state: str = None) -> str:
+    def get_authorization_url(self, state: Optional[str] = None) -> str:
         """Generate LinkedIn authorization URL"""
         if not state:
             state = f"mybookshelf_{int(datetime.now().timestamp())}"
