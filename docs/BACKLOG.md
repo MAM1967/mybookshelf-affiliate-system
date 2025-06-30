@@ -203,7 +203,7 @@
 
   **Phase 1: LinkedIn Direct Conversion Optimization**
 
-  - [ ] **Task**: Design Sunday post template with direct Amazon links:
+  - [ ] **Task**: Design Tuesday/Wednesday/Thursday post templates with direct Amazon links:
     - [ ] Scripture hook opening (Proverbs 16:3 + leadership insight)
     - [ ] Individual book listings with covers, titles, prices
     - [ ] Direct "GET ON AMAZON" buttons for each book (affiliate links)
@@ -429,11 +429,12 @@
     - [ ] Performance monitoring
     - [ ] Uptime alerts
 
-- [ ] **Story**: Sunday Email Notification System
-  - [ ] **Task**: Set up Sunday email workflow to mcddsl@icloud.com
-  - [ ] **Task**: Include approved items summary in email
-  - [ ] **Task**: Add final approval step before LinkedIn publication
-  - [ ] **Task**: Integrate with Pipedream for email automation
+- [ ] **Story**: Sunday Approval & Publishing Calendar System 🆕 **UPDATED**
+  - [ ] **Task**: Set up Sunday email workflow to mcddsl@icloud.com with admin approval site link
+  - [ ] **Task**: Build calendar interface for assigning items to Tuesday/Wednesday/Thursday posts
+  - [ ] **Task**: Include post content generation with practical examples + biblical wisdom alignment
+  - [ ] **Task**: Schedule approved posts for upcoming Tuesday (1-2 books), Wednesday (1-2 books), Thursday (1-2 books + 1 accessory)
+  - [ ] **Task**: Integrate with Pipedream for email automation and posting schedule
 
 ### Amazon Integration Enhancements
 
@@ -516,12 +517,12 @@
   - [ ] Test authentication flow
 
 - [ ] **Story**: LinkedIn Posting Automation ⭐ **UPDATED**
-  - [ ] **Sunday Publication Schedule**: Automated LinkedIn posts go out on Sundays after admin approval
-  - [ ] **Enhanced Post Generation**: Create posts featuring diverse Christian leadership authors (not just Lencioni)
+  - [ ] **Tuesday/Wednesday/Thursday Publication Schedule**: Automated LinkedIn posts scheduled for Tuesday (1-2 books), Wednesday (1-2 books), Thursday (1-2 books + 1 accessory) after Sunday approval
+  - [ ] **Enhanced Post Generation**: Create posts featuring diverse Christian leadership authors with practical examples and biblical wisdom alignment
   - [ ] **Weekly Content Strategy**: Generate posts from weekly scraped and approved items (up to 10 per week)
-  - [ ] **Content Template**: 200-word posts highlighting leadership books + recommendations with affiliate links
-  - [ ] **Final Approval Step**: Email notifications to mcddsl@icloud.com before publication
-  - [ ] **Scripture Integration**: Add Proverbs 16:3 and other relevant biblical principles
+  - [ ] **Content Template**: 200-word posts with practical applications + biblical principles alignment
+  - [ ] **Sunday Approval Workflow**: Email notifications to mcddsl@icloud.com with admin site link for calendar scheduling
+  - [ ] **Scripture Integration**: Add Proverbs 16:3 and other relevant biblical principles per post
   - [ ] **Affiliate Link Embedding**: Include approved items' Amazon associate links
 
 ### Content Strategy & Filtering 🆕 **IMPORTANT**
@@ -541,9 +542,10 @@
   - [ ] Create Pipedream account and workspace
   - [ ] Build weekly scraping workflow (Amazon → Supabase scraping_queue)
   - [ ] Implement admin approval workflow
-  - [ ] Set up Sunday email notifications to mcddsl@icloud.com
-  - [ ] Configure LinkedIn posting workflow with approved items
-  - [ ] Schedule weekly automation cycle (scraping → approval → publication)
+  - [ ] Set up Sunday email notifications to mcddsl@icloud.com with admin approval site link
+  - [ ] Configure LinkedIn posting workflow with Tuesday/Wednesday/Thursday scheduling
+  - [ ] Build publishing calendar system for date assignment
+  - [ ] Schedule weekly automation cycle (Sunday scraping → Sunday approval → Tue/Wed/Thu publication)
 
 ### Canva Integration (Day 4 per PRD)
 

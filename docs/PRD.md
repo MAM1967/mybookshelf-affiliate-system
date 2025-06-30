@@ -40,9 +40,13 @@
   - **Email Notifications**: Sunday approvals sent to mcddsl@icloud.com for final review.
   - **Database Promotion**: Only approved items are promoted from scraping queue to live database.
 - **LinkedIn Automation**:
-  - Generate 200-word post (e.g., "This week's top leadership books + recommendations [affiliate links]") with Canva image (navy-orange, free tier).
-  - **Sunday Publication**: Automated LinkedIn posts go out on Sundays after admin approval.
-  - Use Pipedream to email post for approval (yes/no), then post to MyBookshelf via LinkedIn OAuth app.
+  - Generate 200-word posts with practical examples and biblical wisdom alignment for each book/accessory
+  - **Tuesday/Wednesday/Thursday Publication Schedule**:
+    - **Tuesday**: 1-2 books with leadership principles and biblical alignment
+    - **Wednesday**: 1-2 books with practical application examples
+    - **Thursday**: 1-2 books + 1 accessory with comprehensive recommendations
+  - **Sunday Approval Workflow**: Email admin with approval link, schedule posts for upcoming Tue/Wed/Thu after approval
+  - Use Pipedream to email post for approval (yes/no), then schedule posts via LinkedIn OAuth app.
 - **Mini-App**:
   - Supabase-hosted webpage (Next.js or HTML) to browse recommendations (title, author, link).
   - Accessible via LinkedIn bio/post links.
@@ -95,10 +99,14 @@ CREATE TABLE scraping_queue (
   scraped_date TIMESTAMP DEFAULT NOW(),
   content_score INTEGER DEFAULT 0, -- Christian content alignment score
   filter_flags TEXT[], -- Array of any content warnings
-  status VARCHAR(20) DEFAULT 'pending', -- pending, approved, rejected
+  status VARCHAR(20) DEFAULT 'pending', -- pending, approved, rejected, scheduled
   admin_notes TEXT,
   reviewed_date TIMESTAMP,
-  reviewed_by VARCHAR(100) DEFAULT 'admin'
+  reviewed_by VARCHAR(100) DEFAULT 'admin',
+  scheduled_post_date DATE, -- Tuesday, Wednesday, or Thursday assignment
+  post_content TEXT, -- Generated post with practical examples + biblical wisdom
+  practical_examples TEXT, -- How this book helps in real scenarios
+  biblical_alignment TEXT -- Scripture references and wisdom principles
 );
 
 -- Admin session management
@@ -136,11 +144,47 @@ CREATE TABLE approval_log (
 GET  /api/admin/login              - Admin authentication
 POST /api/admin/logout             - Session termination
 GET  /api/admin/pending            - Fetch pending approval items
-POST /api/admin/approve/:id        - Approve single item
+POST /api/admin/approve/:id        - Approve single item with date assignment
 POST /api/admin/reject/:id         - Reject single item
-POST /api/admin/batch-action       - Bulk approve/reject
+POST /api/admin/batch-action       - Bulk approve/reject with date assignments
+GET  /api/admin/calendar           - View upcoming posting calendar
+POST /api/admin/schedule-posts     - Schedule approved items for Tue/Wed/Thu
 GET  /api/admin/history           - Approval history
 POST /api/admin/promote-approved   - Move approved items to live database
+GET  /api/admin/generate-content   - Generate post content with examples + biblical wisdom
+```
+
+## 3.2 Publishing Calendar & Content Generation System
+
+**Calendar Management Requirements:**
+
+- **Sunday Workflow**: Items scraped → Email sent to admin → Admin reviews items on approval site
+- **Date Assignment**: Admin assigns each approved item to specific Tuesday, Wednesday, or Thursday post slots
+- **Content Requirements**: Each item must include:
+  - Practical examples of how the book helps in real scenarios
+  - Biblical wisdom principles that the book's concepts align with
+  - Scripture references relevant to leadership principles
+  - Integration with existing business/leadership practices
+
+**Calendar Interface Features:**
+
+- **Weekly View**: Visual calendar showing Tuesday/Wednesday/Thursday slots
+- **Drag & Drop**: Easy assignment of approved items to posting dates
+- **Content Preview**: Generated post content with practical examples + biblical alignment
+- **Scheduling Logic**:
+  - Tuesday: 1-2 leadership foundation books
+  - Wednesday: 1-2 practical application books
+  - Thursday: 1-2 books + 1 accessory (comprehensive week wrap-up)
+
+**Content Generation Templates:**
+
+```sql
+-- Add content fields to scraping_queue table
+ALTER TABLE scraping_queue ADD COLUMN practical_example_1 TEXT;
+ALTER TABLE scraping_queue ADD COLUMN practical_example_2 TEXT;
+ALTER TABLE scraping_queue ADD COLUMN biblical_principle TEXT;
+ALTER TABLE scraping_queue ADD COLUMN scripture_reference VARCHAR(100);
+ALTER TABLE scraping_queue ADD COLUMN leadership_application TEXT;
 ```
 
 ## 4. User Interaction & Marketing Flow: Virtuous Conversion Cycle
@@ -149,7 +193,7 @@ POST /api/admin/promote-approved   - Move approved items to live database
 
 **Based on analysis of top Amazon affiliate sites including The Wirecutter, OutdoorGearLab, and Pack Hacker**
 
-#### Phase 1: LinkedIn Direct Conversion (Sunday Posts) - PRIMARY PATH
+#### Phase 1: LinkedIn Direct Conversion (Tuesday/Wednesday/Thursday Posts) - PRIMARY PATH
 
 **User Story**: "As a Christian professional on LinkedIn, I want to discover leadership books that align with my values and buy them immediately without extra steps."
 

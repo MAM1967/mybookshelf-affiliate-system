@@ -25,12 +25,14 @@ This document outlines the complete user journey optimization strategy for MyBoo
 
 **Christian Professional**: "I want leadership book recommendations that align with my faith values and I want to buy them immediately without extra steps."
 
-### OPTIMIZED Post Structure Template (DIRECT AMAZON LINKS)
+### OPTIMIZED Post Structure Templates (DIRECT AMAZON LINKS)
+
+**Tuesday Template (1-2 Leadership Books):**
 
 ```
 🙏 Proverbs 16:3 - "Commit to the LORD whatever you do, and he will establish your plans."
 
-This week's Christian leadership picks for building kingdom-centered businesses:
+Today's Christian leadership foundations for building kingdom-centered businesses:
 
 📚 "The Five Dysfunctions of a Team" by Patrick Lencioni
 ✅ Vetted for biblical alignment | Starting at $12.99
@@ -49,6 +51,42 @@ This week's Christian leadership picks for building kingdom-centered businesses:
 #ChristianLeadership #BusinessMinistry #Leadership
 ```
 
+**Wednesday Template (1-2 Practical Application Books):**
+
+```
+🙏 James 1:22 - "Do not merely listen to the word, and so deceive yourselves. Do what it says."
+
+Midweek momentum for Christian leaders putting principles into practice:
+
+📚 [Book Title] by [Author]
+✅ Practical Application: [How this helps in real scenarios]
+👉 [GET ON AMAZON] ← Direct affiliate link
+
+📖 See ALL our recommendations + leadership insights → [Mini-site link]
+
+#PracticalWisdom #ChristianBusiness #Leadership
+```
+
+**Thursday Template (1-2 Books + 1 Accessory):**
+
+```
+🙏 Ecclesiastes 3:1 - "To every thing there is a season, and a time to every purpose under heaven."
+
+End the week strong with tools for kingdom-centered leadership:
+
+📚 [Book Title] by [Author]
+✅ Biblical Alignment: [Scripture connection + leadership principle]
+👉 [GET ON AMAZON] ← Direct affiliate link
+
+📝 [Accessory Name]
+✅ Purpose: Perfect for applying leadership insights in daily practice
+👉 [GET ON AMAZON] ← Direct affiliate link
+
+📖 See ALL our recommendations + leadership insights → [Mini-site link]
+
+#ChristianLeadership #LeadershipTools #KingdomBusiness
+```
+
 ### Visual Content Strategy
 
 - **Real book covers** (not generic rectangles)
@@ -59,7 +97,10 @@ This week's Christian leadership picks for building kingdom-centered businesses:
 
 ### Engagement Optimization
 
-- **Post timing**: Sunday 8 AM EST (peak Christian professional activity)
+- **Post timing**: Tuesday/Wednesday/Thursday 8 AM EST (peak business professional activity)
+  - **Tuesday**: Foundation leadership principles (1-2 books)
+  - **Wednesday**: Practical application focus (1-2 books)
+  - **Thursday**: Comprehensive week wrap-up (1-2 books + 1 accessory)
 - **Scripture integration**: Weekly rotating verses about wisdom/leadership
 - **Comment strategy**: Engage authentically on Christian business topics
 - **Connection building**: 20 targeted connections daily with Christian leaders
@@ -123,7 +164,7 @@ Get practical leadership principles from our book recommendations:
 • Discussion questions for leadership teams
 
 [EMAIL SIGNUP: Simple form with just email field]
-"No spam, unsubscribe anytime, new insights every Sunday"
+"No spam, unsubscribe anytime, new insights three times weekly"
 ```
 
 ### Technical Performance Requirements
@@ -233,7 +274,7 @@ Join 500+ Christian leaders who get:
 ✅ Early access to new book recommendations
 
 [Email input field]
-"Delivered every Sunday. Unsubscribe anytime."
+"Delivered Tuesday/Wednesday/Thursday. Unsubscribe anytime."
 [JOIN THE COMMUNITY - Primary CTA]
 ```
 
@@ -367,15 +408,25 @@ Visual Story: "Your Perfect Leadership Setup"
 
 ## 🎯 Weekly Content Calendar Integration
 
-### Sunday: Primary Publishing Day
+### Sunday: Admin Approval & Scheduling Day
 
 ```
-8:00 AM - LinkedIn post with weekly picks
-12:00 PM - Email to subscriber list
-6:00 PM - Engagement monitoring and response
+8:00 AM - Weekly scraping and content generation
+10:00 AM - Email to admin (mcddsl@icloud.com) with approval site link
+12:00 PM - Admin reviews and schedules items for Tue/Wed/Thu posts
+2:00 PM - Publishing calendar finalized for upcoming week
 ```
 
-### Monday-Saturday: Community Building
+### Tuesday/Wednesday/Thursday: Primary Publishing Days
+
+```
+Tuesday 8:00 AM - Leadership foundations post (1-2 books)
+Wednesday 8:00 AM - Practical applications post (1-2 books)
+Thursday 8:00 AM - Comprehensive tools post (1-2 books + 1 accessory)
+Daily 6:00 PM - Engagement monitoring and response
+```
+
+### Monday/Friday/Weekend: Community Building
 
 ```
 Daily:
@@ -534,7 +585,7 @@ Year 2+: Scale to full Christian leadership platform
 
 ### Launch Week (Week 0)
 
-- [ ] First Sunday post published
+- [ ] First Tuesday/Wednesday/Thursday posts published
 - [ ] Mini-site traffic monitoring active
 - [ ] Engagement response system ready
 - [ ] Performance tracking dashboard live
