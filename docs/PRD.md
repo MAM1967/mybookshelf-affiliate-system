@@ -237,6 +237,132 @@ ALTER TABLE scraping_queue ADD COLUMN scripture_reference VARCHAR(100);
 ALTER TABLE scraping_queue ADD COLUMN leadership_application TEXT;
 ```
 
+## 3.3 Community Platform Integration - Discourse Implementation 🆕
+
+**Phase 2 Community Development: Discourse Integration Strategy**
+
+Based on analysis of existing community platforms, we will implement **Discourse** as our community/prayer platform to accelerate development while providing enterprise-grade community features.
+
+### Implementation Architecture
+
+```
+Main Site (mybookshelf.shop)
+├── Book recommendations & affiliate links
+├── Sunday encouragement emails
+├── Community highlights from Discourse API
+└── Prayer request highlights on homepage
+
+Community Platform (community.mybookshelf.shop)
+├── Prayer Requests category
+├── Work & Faith Discussions
+├── Book Discussion threads
+├── Leadership Challenges forum
+└── Admin moderation tools for mcddsl@icloud.com
+```
+
+### Technical Implementation Plan
+
+**Phase 2A: Discourse Setup (Week 1)**
+
+- Deploy Discourse via Docker on subdomain `community.mybookshelf.shop`
+- Configure SSL certificates and domain routing
+- Set up PostgreSQL database for Discourse (separate from main Supabase)
+- Configure email integration for notifications
+
+**Phase 2B: Community Configuration (Week 1-2)**
+
+- Create categories: Prayer Requests, Work & Faith, Book Discussions, Leadership Challenges
+- Configure moderation settings for admin approval workflow
+- Set up user authentication and registration system
+- Configure privacy settings and content guidelines
+
+**Phase 2C: API Integration (Week 2)**
+
+- Implement Discourse API integration for main site
+- Display recent prayer requests on main site homepage
+- Show community highlights and engagement metrics
+- Cross-platform user authentication and session management
+
+### API Integration Specifications
+
+```javascript
+// Display recent prayer requests on main site
+async function getPrayerRequests() {
+  const response = await fetch(
+    "https://community.mybookshelf.shop/latest.json"
+  );
+  const data = await response.json();
+  return data.topic_list.topics.filter(
+    (topic) => topic.category_id === PRAYER_CATEGORY_ID
+  );
+}
+
+// Display community engagement stats
+async function getCommunityStats() {
+  const response = await fetch(
+    "https://community.mybookshelf.shop/site/statistics.json"
+  );
+  return {
+    active_prayers: response.data.prayer_count,
+    community_members: response.data.users_count,
+    discussions_this_week: response.data.topics_7_days,
+  };
+}
+```
+
+### Database Schema Extensions
+
+```sql
+-- Add community integration tracking to main database
+ALTER TABLE books_accessories ADD COLUMN discourse_topic_id INTEGER;
+ALTER TABLE prayer_requests ADD COLUMN discourse_topic_id INTEGER;
+
+-- Track cross-platform engagement
+CREATE TABLE community_integration (
+  id SERIAL PRIMARY KEY,
+  main_site_user_id INTEGER,
+  discourse_user_id INTEGER,
+  discourse_username VARCHAR(100),
+  created_at TIMESTAMP DEFAULT NOW(),
+  last_sync TIMESTAMP DEFAULT NOW()
+);
+```
+
+### Discourse Configuration for Christian Community
+
+**Categories Structure:**
+
+- 🙏 **Prayer Requests** (moderated, admin approval required)
+- 💼 **Work & Faith Integration** (open discussion)
+- 📚 **Book Discussions** (auto-created from book recommendations)
+- 👑 **Leadership Challenges** (practical workplace scenarios)
+- 📢 **Community Announcements** (admin only posting)
+
+**Moderation Settings:**
+
+- All prayer requests require admin approval before publication
+- Anonymous posting option for sensitive prayer requests
+- Content filtering for Christian values alignment
+- Email notifications to mcddsl@icloud.com for new submissions
+
+### Integration Benefits
+
+**Immediate Value:**
+
+- Professional community platform without custom development
+- Battle-tested moderation and user management
+- Mobile-responsive design optimized for engagement
+- Rich text editor with image support for discussions
+
+**Long-term Scalability:**
+
+- Plugin ecosystem for additional Christian-focused features
+- Advanced search and organization of prayer requests and discussions
+- Email digest and notification systems
+- API-driven integration with main platform growth
+
+**Timeline:** 1-2 weeks to full community functionality
+
 ## 4. User Interaction & Marketing Flow: Virtuous Conversion Cycle
 
 ### 4.1 Complete User Journey: LinkedIn → Mini-Site → Amazon

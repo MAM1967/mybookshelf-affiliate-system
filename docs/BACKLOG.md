@@ -603,6 +603,155 @@
     - [ ] Community prayer highlight rotation
     - [ ] Scripture series for professional development
 
+### Phase 2: Community Platform Integration - Discourse Implementation 🆕 **NEXT MAJOR PHASE**
+
+**Target Timeline: 2-3 weeks after core book system completion**
+
+- [ ] **Story**: Discourse Community Platform Setup
+
+  **Phase 2A: Infrastructure Setup (Week 1)**
+
+  - [ ] **Task**: Deploy Discourse via Docker
+    - [ ] Set up subdomain `community.mybookshelf.shop`
+    - [ ] Configure SSL certificates and domain routing
+    - [ ] Deploy Discourse Docker container with PostgreSQL
+    - [ ] Configure Redis for caching and sessions
+    - [ ] Set up backup and monitoring systems
+  - [ ] **Task**: Database and Environment Configuration
+    - [ ] Create separate PostgreSQL database for Discourse
+    - [ ] Configure environment variables and secrets
+    - [ ] Set up email delivery (SMTP integration)
+    - [ ] Configure file upload and storage settings
+  - [ ] **Task**: Initial Admin Setup
+    - [ ] Create admin account for mcddsl@icloud.com
+    - [ ] Configure site settings and branding
+    - [ ] Set up basic security and spam protection
+    - [ ] Configure backup procedures
+
+  **Phase 2B: Community Structure Setup (Week 1-2)**
+
+  - [ ] **Task**: Create Category Structure
+    - [ ] 🙏 Prayer Requests (moderated, admin approval required)
+    - [ ] 💼 Work & Faith Integration (open discussion)
+    - [ ] 📚 Book Discussions (auto-created from recommendations)
+    - [ ] 👑 Leadership Challenges (practical workplace scenarios)
+    - [ ] 📢 Community Announcements (admin only posting)
+  - [ ] **Task**: Configure Moderation Settings
+    - [ ] Set up admin approval workflow for prayer requests
+    - [ ] Configure anonymous posting options for sensitive requests
+    - [ ] Implement content filtering for Christian values
+    - [ ] Set up email notifications to mcddsl@icloud.com
+  - [ ] **Task**: Design Community Guidelines
+    - [ ] Create community rules aligned with Christian values
+    - [ ] Draft prayer request submission guidelines
+    - [ ] Establish work/faith discussion etiquette
+    - [ ] Set up user onboarding and welcome messages
+
+  **Phase 2C: Main Site Integration (Week 2)**
+
+  - [ ] **Task**: Discourse API Integration
+    - [ ] Implement API client for fetching community data
+    - [ ] Create functions to display recent prayer requests on main site
+    - [ ] Build community stats display (active prayers, members, discussions)
+    - [ ] Add community highlights to homepage
+  - [ ] **Task**: Cross-Platform Authentication
+    - [ ] Configure Single Sign-On (SSO) between main site and Discourse
+    - [ ] Sync user accounts and authentication sessions
+    - [ ] Handle user registration flow across both platforms
+    - [ ] Implement logout synchronization
+  - [ ] **Task**: Content Synchronization
+    - [ ] Auto-create book discussion topics for new recommendations
+    - [ ] Sync community highlights for Sunday encouragement emails
+    - [ ] Track prayer request engagement and responses
+    - [ ] Display answered prayer testimonies on main site
+
+  **Phase 2D: Advanced Features (Week 3)**
+
+  - [ ] **Task**: Enhanced Prayer System
+    - [ ] Implement prayer tracking and follow-up system
+    - [ ] Create "Prayers Answered" celebration features
+    - [ ] Add prayer category filtering (work, personal, leadership, etc.)
+    - [ ] Build prayer reminder and check-in notifications
+  - [ ] **Task**: Community Engagement Features
+    - [ ] Add community member highlights to main site
+    - [ ] Implement discussion previews on book pages
+    - [ ] Create featured discussion rotation system
+    - [ ] Add community activity feed to main site
+  - [ ] **Task**: Analytics and Reporting
+    - [ ] Track community engagement metrics
+    - [ ] Monitor prayer request and response rates
+    - [ ] Generate weekly community reports for admin
+    - [ ] Analyze cross-platform user behavior and conversion
+
+### Integration Architecture Implementation
+
+- [ ] **Story**: Technical Integration Requirements
+
+  - [ ] **Task**: API Integration Layer
+    ```javascript
+    // Implementation examples for main site integration
+    async function getPrayerRequests() {
+      const response = await fetch(
+        "https://community.mybookshelf.shop/latest.json"
+      );
+      return data.topic_list.topics.filter(
+        (topic) => topic.category_id === PRAYER_CATEGORY_ID
+      );
+    }
+    ```
+  - [ ] **Task**: Database Schema Extensions
+
+    ```sql
+    ALTER TABLE books_accessories ADD COLUMN discourse_topic_id INTEGER;
+    ALTER TABLE prayer_requests ADD COLUMN discourse_topic_id INTEGER;
+
+    CREATE TABLE community_integration (
+      id SERIAL PRIMARY KEY,
+      main_site_user_id INTEGER,
+      discourse_user_id INTEGER,
+      discourse_username VARCHAR(100),
+      created_at TIMESTAMP DEFAULT NOW(),
+      last_sync TIMESTAMP DEFAULT NOW()
+    );
+    ```
+
+  - [ ] **Task**: Performance and Security
+    - [ ] Implement API rate limiting and caching
+    - [ ] Configure CORS for cross-domain requests
+    - [ ] Set up SSL termination and security headers
+    - [ ] Monitor and optimize database query performance
+
+**Business Impact**: Professional community platform accelerates development by 4-6 weeks while providing enterprise-grade features for prayer support and work/faith discussions. Enables immediate community engagement without custom development overhead.
+
+**Technical Benefits**: Battle-tested platform with extensive plugin ecosystem, professional moderation tools, and mobile-optimized user experience. API-first architecture allows seamless integration with existing Next.js/Supabase stack.
+
+**Priority Justification**: Community platform is essential for prayer request functionality and work/faith discussions, but should follow core book recommendation system completion. Discourse provides fastest path to production-ready community features.
+
+## Higher Priority: Email & Community Features
+
+### Enhanced Email Management System 🆕
+
+- [ ] **Task**: Design Sunday encouragement email template
+  - [ ] Inspirational Christian leadership content
+  - [ ] Scripture-based encouragement for workplace challenges
+  - [ ] Prayer points for the week ahead
+  - [ ] Community highlights and answered prayers
+  - [ ] NO book recommendations or affiliate links
+- [ ] **Task**: Build email content management system
+  - [ ] Admin interface for creating weekly encouragement content
+  - [ ] Template library for different encouragement themes
+  - [ ] Preview and scheduling functionality
+  - [ ] Email analytics and engagement tracking
+- [ ] **Task**: Integrate with existing email list
+  - [ ] Separate Sunday encouragement from book recommendation emails
+  - [ ] Subscription preferences (books + encouragement, or encouragement only)
+  - [ ] Unsubscribe options for each email type
+- [ ] **Task**: Create encouragement content calendar
+  - [ ] Weekly themes: Monday motivation, workplace witness, leadership challenges
+  - [ ] Seasonal content: Christian holidays, new year, etc.
+  - [ ] Community prayer highlight rotation
+  - [ ] Scripture series for professional development
+
 ### Pipedream Automation (Day 4 per PRD)
 
 - [ ] **Story**: Pipedream Workflow Setup ⭐ **ENHANCED**
