@@ -38,7 +38,7 @@ jobs:
           python test_affiliate_links.py --report
 
       - name: Upload health check reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: health-check-reports-${{ github.run_number }}
@@ -125,7 +125,7 @@ jobs:
           python generate_weekly_report.py
 
       - name: Upload weekly report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: weekly-health-report-${{ github.run_number }}
           path: backend/scripts/weekly_health_report_*.json
