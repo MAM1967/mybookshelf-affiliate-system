@@ -9,6 +9,10 @@
   ],
   "routes": [
     {
+      "src": "/admin/linkedin-callback",
+      "dest": "/frontend/mini-app/linkedin-callback.html"
+    },
+    {
       "src": "/admin/(.*)",
       "dest": "/frontend/mini-app/admin.html"
     },
