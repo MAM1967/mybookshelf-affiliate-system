@@ -47,14 +47,6 @@
       "dest": "/frontend/mini-app/$1"
     }
   ],
-  "functions": {
-    "linkedin-oauth.js": {
-      "runtime": "nodejs20.x"
-    },
-    "api/linkedin-callback.js": {
-      "runtime": "nodejs20.x"
-    }
-  },
   "env": {
     "SUPABASE_URL": "@supabase-url",
     "SUPABASE_ANON_KEY": "@supabase-anon-key",
