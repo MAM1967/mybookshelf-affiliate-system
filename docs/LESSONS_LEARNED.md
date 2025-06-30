@@ -206,9 +206,48 @@ This document captures key lessons learned during the development of the MyBooks
 - **Result**: Issue resolved in systematic steps rather than trial-and-error
 - **Takeaway**: Follow methodical debugging rather than assumption-based fixes
 
+### 16. LinkedIn API Scopes: V1 vs V2 Migration (December 2024)
+
+**Lesson**: LinkedIn deprecated V1 API scopes - always verify current API documentation
+
+- **Issue**: Initial implementation used deprecated LinkedIn V1 OAuth scopes
+- **Root Cause**: Using outdated documentation/examples that referenced old API version
+- **Discovery**: User pointed out "Those are not the proper scopes those are V1 scopes"
+
+**❌ Deprecated V1 LinkedIn API Scopes:**
+
+```
+r_liteprofile    # (V1) Read basic profile - DEPRECATED
+r_emailaddress   # (V1) Read email address - DEPRECATED
+```
+
+**✅ Current V2 LinkedIn API Requirements:**
+
+```
+OAuth Scopes: openid profile email w_member_social
+Product Access Required:
+- "Sign In with LinkedIn using OpenID Connect" (for profile access)
+- "Share on LinkedIn" (for posting capabilities)
+```
+
+**Key Differences:**
+
+- **V1**: Used individual permission scopes (`r_liteprofile`, `r_emailaddress`)
+- **V2**: Uses standard OpenID Connect scopes (`openid`, `profile`, `email`) + LinkedIn-specific scopes
+- **V2**: Requires requesting access to specific "Products" in LinkedIn Developer Portal
+- **V2**: Product approval process is required before OAuth scopes work
+
+**Solution Applied:**
+
+1. Updated OAuth scopes in `linkedin_simple_test.py`
+2. Updated developer portal configuration instructions
+3. Added product access requirements to documentation
+
+**Takeaway**: Always verify API documentation for current version and don't assume examples from tutorials are up-to-date. OAuth standards evolve and deprecated scopes will fail silently or with confusing errors.
+
 ## Process Lessons
 
-### 16. Documentation Management
+### 17. Documentation Management
 
 **Lesson**: Save important project documents in the project structure early
 
@@ -219,7 +258,7 @@ This document captures key lessons learned during the development of the MyBooks
 
 ## Development Strategy Lessons
 
-### 17. Feature Development Order
+### 18. Feature Development Order
 
 **Lesson**: Build core functionality before polish features
 
@@ -227,7 +266,7 @@ This document captures key lessons learned during the development of the MyBooks
 - **Approach**: Prioritized data integrity over visual appeal
 - **Takeaway**: Focus on functional requirements before cosmetic improvements
 
-### 18. Tool Creation Philosophy
+### 19. Tool Creation Philosophy
 
 **Lesson**: Build flexible, multi-mode tools
 
@@ -235,7 +274,7 @@ This document captures key lessons learned during the development of the MyBooks
 - **Benefit**: Single tool handles multiple use cases and user preferences
 - **Takeaway**: Design tools with multiple interaction patterns from the start
 
-### 19. Error Handling & Recovery
+### 20. Error Handling & Recovery
 
 **Lesson**: Plan for failure scenarios and provide recovery paths
 
@@ -245,7 +284,7 @@ This document captures key lessons learned during the development of the MyBooks
 
 ## User Experience Lessons
 
-### 20. Approval Workflows
+### 21. Approval Workflows
 
 **Lesson**: User approval should be built into automated systems
 
@@ -253,7 +292,7 @@ This document captures key lessons learned during the development of the MyBooks
 - **Solution**: Built preview mode in image downloader for user approval
 - **Takeaway**: Automation should enhance, not replace, user control
 
-### 21. System Status Communication
+### 22. System Status Communication
 
 **Lesson**: Clearly communicate what's working vs. what needs work
 
@@ -263,7 +302,7 @@ This document captures key lessons learned during the development of the MyBooks
 
 ## Future Development Guidelines
 
-### 22. Planning & Architecture
+### 23. Planning & Architecture
 
 - Always start with data integrity and duplicate prevention
 - Build approval workflows into automated processes
@@ -271,14 +310,14 @@ This document captures key lessons learned during the development of the MyBooks
 - Design tools with multiple interaction modes
 - Plan for external dependency failures
 
-### 23. Communication Best Practices
+### 24. Communication Best Practices
 
 - Be explicit about current vs. planned functionality
 - Listen for user control signals (stop, pause, change direction)
 - Provide regular, clear status updates
 - Avoid misleading claims about capabilities
 
-### 24. Technical Standards
+### 25. Technical Standards
 
 - Implement robust error handling and recovery
 - Use version control from project start
