@@ -198,87 +198,104 @@
       }
 
       function exchangeToken() {
+        debugLog("Starting token exchange process...");
+
         const authCode = localStorage.getItem("linkedin_auth_code");
+        const state = localStorage.getItem("linkedin_auth_state");
+
         if (!authCode) {
-          alert("❌ No authorization code found");
-          return;
-        }
-
-        // In a real implementation, this would call your backend API
-        // For now, show the user what to do
-        alert(
-          `🔧 Manual Token Exchange Required\n\nRun this command on your server:\n\npython3 backend/scripts/linkedin_api_production.py --exchange-token "${authCode}"`
-        );
-      }
-
-      function processOAuthCallback() {
-        debugLog("Processing OAuth callback...");
-
-        // Parse URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get("code");
-        const error = urlParams.get("error");
-        const errorDescription = urlParams.get("error_description");
-        const state = urlParams.get("state");
-
-        debugLog(`Code: ${code ? "Present" : "Missing"}`);
-        debugLog(`Error: ${error || "None"}`);
-        debugLog(`State: ${state || "None"}`);
-
-        // Handle OAuth errors
-        if (error) {
-          const errorMessages = {
-            access_denied:
-              "You denied access to LinkedIn. Please try again if you want to connect your LinkedIn account.",
-            invalid_request:
-              "Invalid OAuth request. Please check your LinkedIn app configuration.",
-            invalid_client:
-              "Invalid LinkedIn app credentials. Please check your Client ID.",
-            invalid_grant:
-              "Invalid authorization grant. Please try the authorization process again.",
-            unsupported_response_type:
-              "Unsupported OAuth response type. Please check your LinkedIn app configuration.",
-          };
-
-          const friendlyMessage =
-            errorMessages[error] ||
-            "An unknown error occurred during LinkedIn authorization.";
           showError(
-            "LinkedIn Authorization Failed",
-            friendlyMessage,
-            errorDescription
+            "Missing Authorization Code",
+            "No authorization code found in localStorage"
           );
           return;
         }
 
-        // Handle successful authorization
-        if (code) {
-          debugLog("Authorization code received successfully");
-          showSuccess(code, state);
+        const exchangeData = {
+          grant_type: "authorization_code",
+          code: authCode,
+          redirect_uri: window.location.origin + window.location.pathname,
+          client_id: "78wmrhdd99ssbi", // Your LinkedIn Client ID
+        };
+
+        debugLog(
+          "Token exchange data prepared: " + JSON.stringify(exchangeData)
+        );
+
+        // Note: In production, the client_secret should be handled server-side
+        // This is a demo of the process - actual token exchange should happen on your backend
+
+        const statusDiv = document.getElementById("status");
+        statusDiv.className = "loading";
+        statusDiv.innerHTML =
+          "🔄 Exchanging authorization code for access token...";
+
+        // Simulate backend call (replace with actual backend endpoint)
+        setTimeout(() => {
+          showError(
+            "Token Exchange",
+            "Token exchange must be completed on the backend server with your client_secret.",
+            "Use the emergency_oauth_complete.py script or implement the token exchange in your backend API."
+          );
+        }, 2000);
+      }
+
+      // Main OAuth processing logic
+      function processOAuthCallback() {
+        debugLog("Processing OAuth callback...");
+        debugLog("Current URL: " + window.location.href);
+        debugLog("Current domain: " + window.location.hostname);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const authCode = urlParams.get("code");
+        const state = urlParams.get("state");
+        const error = urlParams.get("error");
+        const errorDescription = urlParams.get("error_description");
+
+        debugLog("URL parameters parsed:");
+        debugLog(
+          "- code: " + (authCode ? authCode.substring(0, 20) + "..." : "null")
+        );
+        debugLog("- state: " + state);
+        debugLog("- error: " + error);
+        debugLog("- error_description: " + errorDescription);
+
+        if (error) {
+          showError(
+            "LinkedIn Authorization Error",
+            error,
+            errorDescription || "Please try the authorization process again."
+          );
           return;
         }
 
-        // Handle case where no code or error is present
-        showError(
-          "Invalid Authorization Response",
-          "No authorization code was received from LinkedIn.",
-          "This usually means the OAuth flow was interrupted or there was a configuration issue."
-        );
+        if (!authCode) {
+          showError(
+            "Missing Authorization Code",
+            "No authorization code found in the callback URL.",
+            "Please restart the LinkedIn authorization process."
+          );
+          return;
+        }
+
+        if (!state || state !== "mybookshelf_production_oauth") {
+          showError(
+            "Invalid State Parameter",
+            "The state parameter does not match the expected value.",
+            "This could indicate a security issue. Please restart the authorization process."
+          );
+          return;
+        }
+
+        debugLog("All OAuth parameters validated successfully");
+        showSuccess(authCode, state);
       }
 
-      // Initialize on page load
+      // Initialize when page loads
       document.addEventListener("DOMContentLoaded", function () {
-        debugLog("LinkedIn OAuth callback page loaded");
-        debugLog("URL: " + window.location.href);
+        debugLog("LinkedIn OAuth callback handler initialized");
         processOAuthCallback();
       });
-
-      // Fallback for older browsers
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", processOAuthCallback);
-      } else {
-        processOAuthCallback();
-      }
     </script>
   </body>
 </html>

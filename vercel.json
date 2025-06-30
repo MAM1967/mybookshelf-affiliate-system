@@ -9,16 +9,39 @@
   ],
   "routes": [
     {
+      "src": "/linkedin-callback.html",
+      "dest": "/frontend/mini-app/linkedin-callback.html",
+      "headers": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "src": "/linkedin-callback",
+      "dest": "/frontend/mini-app/linkedin-callback.html",
+      "headers": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
       "src": "/admin/linkedin-callback.html",
-      "dest": "/frontend/mini-app/admin/linkedin-callback.html"
+      "dest": "/frontend/mini-app/admin/linkedin-callback.html",
+      "headers": {
+        "Cache-Control": "no-cache"
+      }
     },
     {
       "src": "/admin/linkedin-callback",
-      "dest": "/frontend/mini-app/admin/linkedin-callback.html"
+      "dest": "/frontend/mini-app/admin/linkedin-callback.html",
+      "headers": {
+        "Cache-Control": "no-cache"
+      }
     },
     {
       "src": "/admin/oauth/linkedin",
-      "dest": "/frontend/mini-app/admin/linkedin-callback.html"
+      "dest": "/frontend/mini-app/admin/linkedin-callback.html",
+      "headers": {
+        "Cache-Control": "no-cache"
+      }
     },
     {
       "src": "/admin/(.*)",
@@ -29,6 +52,7 @@
       "dest": "/frontend/mini-app/$1"
     }
   ],
+  "functions": {},
   "env": {
     "SUPABASE_URL": "@supabase-url",
     "SUPABASE_ANON_KEY": "@supabase-anon-key",
