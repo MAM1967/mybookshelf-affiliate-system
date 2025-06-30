@@ -79,7 +79,58 @@ This document captures key lessons learned during the development of the MyBooks
 5. **Environment variable setup** is critical for CI/CD success
 6. **Broken affiliate links are normal** - monitoring system working as designed
 
-### 2. Operational Readiness & Soft Launch Preparation (June 30, 2025) 🆕
+### 2. Vercel Deployment Troubleshooting & Systematic Problem Solving (June 30, 2025) 🆕
+
+**Lesson**: Systematic troubleshooting beats guesswork - research, analyze, then act
+
+**Critical Issue Discovered:**
+
+- **❌ Deployment Not Updating**: Live site showing old content despite multiple commits
+- **❌ Admin Dashboard 404**: `/admin.html` returning 404 errors
+- **❌ Static Files Not Serving**: Privacy/Terms pages returning 404
+- **❌ Configuration Conflicts**: Multiple vercel.json changes creating routing conflicts
+
+**Root Cause Analysis:**
+
+- **File Structure Mismatch**: Files moved to root directory but CI/CD expected `frontend/mini-app/`
+- **Build Directory Mismatch**: GitHub Actions deploys from `frontend/mini-app` but files were in root
+- **Vercel Configuration Conflicts**: Multiple vercel.json changes created routing conflicts
+- **Cache Issues**: Vercel serving cached versions despite new deployments
+
+**Systematic Resolution Process:**
+
+1. **Research Phase**: Analyzed codebase for deployment patterns and CI/CD expectations
+2. **Diagnosis Phase**: Identified file structure and configuration mismatches
+3. **Solution Phase**: Restored proper file structure and configuration
+4. **Verification Phase**: Tested all endpoints systematically
+
+**Successful Resolution:**
+
+- **✅ Restored File Structure**: Files back in `frontend/mini-app/` directory
+- **✅ Fixed Vercel Configuration**: Proper routing matching CI/CD expectations
+- **✅ Cleaned Up Conflicts**: Removed duplicate files causing routing issues
+- **✅ Verified All Endpoints**: Main page, admin, privacy, terms all working
+
+**Final Results:**
+
+- **✅ Main Page**: `https://www.mybookshelf.shop/` - Working with "[STAGING]" title
+- **✅ Admin Dashboard**: `https://www.mybookshelf.shop/admin.html` - 200 OK
+- **✅ Admin Redirect**: `https://www.mybookshelf.shop/admin` - 200 OK
+- **✅ Privacy Policy**: `https://www.mybookshelf.shop/privacy.html` - 200 OK
+- **✅ Terms of Service**: `https://www.mybookshelf.shop/terms.html` - 200 OK
+
+**Key Takeaways:**
+
+1. **Research Before Acting**: Analyze codebase patterns and CI/CD expectations first
+2. **Maintain File Structure Consistency**: Always keep files in expected directory structure
+3. **Avoid Configuration Conflicts**: Make incremental changes rather than multiple conflicting updates
+4. **Test Systematically**: Verify each endpoint after configuration changes
+5. **Follow CI/CD Pipeline Expectations**: Ensure local structure matches pipeline requirements
+6. **Document Troubleshooting Process**: Record lessons for future reference
+
+**Takeaway**: Systematic troubleshooting with proper research and analysis is far more effective than trial-and-error guesswork. Understanding the system architecture and deployment pipeline is crucial for resolving deployment issues.
+
+### 3. Operational Readiness & Soft Launch Preparation (June 30, 2025) 🆕
 
 **Lesson**: Production systems should prioritize working components over perfect completeness
 
@@ -198,7 +249,7 @@ This document captures key lessons learned during the development of the MyBooks
 - **Approach**: Prioritized data integrity over visual appeal
 - **Takeaway**: Focus on functional requirements before cosmetic improvements
 
-### 11. Tool Creation Philosophy
+### 12. Tool Creation Philosophy
 
 **Lesson**: Build flexible, multi-mode tools
 
@@ -206,7 +257,7 @@ This document captures key lessons learned during the development of the MyBooks
 - **Benefit**: Single tool handles multiple use cases and user preferences
 - **Takeaway**: Design tools with multiple interaction patterns from the start
 
-### 12. Error Handling & Recovery
+### 13. Error Handling & Recovery
 
 **Lesson**: Plan for failure scenarios and provide recovery paths
 
@@ -214,7 +265,7 @@ This document captures key lessons learned during the development of the MyBooks
 - **Implementation**: Added graceful error handling in image download script
 - **Takeaway**: Robust error handling is as important as happy path functionality
 
-### 13. Approval Workflows
+### 14. Approval Workflows
 
 **Lesson**: User approval should be built into automated systems
 
