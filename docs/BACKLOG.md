@@ -26,6 +26,7 @@
 - [x] **PA API integration working** (credentials valid, awaiting approval)
 - [x] **Robust fallback system** using known working image URLs
 - [x] **Base64 image conversion system** for reliable display
+- [x] **🎉 FIXED: Broken affiliate links** - Updated all "EXAMPLE" ASINs with real Amazon product ASINs (Dec 30, 2024)
 
 ### Frontend & Image System ✅
 
@@ -90,15 +91,37 @@
 ### Amazon Integration Enhancements
 
 - [ ] **Story**: Enhanced Amazon Product Fetching
+
   - [x] ~~Register for Amazon PA API access~~ ✅ **DONE**
   - [x] ~~Set up Amazon Associate ID for affiliate links~~ ✅ **DONE**
   - [x] ~~Create PA API credentials and environment variables~~ ✅ **DONE**
   - [x] ~~Test PA API connectivity and rate limits~~ ✅ **DONE** (awaiting approval)
+  - [x] ~~Fix broken affiliate links with correct ASINs~~ ✅ **DONE** (Dec 30, 2024)
   - [ ] **When PA API approved**: Implement live book fetching from Amazon
   - [ ] Add Patrick Lencioni author prioritization
   - [ ] Implement Christian content filtering (exclude anti-Christian keywords)
   - [ ] Add accessory search functionality (journals, pens)
   - [ ] Create weekly batch fetching (3 books + 1 accessory)
+
+- [ ] **Story**: Smart Amazon Pricing Handler ⭐ **NEW PRIORITY**
+  - [ ] **Problem**: Amazon has multiple formats (Kindle $9.99, Paperback $14.99, Hardcover $24.99, Audiobook $19.95)
+  - [ ] **Goal**: Display optimal price for affiliate conversion and user experience
+  - [ ] **Priority Format Logic**:
+    - 1st: Paperback (best balance of price/commission)
+    - 2nd: Kindle (lowest price, good conversion)
+    - 3rd: Hardcover (highest commission but expensive)
+    - 4th: Audiobook (premium option)
+  - [ ] **Implementation Tasks**:
+    - [ ] Parse all available formats from Amazon PA API `Offers.Listings[]`
+    - [ ] Create format priority ranking system
+    - [ ] Add format detection and classification
+    - [ ] Implement price comparison and selection logic
+    - [ ] Display "Starting at $X.XX" with format indicator
+    - [ ] Add format switcher UI component (dropdown/tabs)
+    - [ ] Ensure affiliate links work for all formats
+    - [ ] Add fallback to any available format if preferred unavailable
+  - [ ] **Business Impact**: Increased conversions through optimal pricing display
+  - [ ] **Technical Notes**: PA API returns `Offers.Listings[].Condition` and `Offers.Listings[].Price`
 
 ### LinkedIn Integration (Day 1, 4 per PRD) - **HIGH PRIORITY**
 
