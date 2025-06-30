@@ -41,7 +41,7 @@
       }
 
       .header-logo {
-        width: 70px;
+        width: 210px;
         height: auto;
         margin-right: 18px;
       }
@@ -710,10 +710,24 @@
           const urlParams = new URLSearchParams(window.location.search);
           sessionToken = urlParams.get("token");
 
+          // Always update week title to current week
+          updateWeekTitleToCurrent();
+
           if (!sessionToken) {
+            // Show today's date if no session
+            document.getElementById("session-date").textContent =
+              new Date().toLocaleDateString("en-US", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              });
             showError(
               "Access token missing. Please use the link from your approval email."
             );
+            // Still try to load books for demo/testing
+            await loadPendingBooks();
+            updateStats();
             return;
           }
 
@@ -728,6 +742,28 @@
           console.error("Dashboard initialization error:", error);
           showError("Failed to initialize dashboard: " + error.message);
         }
+      }
+
+      // Update the week title to the current week (Monday-Sunday)
+      function updateWeekTitleToCurrent() {
+        const weekTitleEl = document.querySelector(".week-title");
+        const today = new Date();
+        // Get Monday of this week
+        const day = today.getDay();
+        const diffToMonday = (day === 0 ? -6 : 1) - day; // Sunday=0, Monday=1
+        const monday = new Date(today);
+        monday.setDate(today.getDate() + diffToMonday);
+        // Get Sunday of this week
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        // Format dates
+        const options = { month: "long", day: "numeric" };
+        const year = today.getFullYear();
+        const weekStr = `Week of ${monday.toLocaleDateString(
+          "en-US",
+          options
+        )}-${sunday.toLocaleDateString("en-US", options)}, ${year}`;
+        weekTitleEl.textContent = weekStr;
       }
 
       // Validate admin session
@@ -774,6 +810,7 @@
           document.getElementById("loading").style.display = "block";
           document.getElementById("books-grid").style.display = "none";
           document.getElementById("error").style.display = "none";
+          document.getElementById("empty-state").style.display = "none";
 
           const { data, error } = await supabase
             .from("pending_books")
@@ -792,11 +829,15 @@
 
           if (pendingBooks.length === 0) {
             document.getElementById("empty-state").style.display = "block";
+            document.getElementById("books-grid").style.display = "none";
           } else {
             document.getElementById("books-grid").style.display = "grid";
+            document.getElementById("empty-state").style.display = "none";
           }
         } catch (error) {
           document.getElementById("loading").style.display = "none";
+          document.getElementById("books-grid").style.display = "none";
+          document.getElementById("empty-state").style.display = "none";
           showError("Failed to load books: " + error.message);
         }
       }
