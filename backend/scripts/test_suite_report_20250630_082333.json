@@ -1,0 +1,34 @@
+{
+  "timestamp": "2025-06-30T08:23:33.116933",
+  "overall_status": "WARNINGS",
+  "total_duration_seconds": 0.823892,
+  "test_suites": {
+    "total": 2,
+    "passed": 1,
+    "warnings": 1,
+    "failed": 0
+  },
+  "results": [
+    {
+      "name": "Database Integrity",
+      "status": "WARNINGS",
+      "exit_code": 2,
+      "duration_seconds": 0.2556040287017822,
+      "report_file": null
+    },
+    {
+      "name": "Affiliate Links",
+      "status": "PASSED",
+      "exit_code": 0,
+      "duration_seconds": 0.5678200721740723,
+      "report_file": null
+    }
+  ],
+  "environment": {
+    "fast_mode": false,
+    "verbose": false,
+    "python_version": "3.9.6",
+    "working_directory": "/Users/michaelmcdermott/mybookshelf-affiliate-system/backend/scripts"
+  },
+  "individual_reports": {}
+}
