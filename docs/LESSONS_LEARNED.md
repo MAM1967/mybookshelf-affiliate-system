@@ -198,6 +198,47 @@ This document captures key lessons learned during the development of the MyBooks
 
 **Lesson**: Systematic debugging reveals root causes faster
 
+## Development Resources & References
+
+### LinkedIn API Development Resources
+
+**Official LinkedIn Developers GitHub**: [https://github.com/linkedin-developers](https://github.com/linkedin-developers)
+
+**Key Resources Available:**
+
+1. **Official Client Libraries**:
+
+   - [linkedin-api-js-client](https://github.com/linkedin-developers/linkedin-api-js-client) - JavaScript/TypeScript client (116 stars)
+   - [linkedin-api-python-client](https://github.com/linkedin-developers/linkedin-api-python-client) - Official Python client (216 stars)
+
+2. **Sample Applications**:
+
+   - [java-sample-application](https://github.com/linkedin-developers/java-sample-application) - Sample code for LinkedIn APIs
+   - [apply-with-linkedin-V3-sample-application](https://github.com/linkedin-developers/apply-with-linkedin-V3-sample-application) - Apply with LinkedIn integration
+
+3. **Development Tools**:
+   - [job-posting-development-tools](https://github.com/linkedin-developers/job-posting-development-tools) - Tools for job posting APIs
+   - [recruiter-system-connect-development-tools](https://github.com/linkedin-developers/recruiter-system-connect-development-tools) - RSC program tools
+   - [linkedin-capi-tag-template](https://github.com/linkedin-developers/linkedin-capi-tag-template) - Google Tag Manager template for Conversion API
+
+**Getting Started Resources** (from LinkedIn Developer Platform):
+
+- API product catalog exploration
+- Developer Portal for application creation
+- API documentation
+- Access token generation tools
+- Postman Collections for specific use cases
+- API status and outage information
+
+**For Our MyBookshelf Project:**
+
+- **Current Integration**: OAuth with Client ID `78wmrhdd99ssbi`
+- **Use Case**: Automated LinkedIn posting for affiliate book recommendations
+- **Relevant Libraries**: Python client library for backend integration
+- **Next Steps**: Review sample applications for best practices in automated posting
+
+**Lesson**: Official developer resources provide tested, maintained code samples that can accelerate integration development and reduce trial-and-error.
+
 - **Process Used**:
   1. Verified database contained real image URLs
   2. Checked frontend image loading logic

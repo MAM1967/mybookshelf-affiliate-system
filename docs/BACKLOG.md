@@ -195,6 +195,246 @@
 
 ## 📋 SPRINT 1 BACKLOG (Week 1 - Core Automation)
 
+### 🎯 User Interaction & Marketing Flow - ANTI-FRICTION CONVERSION SYSTEM 🆕 **HIGHEST PRIORITY**
+
+**Based on analysis of top Amazon affiliate sites for DIRECT CONVERSION with mini-site as standalone value hub**
+
+- [ ] **Story**: LinkedIn Direct-to-Amazon Flow (Primary Path - 90% of conversions)
+
+  **Phase 1: LinkedIn Direct Conversion Optimization**
+
+  - [ ] **Task**: Design Sunday post template with direct Amazon links:
+    - [ ] Scripture hook opening (Proverbs 16:3 + leadership insight)
+    - [ ] Individual book listings with covers, titles, prices
+    - [ ] Direct "GET ON AMAZON" buttons for each book (affiliate links)
+    - [ ] Secondary "See ALL recommendations + insights" (mini-site link)
+    - [ ] "Vetted for biblical alignment" badge per book
+  - [ ] **Task**: Implement visual content strategy:
+    - [ ] High-quality book cover photography workflow
+    - [ ] "Flat lay" lifestyle photography (Pack Hacker style)
+    - [ ] Brand-consistent color scheme (navy/orange theme)
+
+  **Phase 2: Mini-Site Friction Elimination (<3 Second Conversion Path)**
+
+  - [ ] **Task**: Build trust-first landing page architecture:
+    - [ ] Top 25%: Instant trust building (Christian branding, "Vetted for Christian principles" badge)
+    - [ ] Next 50%: Hero book showcase with "Why we chose this" bullets
+    - [ ] Bottom 25%: Secondary books grid with individual CTAs
+  - [ ] **Task**: Implement speed optimization requirements:
+    - [ ] <2 second Time to Interactive (TTI)
+    - [ ] CDN implementation for all images
+    - [ ] Lazy loading for below-fold content
+    - [ ] Minimal JavaScript for core functionality
+  - [ ] **Task**: Mobile-first responsive design:
+    - [ ] Touch-friendly buttons (minimum 44px)
+    - [ ] Single-column layout for easy scrolling
+    - [ ] Readable typography without zooming
+    - [ ] Thumb-accessible navigation
+
+  **Phase 3: Amazon Handoff Optimization**
+
+  - [ ] **Task**: Smart affiliate linking system:
+    - [ ] Direct to lowest-price NEW format (never used/3rd party)
+    - [ ] Preserve `mybookshelf-20` affiliate tag through redirects
+    - [ ] Open Amazon in new tab (preserve mini-site session)
+    - [ ] Let Amazon handle format upselling (Audible, hardcover)
+  - [ ] **Task**: Conversion tracking implementation:
+    - [ ] LinkedIn click-through rate monitoring
+    - [ ] Mini-site to Amazon conversion tracking
+    - [ ] Overall funnel performance analytics
+
+  **Phase 4: Post-Purchase Engagement Loop**
+
+  - [ ] **Task**: Build sustainable engagement system:
+    - [ ] Subtle "Get next week's picks" email capture
+    - [ ] "Follow for weekly leadership insights" LinkedIn prompt
+    - [ ] Social sharing buttons for virality
+    - [ ] Return visitor recognition and personalization
+
+- [ ] **Story**: Conversion Rate Optimization Based on Top Affiliate Sites
+
+  **Wirecutter Model: Trust Through Testing**
+
+  - [ ] **Task**: Implement "Every book tested against Christian principles" messaging
+  - [ ] **Task**: "We read first, then recommend" credibility system
+  - [ ] **Task**: Transparent affiliate disclosure as trust builder
+
+  **OutdoorGearLab Model: Visual Credibility**
+
+  - [ ] **Task**: High-quality book photography setup
+  - [ ] **Task**: "Hands-on testing" imagery (books on desk, reading environment)
+  - [ ] **Task**: Clear rating system for quick decisions
+
+  **Pack Hacker Model: Impulse Purchase Psychology**
+
+  - [ ] **Task**: "Flat lay" book photography (book + journal + pen setup)
+  - [ ] **Task**: Lifestyle integration messaging ("Perfect for your morning devotion")
+  - [ ] **Task**: Visual storytelling that triggers purchase desire
+
+- [ ] **Story**: Performance Metrics & Success Criteria
+
+  - [ ] **Task**: Implement conversion funnel tracking:
+    - [ ] LinkedIn click-through rate (target: 2-5%)
+    - [ ] Mini-site to Amazon conversion (target: 8-15%)
+    - [ ] Amazon purchase conversion (target: 3-8%)
+    - [ ] Overall LinkedIn to purchase (target: 0.5-1%)
+  - [ ] **Task**: User experience optimization:
+    - [ ] <3 second decision time from LinkedIn to Amazon
+    - [ ] Mobile conversion rate parity with desktop
+    - [ ] Bounce rate optimization (<50% on mini-site)
+
+- [ ] **Story**: Mini-Site as Leadership Development Hub (Secondary Path - 10% of traffic, HIGH value)
+
+  **Purpose**: Email list building and ongoing community engagement, NOT conversion funnel
+
+  - [ ] **Task**: Build standalone value proposition:
+    - [ ] "Your Complete Library of Christian-Vetted Leadership Books"
+    - [ ] Complete archive of all weekly recommendations (searchable)
+    - [ ] Leadership principles library with biblical applications
+    - [ ] Author background research and Christian worldview verification
+  - [ ] **Task**: Email signup optimization (PRIMARY GOAL):
+    - [ ] "Weekly Leadership Principles in Action" newsletter
+    - [ ] Join 500+ Christian leaders value proposition
+    - [ ] Simple email-only signup form (no extra fields)
+    - [ ] Target: 15-25% signup rate from mini-site visitors
+  - [ ] **Task**: Content strategy for email subscribers:
+    - [ ] Weekly email with leadership insights from recommended books
+    - [ ] Biblical foundations for each principle
+    - [ ] Practical applications and discussion questions
+    - [ ] Early access to new book recommendations
+
+**Business Impact**: Transform direct conversion model with sustainable email list building for long-term revenue
+**Revenue Potential**: Direct path = immediate conversions, mini-site = long-term community and diversified revenue
+**User Experience**: Zero friction purchase path + optional deep value for engaged users
+**Priority Justification**: Eliminates conversion friction while building sustainable community asset
+
+### Weekly Scraping & Approval Workflow 🆕 **HIGH PRIORITY**
+
+- [ ] **Story**: Weekly Amazon Scraping System
+
+  - [ ] **Task**: Build Amazon scraping script to identify up to 10 non-duplicative items weekly
+  - [ ] **Task**: Implement content filtering for Christian principles:
+    - [ ] Filter out blasphemy and profanity
+    - [ ] Exclude books denying Jesus Christ
+    - [ ] Exclude explicit/implicit embrace of other world religions (Hinduism, Buddhism, Islam) as business principles
+    - [ ] Focus on leadership/productivity/business books aligned with biblical values
+  - [ ] **Task**: Create `scraping_queue` table in Supabase for pending approval items
+  - [ ] **Task**: Diversify beyond Patrick Lencioni to include various Christian leadership authors
+
+- [ ] **Story**: Admin Approval System - Complete Build Plan 🏗️ **COMPREHENSIVE**
+
+  **Phase 1: Database Architecture (Day 1)**
+
+  - [ ] **Task**: Create `scraping_queue` table with comprehensive schema
+    - [ ] Add content scoring fields (content_score, filter_flags)
+    - [ ] Include approval workflow fields (status, admin_notes, reviewed_date)
+    - [ ] Add audit trail capabilities
+  - [ ] **Task**: Create `admin_sessions` table for secure authentication
+  - [ ] **Task**: Create `approval_log` table for action tracking
+  - [ ] **Task**: Set up database constraints and indexes for performance
+  - [ ] **Task**: Create database migration scripts for deployment
+
+  **Phase 2: Backend API Development (Day 2-3)**
+
+  - [ ] **Task**: Build authentication system
+    - [ ] Email-based login for mcddsl@icloud.com
+    - [ ] Session token generation and validation
+    - [ ] Auto-logout after inactivity
+    - [ ] Password reset functionality (future enhancement)
+  - [ ] **Task**: Develop approval API endpoints
+    - [ ] GET /api/admin/pending - Fetch items needing review
+    - [ ] POST /api/admin/approve/:id - Single item approval
+    - [ ] POST /api/admin/reject/:id - Single item rejection
+    - [ ] POST /api/admin/batch-action - Bulk operations
+    - [ ] POST /api/admin/promote-approved - Move to live database
+  - [ ] **Task**: Implement content analysis system
+    - [ ] Christian content scoring algorithm
+    - [ ] Automatic flagging for review priorities
+    - [ ] Content warning detection
+  - [ ] **Task**: Add comprehensive error handling and logging
+
+  **Phase 3: Frontend Dashboard Development (Day 3-4)**
+
+  - [ ] **Task**: Build admin login interface
+    - [ ] Clean, professional login form
+    - [ ] Session management
+    - [ ] Auto-redirect to dashboard
+  - [ ] **Task**: Create main dashboard layout
+    - [ ] Header with logout, user info
+    - [ ] Sidebar navigation
+    - [ ] Main content area for item review
+  - [ ] **Task**: Develop item review interface
+    - [ ] Card-based layout for each scraped item
+    - [ ] Display: title, author, description, price, image
+    - [ ] Show content score and any filter flags
+    - [ ] Approve/Reject buttons with confirmation dialogs
+    - [ ] Notes field for admin comments
+  - [ ] **Task**: Implement batch operations UI
+    - [ ] Select all/none checkboxes
+    - [ ] Bulk approve/reject actions
+    - [ ] Progress indicators for batch operations
+  - [ ] **Task**: Build approval history view
+    - [ ] Searchable/filterable list of past decisions
+    - [ ] Action audit trail
+    - [ ] Performance metrics (approval rates, etc.)
+
+  **Phase 4: Integration & Testing (Day 4-5)**
+
+  - [ ] **Task**: Connect scraping script to approval system
+    - [ ] Populate scraping_queue instead of direct database insertion
+    - [ ] Include content scoring in scraping process
+    - [ ] Add duplicate detection for scraping queue
+  - [ ] **Task**: Build promotion workflow
+    - [ ] Sunday batch promotion of approved items
+    - [ ] Data validation before promotion
+    - [ ] Rollback capability if issues found
+  - [ ] **Task**: Implement email notification system
+    - [ ] Weekly summary emails to mcddsl@icloud.com
+    - [ ] Sunday pre-publication approval requests
+    - [ ] Alert emails for system issues
+  - [ ] **Task**: Security hardening
+    - [ ] Rate limiting on login attempts
+    - [ ] CSRF protection
+    - [ ] Input sanitization and validation
+    - [ ] SQL injection prevention
+
+  **Phase 5: UI/UX Polish (Day 5-6)**
+
+  - [ ] **Task**: Responsive design implementation
+    - [ ] Mobile-friendly admin interface
+    - [ ] Tablet optimization
+    - [ ] Touch-friendly controls
+  - [ ] **Task**: User experience enhancements
+    - [ ] Loading states and progress indicators
+    - [ ] Toast notifications for actions
+    - [ ] Keyboard shortcuts for power users
+    - [ ] Auto-save of admin notes
+  - [ ] **Task**: Christian branding consistency
+    - [ ] Align with main site color scheme (navy-orange)
+    - [ ] Include appropriate scripture references
+    - [ ] Professional, values-driven design
+
+  **Phase 6: Production Deployment (Day 6-7)**
+
+  - [ ] **Task**: Environment setup
+    - [ ] Configure production database tables
+    - [ ] Set up admin subdomain (admin.mybookshelf.shop)
+    - [ ] SSL certificate configuration
+  - [ ] **Task**: Security deployment
+    - [ ] Environment variable configuration
+    - [ ] Production authentication settings
+    - [ ] Backup and recovery procedures
+  - [ ] **Task**: Monitoring and alerting
+    - [ ] Error tracking setup
+    - [ ] Performance monitoring
+    - [ ] Uptime alerts
+
+- [ ] **Story**: Sunday Email Notification System
+  - [ ] **Task**: Set up Sunday email workflow to mcddsl@icloud.com
+  - [ ] **Task**: Include approved items summary in email
+  - [ ] **Task**: Add final approval step before LinkedIn publication
+  - [ ] **Task**: Integrate with Pipedream for email automation
+
 ### Amazon Integration Enhancements
 
 - [ ] **Story**: Enhanced Amazon Product Fetching
@@ -210,25 +450,61 @@
   - [ ] Add accessory search functionality (journals, pens)
   - [ ] Create weekly batch fetching (3 books + 1 accessory)
 
-- [ ] **Story**: Smart Amazon Pricing Handler ⭐ **NEW PRIORITY**
-  - [ ] **Problem**: Amazon has multiple formats (Kindle $9.99, Paperback $14.99, Hardcover $24.99, Audiobook $19.95)
-  - [ ] **Goal**: Display optimal price for affiliate conversion and user experience
-  - [ ] **Priority Format Logic**:
-    - 1st: Paperback (best balance of price/commission)
-    - 2nd: Kindle (lowest price, good conversion)
-    - 3rd: Hardcover (highest commission but expensive)
-    - 4th: Audiobook (premium option)
-  - [ ] **Implementation Tasks**:
-    - [ ] Parse all available formats from Amazon PA API `Offers.Listings[]`
-    - [ ] Create format priority ranking system
-    - [ ] Add format detection and classification
-    - [ ] Implement price comparison and selection logic
-    - [ ] Display "Starting at $X.XX" with format indicator
-    - [ ] Add format switcher UI component (dropdown/tabs)
-    - [ ] Ensure affiliate links work for all formats
-    - [ ] Add fallback to any available format if preferred unavailable
-  - [ ] **Business Impact**: Increased conversions through optimal pricing display
-  - [ ] **Technical Notes**: PA API returns `Offers.Listings[].Condition` and `Offers.Listings[].Price`
+- [ ] **Story**: Smart Amazon Pricing Handler ⭐ **UPDATED PRIORITY**
+
+  - [ ] **Problem**: Amazon books have multiple formats (Kindle $9.99, Paperback $14.99, Hardcover $24.99, Audiobook $19.95)
+  - [ ] **Business Decision**: Show the cheapest available price as default to maximize user appeal
+  - [ ] **User Experience**: Users will make final format decision on Amazon detail page after clicking affiliate link
+
+  **Price Selection Business Logic:**
+
+  - [ ] **Primary Rule**: Display lowest price among all available formats FROM NEW/AMAZON-SOLD items only
+  - [ ] **Critical Exclusion**: Never include used books or third-party seller prices (no affiliate compensation)
+  - [ ] **Seller Filtering**: Only consider prices from Amazon.com or Amazon-fulfilled sellers
+  - [ ] **Format Eligibility**: Include all physical and digital formats (Kindle, Paperback, Hardcover, Audiobook)
+  - [ ] **Price Display**: "Starting at $X.XX" with format indicator showing which format has lowest NEW price
+  - [ ] **Affiliate Link**: Default link goes to the cheapest NEW format's Amazon page
+  - [ ] **Fallback**: If price data unavailable, prioritize: Paperback → Kindle → Hardcover → Audiobook
+
+  **Implementation Tasks:**
+
+  - [ ] **Task**: Parse all available formats from Amazon PA API `Offers.Listings[]`
+  - [ ] **Task**: Implement price comparison algorithm with seller filtering
+    - [ ] Filter `Offers.Listings[]` to exclude used/third-party sellers
+      - [ ] Check `Offers.Listings[].Condition` = "New" only
+      - [ ] Verify `Offers.Listings[].Merchant.Name` = "Amazon.com" or is Amazon-fulfilled
+      - [ ] Exclude marketplace sellers that don't generate affiliate commissions
+    - [ ] Extract price from qualified listings: `Offers.Listings[].Price.Amount`
+    - [ ] Convert all prices to consistent currency/decimal format
+    - [ ] Find minimum price across all NEW formats only
+    - [ ] Identify which format has the minimum NEW price
+  - [ ] **Task**: Create price display logic
+    - [ ] Show "Starting at $X.XX" with lowest price
+    - [ ] Display format badge (e.g., "Kindle", "Paperback", "Hardcover", "Audiobook")
+    - [ ] Ensure affiliate link points to cheapest format's Amazon page
+  - [ ] **Task**: Add format availability indicator
+    - [ ] Show "Multiple formats available" when >1 format exists
+    - [ ] Display price range if helpful (e.g., "$9.99 - $24.99")
+  - [ ] **Task**: Handle edge cases
+    - [ ] No NEW price data available (show "Price varies" or hide item)
+    - [ ] Only used/third-party prices available (exclude item from display)
+    - [ ] Only one NEW format available (show that format's price)
+    - [ ] Temporary price unavailable (fallback to last known NEW price)
+    - [ ] Invalid/corrupted price data (skip and use fallback)
+    - [ ] All formats are used/marketplace only (do not display item)
+  - [ ] **Task**: Format-specific affiliate link management
+    - [ ] Generate correct Amazon ASIN-based links for each format
+    - [ ] Ensure affiliate tag (`mybookshelf-20`) works for all formats
+    - [ ] Test affiliate tracking across different format types
+  - [ ] **Task**: UI Enhancement for price display
+    - [ ] Update frontend to show "Starting at" pricing
+    - [ ] Add format badge styling consistent with site theme
+    - [ ] Ensure mobile responsiveness for price display
+
+  **Business Impact**: Maximize click-through rates by showing most appealing (lowest) price while ensuring affiliate commission eligibility
+  **Revenue Protection**: Exclude used/third-party prices that generate zero affiliate commissions
+  **Technical Notes**: PA API returns `Offers.Listings[].Condition` and `Offers.Listings[].Merchant.Name` for seller filtering
+  **Priority Justification**: Addresses immediate user question about price display logic and protects affiliate revenue
 
 ### LinkedIn Integration (Day 1, 4 per PRD) - **HIGH PRIORITY**
 
@@ -239,21 +515,35 @@
   - [ ] Set up LinkedIn API permissions for posting
   - [ ] Test authentication flow
 
-- [ ] **Story**: LinkedIn Posting Automation
-  - [ ] Create post generation template (200 words)
-  - [ ] Implement affiliate link embedding
-  - [ ] Add Proverbs 16:3 scripture integration
-  - [ ] Create approval email workflow
+- [ ] **Story**: LinkedIn Posting Automation ⭐ **UPDATED**
+  - [ ] **Sunday Publication Schedule**: Automated LinkedIn posts go out on Sundays after admin approval
+  - [ ] **Enhanced Post Generation**: Create posts featuring diverse Christian leadership authors (not just Lencioni)
+  - [ ] **Weekly Content Strategy**: Generate posts from weekly scraped and approved items (up to 10 per week)
+  - [ ] **Content Template**: 200-word posts highlighting leadership books + recommendations with affiliate links
+  - [ ] **Final Approval Step**: Email notifications to mcddsl@icloud.com before publication
+  - [ ] **Scripture Integration**: Add Proverbs 16:3 and other relevant biblical principles
+  - [ ] **Affiliate Link Embedding**: Include approved items' Amazon associate links
+
+### Content Strategy & Filtering 🆕 **IMPORTANT**
+
+- [ ] **Story**: Christian Content Standards Implementation
+  - [ ] **Author Diversification**: Move beyond Patrick Lencioni to include various Christian leadership authors
+  - [ ] **Content Filtering Enforcement**:
+    - [ ] No blasphemy or profanity
+    - [ ] No denial of Jesus Christ
+    - [ ] No explicit/implicit embrace of other world religions (Hinduism, Buddhism, Islam) as business principles
+    - [ ] Focus on biblical leadership, productivity, and business principles
+  - [ ] **Quality Assurance**: Multi-layer review process (automated + human approval + final email review)
 
 ### Pipedream Automation (Day 4 per PRD)
 
-- [ ] **Story**: Pipedream Workflow Setup
+- [ ] **Story**: Pipedream Workflow Setup ⭐ **ENHANCED**
   - [ ] Create Pipedream account and workspace
-  - [ ] Build data fetch workflow (Supabase → Pipedream)
-  - [ ] Implement post generation workflow
-  - [ ] Set up email approval system
-  - [ ] Configure LinkedIn posting workflow
-  - [ ] Schedule weekly automation (Sunday 8 AM)
+  - [ ] Build weekly scraping workflow (Amazon → Supabase scraping_queue)
+  - [ ] Implement admin approval workflow
+  - [ ] Set up Sunday email notifications to mcddsl@icloud.com
+  - [ ] Configure LinkedIn posting workflow with approved items
+  - [ ] Schedule weekly automation cycle (scraping → approval → publication)
 
 ### Canva Integration (Day 4 per PRD)
 
