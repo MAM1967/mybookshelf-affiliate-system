@@ -1,0 +1,48 @@
+{
+  "timestamp": "2025-06-30T10:59:01.425564",
+  "deployment_url": "https://mybookshelf.shop",
+  "overall_status": "PASSED",
+  "total_tests": 4,
+  "passed": 4,
+  "warnings": 0,
+  "failed": 0,
+  "avg_response_time_ms": 141,
+  "results": [
+    {
+      "test_name": "Homepage Availability",
+      "status": "PASS",
+      "response_time_ms": 315,
+      "message": "Available (200)",
+      "details": {
+        "url": "https://mybookshelf.shop",
+        "status_code": 200
+      }
+    },
+    {
+      "test_name": "Content Integrity",
+      "status": "PASS",
+      "response_time_ms": 64,
+      "message": "All required content present",
+      "details": {
+        "missing_elements": []
+      }
+    },
+    {
+      "test_name": "Affiliate Links",
+      "status": "PASS",
+      "response_time_ms": 45,
+      "message": "Affiliate links properly configured",
+      "details": {
+        "has_affiliate_tag": true,
+        "has_amazon_links": true
+      }
+    },
+    {
+      "test_name": "Performance",
+      "status": "PASS",
+      "response_time_ms": 0,
+      "message": "Skipped (use --performance to enable)",
+      "details": null
+    }
+  ]
+}

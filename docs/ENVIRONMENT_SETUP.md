@@ -19,9 +19,7 @@ Branches & Deployments:
 └── dev → Development (dev-mybookshelf.vercel.app)
 
 Supabase Projects:
-├── Production Project (mybookshelf-prod)
-├── Staging Project (mybookshelf-staging)
-└── Development Project (mybookshelf-dev)
+└── Single Project (mybookshelf) - Free tier, single environment
 ```
 
 ## 1. Vercel Environment Setup
@@ -208,11 +206,11 @@ ANALYTICS_ENABLED=false
    Plan: Free tier (upgrade if needed)
    ```
 
-3. **Production Project** (Current)
+3. **Single Project** (Current)
    ```
-   Name: mybookshelf-prod
+   Name: mybookshelf
    Region: us-east-1
-   Plan: Current plan
+   Plan: Free tier
    ```
 
 ### Step 2: Database Schema Migration
