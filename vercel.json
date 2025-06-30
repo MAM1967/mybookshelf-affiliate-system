@@ -10,7 +10,17 @@
   "routes": [
     {
       "src": "/admin/linkedin-callback(.*)",
-      "dest": "/frontend/mini-app/linkedin-callback.html"
+      "dest": "/frontend/mini-app/linkedin-callback.html",
+      "headers": {
+        "cache-control": "no-cache"
+      }
+    },
+    {
+      "src": "/admin/oauth/linkedin(.*)",
+      "dest": "/frontend/mini-app/linkedin-callback.html",
+      "headers": {
+        "cache-control": "no-cache"
+      }
     },
     {
       "src": "/admin/(.*)",
@@ -19,6 +29,13 @@
     {
       "src": "/(.*)",
       "dest": "/frontend/mini-app/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/auth/linkedin/callback(.*)",
+      "destination": "/admin/linkedin-callback$1",
+      "permanent": false
     }
   ],
   "env": {
