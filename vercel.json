@@ -9,6 +9,22 @@
   ],
   "routes": [
     {
+      "src": "/admin/linkedin-callback.html",
+      "dest": "/frontend/mini-app/admin/linkedin-callback.html"
+    },
+    {
+      "src": "/admin/linkedin-callback",
+      "dest": "/frontend/mini-app/admin/linkedin-callback.html"
+    },
+    {
+      "src": "/admin/oauth/linkedin",
+      "dest": "/frontend/mini-app/admin/linkedin-callback.html"
+    },
+    {
+      "src": "/admin/(.*)",
+      "dest": "/frontend/mini-app/admin/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/frontend/mini-app/$1"
     }
