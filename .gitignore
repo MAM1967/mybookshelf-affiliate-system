@@ -85,3 +85,4 @@ node_modules/
 # Compiled CSS/JS (if we add build process)
 *.min.css
 *.min.js 
+.vercel

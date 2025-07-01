@@ -277,7 +277,15 @@ class FinalLinkedInPoster:
             access_token = token_record['access_token']
             
             # Check if token is expired
-            expires_at = datetime.fromisoformat(token_record['expires_at'])
+            expires_at_str = token_record['expires_at']
+            # Pad milliseconds if needed for fromisoformat
+            if '.' in expires_at_str:
+                date_part, ms_part = expires_at_str.split('.')
+                ms_digits = ms_part.rstrip('Z')
+                if len(ms_digits) < 6:
+                    ms_digits = ms_digits.ljust(6, '0')
+                expires_at_str = f"{date_part}.{ms_digits}"
+            expires_at = datetime.fromisoformat(expires_at_str)
             if expires_at <= datetime.now():
                 logger.error("❌ LinkedIn token has expired")
                 logger.info("ℹ️ Please re-authenticate with LinkedIn to get a fresh token")
@@ -285,7 +293,7 @@ class FinalLinkedInPoster:
             
             # Prepare LinkedIn post data
             post_data = {
-                "author": f"urn:li:person:{token_record['linkedin_user_id']}",
+                "author": "urn:li:organization:10198635",
                 "lifecycleState": "PUBLISHED",
                 "specificContent": {
                     "com.linkedin.ugc.ShareContent": {

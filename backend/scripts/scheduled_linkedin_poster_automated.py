@@ -361,7 +361,7 @@ class AutomatedLinkedInPoster:
             url = 'https://api.linkedin.com/v2/ugcPosts'
             
             post_data = {
-                "author": f"urn:li:person:{self.user_id}",
+                "author": "urn:li:organization:10198635",
                 "lifecycleState": "PUBLISHED",
                 "specificContent": {
                     "com.linkedin.ugc.ShareContent": {
