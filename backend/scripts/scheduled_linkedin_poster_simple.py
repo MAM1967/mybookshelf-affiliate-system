@@ -129,15 +129,18 @@ class ScheduledLinkedInPoster:
                 'Content-Type': 'application/json'
             }
             
-            response = requests.get('https://api.linkedin.com/v2/people/~', headers=headers)
+            # Use the modern userinfo endpoint instead of deprecated people endpoint
+            response = requests.get('https://api.linkedin.com/v2/userinfo', headers=headers)
             
             if response.status_code == 200:
                 user_data = response.json()
-                self.user_id = user_data.get('id')
-                logger.info(f"✅ Token valid for user: {user_data.get('localizedFirstName', 'Unknown')}")
+                # The userinfo endpoint returns 'sub' as the user ID
+                if not self.user_id:
+                    self.user_id = user_data.get('sub')
+                logger.info(f"✅ Token valid for user: {user_data.get('name', 'Unknown')}")
                 return True
             else:
-                logger.error(f"❌ Token validation failed: {response.status_code}")
+                logger.error(f"❌ Token validation failed: {response.status_code} - {response.text}")
                 return False
                 
         except Exception as e:
