@@ -12,9 +12,10 @@ const REDIRECT_URI = "https://mybookshelf.shop/api/linkedin-callback"; // Force 
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase =
-  SUPABASE_URL && SUPABASE_ANON_KEY
-    ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  SUPABASE_URL && (SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY)
+    ? createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY)
     : null;
 
 async function exchangeCodeForToken(authCode) {
@@ -113,6 +114,7 @@ async function storeTokenInSupabase(tokenInfo, profile) {
   try {
     const { data, error } = await supabase.from("linkedin_tokens").upsert(
       {
+        admin_email: profile.email,
         access_token: tokenInfo.access_token,
         token_type: tokenInfo.token_type || "Bearer",
         expires_in: tokenInfo.expires_in,
