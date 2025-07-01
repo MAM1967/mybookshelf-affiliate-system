@@ -22,9 +22,9 @@ os.environ['ADMIN_EMAIL'] = 'mcddsl@icloud.com'
 os.environ['ADMIN_DASHBOARD_URL'] = 'https://mybookshelf.shop/admin'
 os.environ['PUBLIC_SITE_URL'] = 'https://mybookshelf.shop'
 
-# Setup Supabase test configuration (using dummy values for config test)
-os.environ['SUPABASE_URL'] = 'https://test.supabase.co'
-os.environ['SUPABASE_ANON_KEY'] = 'test_anon_key_for_configuration_testing'
+# Setup Supabase test configuration (using real values for integration test)
+os.environ['SUPABASE_URL'] = 'https://ackcgrnizuhauccnbiml.supabase.co'
+os.environ['SUPABASE_ANON_KEY'] = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFja2Nncm5penVoYXVjY25iaW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMjc4MzEsImV4cCI6MjA2NjgwMzgzMX0.SXpIMuNBgUhcEQUHzpEB1zZAdF-UTGvmY81_A_T8Lrs'
 
 from email_service import ResendEmailService
 from sunday_approval_automation import SundayApprovalAutomation

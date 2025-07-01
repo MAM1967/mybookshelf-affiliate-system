@@ -73,10 +73,10 @@ class TestRunner:
             },
             {
                 'name': 'Email Service Integration',
-                'script': 'test_email_integration.py',
-                'args': ['--quick'] if fast_mode else [],
-                'required': False,  # Made non-critical while fixing API key
-                'timeout': 30
+                'script': 'test_email_simple.py',
+                'args': [],
+                'required': False,
+                'timeout': 120
             }
         ]
         
