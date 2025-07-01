@@ -131,7 +131,7 @@ async function storeTokenInSupabase(tokenInfo, profile) {
         created_at: new Date().toISOString(),
         is_active: true,
       },
-      { onConflict: ["linkedin_user_id"] }
+      { onConflict: ["admin_email"] }
     );
     if (error) return { success: false, error: error.message };
     return { success: true };
