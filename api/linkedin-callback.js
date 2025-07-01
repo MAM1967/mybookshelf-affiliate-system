@@ -117,6 +117,11 @@ async function storeTokenInSupabase(tokenInfo, profile) {
       Date.now() + tokenInfo.expires_in * 1000
     ).toISOString();
 
+    console.log(
+      "[LinkedIn OAuth] Storing new access token:",
+      tokenInfo.access_token
+    );
+
     const { data, error } = await supabase.from("linkedin_tokens").upsert(
       {
         admin_email: profile.email,
@@ -133,9 +138,14 @@ async function storeTokenInSupabase(tokenInfo, profile) {
       },
       { onConflict: ["admin_email"] }
     );
-    if (error) return { success: false, error: error.message };
+    if (error) {
+      console.error("[LinkedIn OAuth] Supabase upsert error:", error);
+      return { success: false, error: error.message };
+    }
+    console.log("[LinkedIn OAuth] Upsert result:", data);
     return { success: true };
   } catch (e) {
+    console.error("[LinkedIn OAuth] Token storage exception:", e);
     return { success: false, error: e.message };
   }
 }
