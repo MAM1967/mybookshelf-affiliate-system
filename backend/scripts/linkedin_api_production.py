@@ -58,7 +58,7 @@ class LinkedInAPIProduction:
         self.posts_url = 'https://api.linkedin.com/v2/ugcPosts'
         
         # Required scopes
-        self.scopes = ['openid', 'profile', 'w_member_social', 'email', 'rw_organization_admin']
+        self.scopes = ['openid', 'profile', 'w_member_social', 'w_organization_social', 'email']
     
     def get_authorization_url(self, state: Optional[str] = None) -> str:
         """Generate LinkedIn authorization URL"""
@@ -287,7 +287,7 @@ def generate_linkedin_oauth_url():
     # Production LinkedIn App Configuration
     client_id = "78wmrhdd99ssbi"
     redirect_uri = "https://mybookshelf.shop/api/linkedin-callback"  # Updated to new API endpoint
-    scope = "openid profile w_member_social email rw_organization_admin"
+    scope = "openid profile w_member_social w_organization_social email"
     state = "mybookshelf_production_oauth"
     
     # LinkedIn OAuth 2.0 endpoint

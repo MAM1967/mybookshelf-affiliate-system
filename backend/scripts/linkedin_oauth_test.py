@@ -15,7 +15,7 @@ LINKEDIN_CLIENT_SECRET = "WPL_AP1.hCyy0nkGz9y5i1tP.ExgKnQ=="
 
 # OAuth Configuration
 REDIRECT_URI = "http://localhost:8000/auth/linkedin/callback"  # For testing
-SCOPE = "w_member_social rw_organization_admin"  # Permission to post on behalf of user and organization
+SCOPE = "w_member_social w_organization_social"  # Permission to post on behalf of user and organization
 
 # LinkedIn API URLs
 AUTHORIZATION_URL = "https://www.linkedin.com/oauth/v2/authorization"

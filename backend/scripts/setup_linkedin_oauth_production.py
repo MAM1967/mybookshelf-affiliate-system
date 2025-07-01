@@ -42,8 +42,8 @@ class LinkedInOAuthProductionSetup:
                 'openid',
                 'profile', 
                 'w_member_social',
-                'email',
-                'rw_organization_admin'
+                'w_organization_social',
+                'email'
             ]
         }
         
