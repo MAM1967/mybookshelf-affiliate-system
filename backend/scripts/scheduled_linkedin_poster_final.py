@@ -128,44 +128,61 @@ class FinalLinkedInPoster:
             logger.error(f"❌ Email notification error: {e}")
             return False
 
-    def get_mock_scheduled_books(self) -> List[Dict]:
-        """Get mock scheduled books for testing (replace with real database query)"""
-        today = datetime.now()
-        day_name = today.strftime('%A')
-        
-        # Only return books on Tue/Wed/Thu
-        if day_name not in ['Tuesday', 'Wednesday', 'Thursday']:
-            logger.info(f"ℹ️ No posting scheduled for {day_name}")
-            return []
-        
-        # Mock books for testing
-        mock_books = [
-            {
-                'id': 1,
-                'title': 'Atomic Habits',
-                'author': 'James Clear',
-                'affiliate_link': 'https://amazon.com/dp/0735211299?tag=mybookshelf-20',
-                'category': 'Books',
-                'christian_themes': ['Discipline', 'Personal Growth'],
-                'leadership_topics': ['Habit Formation', 'Productivity'],
-                'content_summary': 'Transform your life with tiny changes that lead to remarkable results.',
-                'scheduled_post_at': today.isoformat()
-            },
-            {
-                'id': 2,
-                'title': 'The Five Dysfunctions of a Team',
-                'author': 'Patrick Lencioni',
-                'affiliate_link': 'https://amazon.com/dp/0787960756?tag=mybookshelf-20',
-                'category': 'Books',
-                'christian_themes': ['Team Building', 'Integrity'],
-                'leadership_topics': ['Team Dynamics', 'Leadership'],
-                'content_summary': 'Build cohesive teams through trust and accountability.',
+    def get_scheduled_books(self) -> List[Dict]:
+        """Get books from database for scheduled posting"""
+        try:
+            today = datetime.now()
+            day_name = today.strftime('%A')
+            
+            # Only return books on Tue/Wed/Thu
+            if day_name not in ['Tuesday', 'Wednesday', 'Thursday']:
+                logger.info(f"ℹ️ No posting scheduled for {day_name}")
+                return []
+            
+            # Get books from database
+            supabase_url = os.getenv('SUPABASE_URL')
+            supabase_key = os.getenv('SUPABASE_ANON_KEY')
+            
+            if not supabase_url or not supabase_key:
+                logger.error("❌ Supabase credentials not configured")
+                return []
+            
+            supabase = create_client(supabase_url, supabase_key)
+            
+            # Get all books from database
+            result = supabase.table('books_accessories').select('*').execute()
+            
+            if not result.data:
+                logger.warning("⚠️ No books found in database")
+                return []
+            
+            books = result.data
+            
+            # Select one book for today based on day of week
+            # Use hash of day to consistently select same book for same day
+            day_hash = hash(day_name)
+            selected_index = day_hash % len(books)
+            selected_book = books[selected_index]
+            
+            # Format book data for posting
+            scheduled_book = {
+                'id': selected_book['id'],
+                'title': selected_book['title'],
+                'author': selected_book['author'],
+                'affiliate_link': selected_book.get('affiliate_link', ''),
+                'category': selected_book.get('category', 'Books'),
+                'christian_themes': ['Christian Leadership', 'Biblical Principles'],
+                'leadership_topics': ['Leadership Development', 'Personal Growth'],
+                'content_summary': f"Discover insights from {selected_book['title']} by {selected_book['author']}.",
                 'scheduled_post_at': today.isoformat()
             }
-        ]
-        
-        logger.info(f"✅ Found {len(mock_books)} books scheduled for {day_name}")
-        return mock_books
+            
+            logger.info(f"✅ Found 1 book scheduled for {day_name}: {scheduled_book['title']}")
+            return [scheduled_book]
+            
+        except Exception as e:
+            logger.error(f"❌ Error getting scheduled books from database: {e}")
+            return []
 
     def generate_post_content(self, book: Dict) -> Dict:
         """Generate LinkedIn post content for a book"""
@@ -320,7 +337,7 @@ class FinalLinkedInPoster:
         logger.info("🚀 Starting automated LinkedIn posting")
         
         # Get books scheduled for today
-        scheduled_books = self.get_mock_scheduled_books()
+        scheduled_books = self.get_scheduled_books()
         
         if not scheduled_books:
             logger.info("ℹ️ No books scheduled for posting today")
