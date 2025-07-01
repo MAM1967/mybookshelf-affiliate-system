@@ -34,7 +34,7 @@ class LinkedInOAuthRoutingTest:
         self.linkedin_config = {
             'client_id': '78wmrhdd99ssbi',
             'response_type': 'code',
-            'scope': 'openid profile w_member_social email',
+            'scope': 'openid profile w_member_social email rw_organization_admin',
             'state': 'mybookshelf_routing_test'
         }
         

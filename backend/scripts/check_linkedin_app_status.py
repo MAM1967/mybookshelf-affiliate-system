@@ -183,7 +183,7 @@ class LinkedInAppStatusChecker:
             print(f"\n📋 Current Token Scope:")
             print(f"   {scope}")
             
-            required_scopes = ['w_member_social', 'openid', 'profile', 'email']
+            required_scopes = ['w_member_social', 'openid', 'profile', 'email', 'rw_organization_admin']
             missing_scopes = []
             
             for required_scope in required_scopes:
