@@ -247,9 +247,14 @@ class FinalLinkedInPoster:
             logger.error(f"❌ Error generating content for {book['title']}: {e}")
             return None
 
-    def post_to_linkedin(self, content: Dict) -> bool:
+    def post_to_linkedin(self, content: Dict, dry_run: bool = False) -> bool:
         """Post to LinkedIn using real API"""
         try:
+            if dry_run:
+                logger.info(f"🧪 DRY RUN: Would post to LinkedIn: {content['book_title']}")
+                logger.info(f"📄 Content preview: {content['text'][:100]}...")
+                return True
+            
             # Get stored access token from database
             supabase_url = os.getenv('SUPABASE_URL')
             supabase_key = os.getenv('SUPABASE_ANON_KEY')
@@ -302,6 +307,7 @@ class FinalLinkedInPoster:
                 'X-Restli-Protocol-Version': '2.0.0'
             }
             
+            logger.info(f"📤 Posting to LinkedIn: {content['book_title']}")
             response = requests.post(
                 'https://api.linkedin.com/v2/ugcPosts',
                 headers=headers,
@@ -310,8 +316,10 @@ class FinalLinkedInPoster:
             )
             
             if response.status_code == 201:
+                post_id = response.json().get('id', 'Unknown')
                 logger.info(f"✅ Successfully posted to LinkedIn: {content['book_title']}")
-                logger.info(f"📄 Post ID: {response.json().get('id', 'Unknown')}")
+                logger.info(f"📄 Post ID: {post_id}")
+                logger.info(f"🔗 Post URL: https://www.linkedin.com/feed/update/{post_id.split(':')[-1]}/")
                 return True
             else:
                 logger.error(f"❌ LinkedIn API error: {response.status_code} - {response.text}")
@@ -331,7 +339,7 @@ class FinalLinkedInPoster:
             logger.error(f"❌ Error posting to LinkedIn: {e}")
             return False
 
-    def run_automated_posting(self) -> Dict:
+    def run_automated_posting(self, dry_run: bool = False) -> Dict:
         """Run automated posting with comprehensive reporting"""
         start_time = datetime.now()
         logger.info("🚀 Starting automated LinkedIn posting")
@@ -372,7 +380,7 @@ class FinalLinkedInPoster:
                 continue
             
             # Post to LinkedIn
-            success = self.post_to_linkedin(content)
+            success = self.post_to_linkedin(content, dry_run)
             
             results.append({
                 'book_id': book['id'],
@@ -532,7 +540,7 @@ def main():
     if args.dry_run:
         logger.info("🧪 DRY RUN MODE: Content will be generated but not posted")
     
-    result = poster.run_automated_posting()
+    result = poster.run_automated_posting(args.dry_run)
     
     # Send daily report email (unless disabled)
     if not args.no_email:
