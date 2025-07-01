@@ -968,7 +968,7 @@
                 ).toFixed(2)}</div>
               </div>
             </div>
-            
+
             <div class="card-content">
               <div class="content-analysis">
                 <div class="content-score">
@@ -977,7 +977,7 @@
                   </div>
                   <span class="score-text">${contentScore}/10</span>
                 </div>
-                
+
                 ${
                   book.christian_themes
                     ? `
@@ -992,7 +992,7 @@
                 `
                     : ""
                 }
-                
+
                 ${
                   book.leadership_topics
                     ? `
@@ -1007,7 +1007,7 @@
                 `
                     : ""
                 }
-                
+
                 ${
                   book.content_filter_notes
                     ? `
@@ -1334,6 +1334,7 @@
       function hideLoginModal() {
         document.getElementById("login-modal").style.display = "none";
       }
+
       function isAuthenticated() {
         return !!localStorage.getItem("admin_session_token");
       }
