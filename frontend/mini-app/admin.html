@@ -1372,16 +1372,30 @@
         const statusDiv = document.getElementById("send-code-status");
         const codeInput = document.getElementById("login-code");
         const loginBtn = document.getElementById("login-btn");
+
+        // Reset state
         statusDiv.style.display = "none";
         btn.disabled = true;
         btn.textContent = "Sending...";
         codeInput.disabled = true;
         loginBtn.disabled = true;
+
         try {
+          console.log("Sending login code request...");
           const res = await fetch("/api/request-login-code", {
             method: "POST",
+            headers: { "Content-Type": "application/json" },
           });
+
+          console.log("Response status:", res.status);
+
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          }
+
           const data = await res.json();
+          console.log("Response data:", data);
+
           if (data.success) {
             statusDiv.textContent = "Code sent! Check your email.";
             statusDiv.style.display = "block";
@@ -1394,11 +1408,14 @@
             btn.textContent = "Send Code";
           }
         } catch (e) {
-          statusDiv.textContent = "Network error.";
+          console.error("Error sending login code:", e);
+          statusDiv.textContent = `Error: ${e.message}`;
           statusDiv.style.display = "block";
           btn.textContent = "Send Code";
+        } finally {
+          // Always re-enable the button
+          btn.disabled = false;
         }
-        btn.disabled = false;
       }
       // On page load, show modal if not authenticated
       window.addEventListener("DOMContentLoaded", function () {
