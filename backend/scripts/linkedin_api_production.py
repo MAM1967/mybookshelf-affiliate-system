@@ -39,7 +39,7 @@ class LinkedInAPIProduction:
         """Initialize LinkedIn API client"""
         self.client_id = os.getenv('LINKEDIN_CLIENT_ID', '78wmrhdd99ssbi')
         self.client_secret = os.getenv('LINKEDIN_CLIENT_SECRET')
-        self.redirect_uri = os.getenv('LINKEDIN_REDIRECT_URI', 'https://mybookshelf.shop/linkedin-oauth')
+        self.redirect_uri = os.getenv('LINKEDIN_REDIRECT_URI', 'https://mybookshelf.shop/api/linkedin-callback')
         
         # Initialize Supabase for token storage (optional for URL generation)
         self.supabase: Optional[Client] = None
@@ -286,7 +286,7 @@ def generate_linkedin_oauth_url():
     
     # Production LinkedIn App Configuration
     client_id = "78wmrhdd99ssbi"
-    redirect_uri = "https://mybookshelf.shop/linkedin-oauth.html"  # Updated to static HTML file
+    redirect_uri = "https://mybookshelf.shop/api/linkedin-callback"  # Updated to new API endpoint
     scope = "openid profile w_member_social email"
     state = "mybookshelf_production_oauth"
     

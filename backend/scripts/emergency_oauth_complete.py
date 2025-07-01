@@ -29,7 +29,7 @@ except ImportError:
 # LinkedIn OAuth Configuration
 LINKEDIN_CLIENT_ID = "78wmrhdd99ssbi"
 LINKEDIN_CLIENT_SECRET = os.getenv('LINKEDIN_CLIENT_SECRET')
-REDIRECT_URI = "https://mybookshelf.shop/linkedin-oauth.html"
+REDIRECT_URI = "https://mybookshelf.shop/api/linkedin-callback"
 
 class LinkedInOAuthEmergencyCompleter:
     """Emergency LinkedIn OAuth completion handler"""
