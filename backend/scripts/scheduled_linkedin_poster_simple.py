@@ -87,26 +87,38 @@ class ScheduledLinkedInPoster:
         }
 
     def load_access_token(self) -> bool:
-        """Load LinkedIn access token from storage"""
+        """Load LinkedIn access token from Supabase database"""
         try:
-            if os.path.exists('linkedin_token.json'):
-                with open('linkedin_token.json', 'r') as f:
-                    token_data = json.load(f)
-                    self.access_token = token_data.get('access_token')
-                    
-                    # Validate token is still valid
-                    if self.validate_token():
-                        logger.info("✅ LinkedIn access token loaded and validated")
-                        return True
-                    else:
-                        logger.warning("❌ Stored LinkedIn token is invalid")
-                        return False
+            # Get the most recent active LinkedIn token from Supabase
+            response = self.supabase.table('linkedin_tokens').select(
+                'access_token, linkedin_user_id, expires_at, is_active'
+            ).eq('is_active', True).order('created_at', desc=True).limit(1).execute()
+            
+            if response.data and len(response.data) > 0:
+                token_data = response.data[0]
+                
+                # Check if token is expired
+                expires_at = datetime.fromisoformat(token_data['expires_at'].replace('Z', '+00:00'))
+                if expires_at <= datetime.now().replace(tzinfo=expires_at.tzinfo):
+                    logger.warning("❌ Stored LinkedIn token has expired")
+                    return False
+                
+                self.access_token = token_data['access_token']
+                self.user_id = token_data['linkedin_user_id']
+                
+                # Validate token is still valid with LinkedIn
+                if self.validate_token():
+                    logger.info("✅ LinkedIn access token loaded from database and validated")
+                    return True
+                else:
+                    logger.warning("❌ Stored LinkedIn token is invalid")
+                    return False
             else:
-                logger.warning("❌ No LinkedIn token file found")
+                logger.warning("❌ No active LinkedIn token found in database")
                 return False
                 
         except Exception as e:
-            logger.error(f"❌ Error loading LinkedIn token: {e}")
+            logger.error(f"❌ Error loading LinkedIn token from database: {e}")
             return False
 
     def validate_token(self) -> bool:
