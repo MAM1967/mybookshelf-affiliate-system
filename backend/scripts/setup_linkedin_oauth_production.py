@@ -42,7 +42,8 @@ class LinkedInOAuthProductionSetup:
                 'openid',
                 'profile', 
                 'w_member_social',
-                'email'
+                'email',
+                'rw_organization_admin'
             ]
         }
         
@@ -307,7 +308,7 @@ class LinkedInAPIProduction:
         self.posts_url = 'https://api.linkedin.com/v2/ugcPosts'
         
         # Required scopes
-        self.scopes = ['openid', 'profile', 'w_member_social', 'email']
+        self.scopes = ['openid', 'profile', 'w_member_social', 'email', 'rw_organization_admin']
     
     def get_authorization_url(self, state: str = None) -> str:
         """Generate LinkedIn authorization URL"""

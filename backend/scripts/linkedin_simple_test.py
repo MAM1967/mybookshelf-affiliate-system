@@ -25,7 +25,7 @@ def test_linkedin_app_setup():
     auth_params = {
         'response_type': 'code',
         'client_id': LINKEDIN_CLIENT_ID,
-        'scope': 'openid profile email w_member_social',
+        'scope': 'openid profile email w_member_social rw_organization_admin',
         'state': 'test123'
     }
     
@@ -45,7 +45,7 @@ def test_linkedin_app_setup():
     print(f"4. Request access to these LinkedIn products:")
     print(f"   - 'Sign In with LinkedIn using OpenID Connect' (for profile access)")
     print(f"   - 'Share on LinkedIn' (for posting capabilities)")
-    print(f"5. OAuth scopes will be: openid profile email w_member_social")
+    print(f"5. OAuth scopes will be: openid profile email w_member_social rw_organization_admin")
     
     print(f"\n✅ Credentials are properly configured!")
     print(f"⚠️  Need to add redirect URIs in LinkedIn Developer Portal")
@@ -61,7 +61,7 @@ def show_manual_oauth_steps():
         'response_type': 'code',
         'client_id': LINKEDIN_CLIENT_ID,
         'redirect_uri': 'https://mybookshelf.shop/auth/linkedin/callback',
-        'scope': 'openid profile email w_member_social',
+        'scope': 'openid profile email w_member_social rw_organization_admin',
         'state': 'mybookshelf_test'
     }
     

@@ -28,6 +28,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+print("SUPABASE_URL:", os.getenv("SUPABASE_URL"))
+print("SUPABASE_ANON_KEY:", os.getenv("SUPABASE_ANON_KEY"))
+
 class FinalLinkedInPoster:
     """Production LinkedIn poster with email notifications"""
     
