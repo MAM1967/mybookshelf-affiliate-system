@@ -12,8 +12,12 @@
       "dest": "/api/$1"
     },
     {
+      "src": "/admin",
+      "dest": "/frontend/mini-app/admin-simple.html"
+    },
+    {
       "src": "/admin/(.*)",
-      "dest": "/frontend/mini-app/admin.html"
+      "dest": "/frontend/mini-app/admin-simple.html"
     },
     {
       "src": "/(.*)",
