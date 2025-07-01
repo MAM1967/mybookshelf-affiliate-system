@@ -238,13 +238,7 @@ function generateErrorHTML(errorMessage) {
 
 export default async function handler(req, res) {
   try {
-    // Force HTTPS and apex domain
-    const host = req.headers.host;
-    if (host.startsWith("www.")) {
-      const redirectUrl = `https://mybookshelf.shop${req.url}`;
-      return res.redirect(301, redirectUrl);
-    }
-
+    // Removed www. redirect logic to prevent redirect loop
     const { code, state, error, error_description } = req.query;
 
     // Handle OAuth errors
