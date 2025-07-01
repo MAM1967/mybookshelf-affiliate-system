@@ -1,18 +1,14 @@
 {
   "name": "mybookshelf-affiliate-system",
   "version": 2,
-  "builds": [
-    { "src": "api/**/*.js", "use": "@vercel/node" },
-    { "src": "frontend/mini-app/**", "use": "@vercel/static" }
-  ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/(.*)", "dest": "/frontend/mini-app/$1" }
   ],
   "env": {
-    "SUPABASE_ANON_KEY": "@supabase-anon-key",
-    "RESEND_API_KEY": "@resend-api-key",
-    "ADMIN_EMAIL": "@admin-email",
-    "LINKEDIN_CLIENT_ID": "@linkedin-client-id"
+    "SUPABASE_ANON_KEY": "",
+    "RESEND_API_KEY": "",
+    "ADMIN_EMAIL": "",
+    "LINKEDIN_CLIENT_ID": ""
   }
 }
