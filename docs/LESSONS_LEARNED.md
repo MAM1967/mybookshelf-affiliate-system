@@ -471,55 +471,6 @@ class LinkedInOAuthEmergencyCompleter:
 
 This was a **mission-critical breakthrough** that unblocked the entire LinkedIn revenue automation system.
 
-## Development Resources & References
-
-### LinkedIn API Development Resources
-
-**Official LinkedIn Developers GitHub**: [https://github.com/linkedin-developers](https://github.com/linkedin-developers)
-
-**Key Resources Available:**
-
-1. **Official Client Libraries**:
-
-   - [linkedin-api-js-client](https://github.com/linkedin-developers/linkedin-api-js-client) - JavaScript/TypeScript client (116 stars)
-   - [linkedin-api-python-client](https://github.com/linkedin-developers/linkedin-api-python-client) - Official Python client (216 stars)
-
-2. **Sample Applications**:
-
-   - [java-sample-application](https://github.com/linkedin-developers/java-sample-application) - Sample code for LinkedIn APIs
-   - [apply-with-linkedin-V3-sample-application](https://github.com/linkedin-developers/apply-with-linkedin-V3-sample-application) - Apply with LinkedIn integration
-
-3. **Development Tools**:
-   - [job-posting-development-tools](https://github.com/linkedin-developers/job-posting-development-tools) - Tools for job posting APIs
-   - [recruiter-system-connect-development-tools](https://github.com/linkedin-developers/recruiter-system-connect-development-tools) - RSC program tools
-   - [linkedin-capi-tag-template](https://github.com/linkedin-developers/linkedin-capi-tag-template) - Google Tag Manager template for Conversion API
-
-**Getting Started Resources** (from LinkedIn Developer Platform):
-
-- API product catalog exploration
-- Developer Portal for application creation
-- API documentation
-- Access token generation tools
-- Postman Collections for specific use cases
-- API status and outage information
-
-**For Our MyBookshelf Project:**
-
-- **Current Integration**: OAuth with Client ID `78wmrhdd99ssbi`
-- **Use Case**: Automated LinkedIn posting for affiliate book recommendations
-- **Relevant Libraries**: Python client library for backend integration
-- **Next Steps**: Review sample applications for best practices in automated posting
-
-**Lesson**: Official developer resources provide tested, maintained code samples that can accelerate integration development and reduce trial-and-error.
-
-- **Process Used**:
-  1. Verified database contained real image URLs
-  2. Checked frontend image loading logic
-  3. Discovered hardcoded ID mappings were the issue
-  4. Fixed priority system to use database values first
-- **Result**: Issue resolved in systematic steps rather than trial-and-error
-- **Takeaway**: Follow methodical debugging rather than assumption-based fixes
-
 ### 20. LinkedIn API Scopes: V1 vs V2 Migration (December 2024)
 
 **Lesson**: LinkedIn deprecated V1 API scopes - always verify current API documentation
@@ -633,6 +584,12 @@ print(f'Database state: {len(response.data)} records')
 - ✅ Updated `setup.py` to remove dependency
 - ✅ Updated `README.md` to remove references
 - ✅ Database restored to correct state (4 records, all $19.99, real covers)
+
+### 22. Emergency OAuth Script Argument Bug (July 2025)
+
+**Lesson**: Passing --code as an argument to the emergency_oauth_complete.py script caused the script to use '--code' as the authorization code, resulting in a 6-character code and repeated 401 errors from LinkedIn. The correct usage is to pass the code as the first argument, without --code. This bug was discovered after multiple failed attempts and fixed by reviewing the script's argument parsing logic.
+
+**Takeaway**: Always check script argument parsing and usage instructions. Update documentation and script help output to clarify the correct way to pass the authorization code. Recommend updating the script's usage instructions to explicitly warn against using --code or other flags.
 
 ## Process Lessons
 

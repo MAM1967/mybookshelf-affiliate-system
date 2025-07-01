@@ -18,7 +18,6 @@
     }
   ],
   "env": {
-    "SUPABASE_URL": "@supabase-url",
     "SUPABASE_ANON_KEY": "@supabase-anon-key",
     "RESEND_API_KEY": "@resend-api-key",
     "ADMIN_EMAIL": "@admin-email",

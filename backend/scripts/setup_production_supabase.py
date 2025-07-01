@@ -195,12 +195,12 @@ def test_production_connection():
         result = supabase.rpc('admin_dashboard_summary').execute()
         print("✅ Admin dashboard view working")
         
-        print("\\n🎉 All tests passed! Production database is ready.")
+        print("\n🎉 All tests passed! Production database is ready.")
         return True
         
     except Exception as e:
         print(f"❌ Connection test failed: {e}")
-        print("\\n🔧 Troubleshooting:")
+        print("\n🔧 Troubleshooting:")
         print("1. Verify project URL is correct")
         print("2. Verify anon key is correct") 
         print("3. Ensure database schemas are deployed")
