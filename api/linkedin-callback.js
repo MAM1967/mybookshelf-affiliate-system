@@ -112,12 +112,18 @@ async function getUserProfile(accessToken) {
 async function storeTokenInSupabase(tokenInfo, profile) {
   if (!supabase) return { success: false, error: "Supabase not configured" };
   try {
+    // Calculate expiration timestamp
+    const expiresAt = new Date(
+      Date.now() + tokenInfo.expires_in * 1000
+    ).toISOString();
+
     const { data, error } = await supabase.from("linkedin_tokens").upsert(
       {
         admin_email: profile.email,
         access_token: tokenInfo.access_token,
         token_type: tokenInfo.token_type || "Bearer",
         expires_in: tokenInfo.expires_in,
+        expires_at: expiresAt,
         scope: tokenInfo.scope,
         linkedin_user_id: profile.sub,
         linkedin_name: profile.name,
