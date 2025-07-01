@@ -318,3 +318,11 @@
 **Next Review**: Weekly performance analysis and optimization
 
 ---
+
+## BLOCKED
+
+- LinkedIn organization posting is blocked pending approval for the Community Management API (w_organization_social scope). A new developer app was created and access request submitted. Resume org posting integration after approval.
+
+## TOP PRIORITY (after approval)
+
+- Complete LinkedIn organization posting integration and test with w_organization_social scope.

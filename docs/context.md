@@ -15,6 +15,7 @@
 - **Posting automation**: Script runs, finds scheduled books, and marks them as posted in Supabase.
 - **LinkedIn API**: Returns 201 and post ID, but posts are not visible on the LinkedIn feed (likely due to LinkedIn-side restrictions or sandboxing).
 - **Manual LinkedIn post**: Made to help establish account trust.
+- As of now, LinkedIn organization posting is blocked pending approval for the Community Management API (which grants w_organization_social). A new LinkedIn developer app was created and a request for Community Management API access was submitted. Awaiting LinkedIn approval before further progress.
 
 ## Recent Troubleshooting
 
@@ -41,3 +42,5 @@
 ---
 
 **Ready for support escalation.**
+
+- The MyBookShelf LinkedIn company page was created in 2015 by the project owner, who is the sole admin and has verified admin status.
