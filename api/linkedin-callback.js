@@ -121,6 +121,12 @@ async function storeTokenInSupabase(tokenInfo, profile) {
       "[LinkedIn OAuth] Storing new access token:",
       tokenInfo.access_token
     );
+    console.log("[LinkedIn OAuth] Token scope:", tokenInfo.scope);
+    console.log("[LinkedIn OAuth] Has organization admin:", hasOrgAdmin);
+
+    // Check if scope includes organization admin permission
+    const hasOrgAdmin =
+      tokenInfo.scope && tokenInfo.scope.includes("rw_organization_admin");
 
     const { data, error } = await supabase.from("linkedin_tokens").upsert(
       {
@@ -135,6 +141,7 @@ async function storeTokenInSupabase(tokenInfo, profile) {
         linkedin_email: profile.email,
         created_at: new Date().toISOString(),
         is_active: true,
+        has_organization_admin: hasOrgAdmin,
       },
       { onConflict: ["admin_email"] }
     );
