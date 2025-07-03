@@ -187,25 +187,7 @@ jobs:
           # Test production deployment
           PRODUCTION_URL="https://mybookshelf.shop" python test_deployment.py
 
-      - name: Notify deployment success
-        uses: 8398a7/action-slack@v3
-        if: success()
-        with:
-          status: success
-          fields: repo,message,commit,author,action,eventName,ref,workflow
-          text: "✅ MyBookshelf deployed to production successfully!"
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-      - name: Notify deployment failure
-        uses: 8398a7/action-slack@v3
-        if: failure()
-        with:
-          status: failure
-          fields: repo,message,commit,author,action,eventName,ref,workflow
-          text: "❌ MyBookshelf production deployment failed!"
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      # Slack notifications removed - not configured
 
   dependency-update:
     name: Update Dependencies
