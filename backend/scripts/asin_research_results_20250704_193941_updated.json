@@ -1,0 +1,2007 @@
+{
+  "metadata": {
+    "created_date": "2025-06-30",
+    "total_books": 75,
+    "total_accessories": 25,
+    "description": "Complete inventory for MyBookshelf 2025 - Christian leadership, business, and productivity books with executive accessories"
+  },
+  "research_date": "2025-07-04 19:38:01",
+  "total_items": 100,
+  "items_found": 0,
+  "items_needing_manual_research": 100,
+  "books": {
+    "christian_worldview_leadership": [
+      {
+        "title": "The Five Dysfunctions of a Team",
+        "author": "Patrick Lencioni",
+        "category": "Books",
+        "description": "Team trust and leadership, rooted in integrity.",
+        "christian_themes": [
+          "integrity",
+          "trust",
+          "team building"
+        ],
+        "leadership_topics": [
+          "team dynamics",
+          "leadership principles",
+          "organizational health"
+        ],
+        "focus_area": "Team Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Advantage",
+        "author": "Patrick Lencioni",
+        "category": "Books",
+        "description": "Organizational health through servant leadership.",
+        "christian_themes": [
+          "servant leadership",
+          "organizational health"
+        ],
+        "leadership_topics": [
+          "organizational development",
+          "leadership strategy"
+        ],
+        "focus_area": "Organizational Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Ideal Team Player",
+        "author": "Patrick Lencioni",
+        "category": "Books",
+        "description": "Humble, hungry, smart leadership principles.",
+        "christian_themes": [
+          "humility",
+          "character development"
+        ],
+        "leadership_topics": [
+          "team building",
+          "hiring",
+          "character assessment"
+        ],
+        "focus_area": "Team Development",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Leadership and Emotional Sabotage",
+        "author": "Joe Rigney",
+        "category": "Books",
+        "description": "Resisting anxiety in Christian leadership.",
+        "christian_themes": [
+          "emotional health",
+          "anxiety management",
+          "spiritual warfare"
+        ],
+        "leadership_topics": [
+          "emotional intelligence",
+          "stress management"
+        ],
+        "focus_area": "Emotional Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Christian Leader's Worldview",
+        "author": "Michael J. LaPierre",
+        "category": "Books",
+        "description": "Bible-based leadership framework.",
+        "christian_themes": [
+          "biblical worldview",
+          "Christian leadership"
+        ],
+        "leadership_topics": [
+          "leadership philosophy",
+          "decision making"
+        ],
+        "focus_area": "Christian Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Christian Leadership Essentials",
+        "author": "David S. Dockery",
+        "category": "Books",
+        "description": "Managing Christian organizations.",
+        "christian_themes": [
+          "Christian management",
+          "ministry leadership"
+        ],
+        "leadership_topics": [
+          "organizational management",
+          "leadership development"
+        ],
+        "focus_area": "Christian Management",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Lead: 12 Gospel Principles for Leadership",
+        "author": "Paul David Tripp",
+        "category": "Books",
+        "description": "Gospel-centered church leadership.",
+        "christian_themes": [
+          "gospel-centered leadership",
+          "church leadership"
+        ],
+        "leadership_topics": [
+          "ministry leadership",
+          "spiritual leadership"
+        ],
+        "focus_area": "Church Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Sacredness of Secular Work",
+        "author": "Jordan Raynor",
+        "category": "Books",
+        "description": "Work as worship for Christians.",
+        "christian_themes": [
+          "work as worship",
+          "calling",
+          "purpose"
+        ],
+        "leadership_topics": [
+          "work-life integration",
+          "purpose-driven leadership"
+        ],
+        "focus_area": "Work & Faith",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Strengthening the Soul of Your Leadership",
+        "author": "Ruth Haley Barton",
+        "category": "Books",
+        "description": "Spiritual growth in ministry.",
+        "christian_themes": [
+          "spiritual formation",
+          "soul care",
+          "ministry sustainability"
+        ],
+        "leadership_topics": [
+          "leadership development",
+          "personal growth"
+        ],
+        "focus_area": "Spiritual Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Servant Leadership",
+        "author": "Robert K. Greenleaf",
+        "category": "Books",
+        "description": "Biblical servant leadership principles.",
+        "christian_themes": [
+          "servant leadership",
+          "humility",
+          "service"
+        ],
+        "leadership_topics": [
+          "leadership philosophy",
+          "servant leadership"
+        ],
+        "focus_area": "Servant Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Maxwell Daily Reader",
+        "author": "John C. Maxwell",
+        "category": "Books",
+        "description": "Daily Christian leadership insights.",
+        "christian_themes": [
+          "daily devotions",
+          "Christian leadership"
+        ],
+        "leadership_topics": [
+          "leadership development",
+          "daily growth"
+        ],
+        "focus_area": "Daily Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Faith Driven Entrepreneur",
+        "author": "Henry Kaestner",
+        "category": "Books",
+        "description": "God-given purpose in business creation.",
+        "christian_themes": [
+          "entrepreneurship",
+          "calling",
+          "stewardship"
+        ],
+        "leadership_topics": [
+          "entrepreneurship",
+          "business creation",
+          "purpose"
+        ],
+        "focus_area": "Christian Entrepreneurship",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "H3 Leadership",
+        "author": "Brad Lomenick",
+        "category": "Books",
+        "description": "Humble, hungry, hustle in Christian leadership.",
+        "christian_themes": [
+          "humility",
+          "work ethic",
+          "character"
+        ],
+        "leadership_topics": [
+          "leadership character",
+          "work ethic",
+          "ambition"
+        ],
+        "focus_area": "Character Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Leadership in Christian Perspective",
+        "author": "Justin A. Irving",
+        "category": "Books",
+        "description": "Biblical foundations for leadership.",
+        "christian_themes": [
+          "biblical leadership",
+          "Christian perspective"
+        ],
+        "leadership_topics": [
+          "leadership foundations",
+          "biblical principles"
+        ],
+        "focus_area": "Biblical Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Unhurried Pastor",
+        "author": "Brian Croft",
+        "category": "Books",
+        "description": "Sustainable ministry productivity.",
+        "christian_themes": [
+          "pastoral care",
+          "ministry sustainability",
+          "rest"
+        ],
+        "leadership_topics": [
+          "time management",
+          "sustainable leadership"
+        ],
+        "focus_area": "Ministry Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Both/And Ministry",
+        "author": "Benjamin D. Wayman",
+        "category": "Books",
+        "description": "Leading like Jesus in ministry.",
+        "christian_themes": [
+          "Christlike leadership",
+          "ministry balance"
+        ],
+        "leadership_topics": [
+          "ministry leadership",
+          "balanced leadership"
+        ],
+        "focus_area": "Ministry Balance",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Spurgeon on Leadership",
+        "author": "Larry J. Michael",
+        "category": "Books",
+        "description": "Timeless wisdom from Charles Spurgeon.",
+        "christian_themes": [
+          "historical wisdom",
+          "pastoral leadership"
+        ],
+        "leadership_topics": [
+          "historical leadership",
+          "pastoral wisdom"
+        ],
+        "focus_area": "Historical Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The True Measure of a Man",
+        "author": "Richard E. Simmons III",
+        "category": "Books",
+        "description": "Success through faith.",
+        "christian_themes": [
+          "biblical manhood",
+          "success",
+          "character"
+        ],
+        "leadership_topics": [
+          "character development",
+          "success principles"
+        ],
+        "focus_area": "Character & Success",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Money, Possessions, and Eternity",
+        "author": "Randy Alcorn",
+        "category": "Books",
+        "description": "Biblical financial stewardship.",
+        "christian_themes": [
+          "stewardship",
+          "money management",
+          "eternal perspective"
+        ],
+        "leadership_topics": [
+          "financial management",
+          "stewardship"
+        ],
+        "focus_area": "Financial Stewardship",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Neither Poverty nor Riches",
+        "author": "Craig L. Blomberg",
+        "category": "Books",
+        "description": "Biblical theology of possessions.",
+        "christian_themes": [
+          "wealth",
+          "poverty",
+          "biblical economics"
+        ],
+        "leadership_topics": [
+          "financial philosophy",
+          "economic principles"
+        ],
+        "focus_area": "Biblical Economics",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Garden City",
+        "author": "John Mark Comer",
+        "category": "Books",
+        "description": "Work and rest as God's design.",
+        "christian_themes": [
+          "work and rest",
+          "God's design",
+          "sabbath"
+        ],
+        "leadership_topics": [
+          "work-life balance",
+          "productivity",
+          "rest"
+        ],
+        "focus_area": "Work & Rest",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Conviction to Lead",
+        "author": "Albert Mohler",
+        "category": "Books",
+        "description": "Principled Christian leadership.",
+        "christian_themes": [
+          "conviction",
+          "principled leadership"
+        ],
+        "leadership_topics": [
+          "leadership principles",
+          "conviction-based leadership"
+        ],
+        "focus_area": "Principled Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Called to Lead",
+        "author": "John MacArthur",
+        "category": "Books",
+        "description": "Biblical leadership for church and work.",
+        "christian_themes": [
+          "calling",
+          "biblical leadership"
+        ],
+        "leadership_topics": [
+          "calling",
+          "biblical leadership principles"
+        ],
+        "focus_area": "Called Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Emotionally Healthy Leader",
+        "author": "Peter Scazzero",
+        "category": "Books",
+        "description": "Spiritual and emotional balance.",
+        "christian_themes": [
+          "emotional health",
+          "spiritual formation"
+        ],
+        "leadership_topics": [
+          "emotional intelligence",
+          "healthy leadership"
+        ],
+        "focus_area": "Emotional Health",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Managing God's Money",
+        "author": "Randy Alcorn",
+        "category": "Books",
+        "description": "Christian approach to business finances.",
+        "christian_themes": [
+          "stewardship",
+          "financial management"
+        ],
+        "leadership_topics": [
+          "business finances",
+          "money management"
+        ],
+        "focus_area": "Financial Management",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The 21 Irrefutable Laws of Leadership",
+        "author": "John C. Maxwell",
+        "category": "Books",
+        "description": "Biblical leadership laws.",
+        "christian_themes": [
+          "leadership laws",
+          "biblical principles"
+        ],
+        "leadership_topics": [
+          "leadership principles",
+          "leadership laws"
+        ],
+        "focus_area": "Leadership Laws",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Developing the Leader Within You 2.0",
+        "author": "John C. Maxwell",
+        "category": "Books",
+        "description": "Personal growth in faith.",
+        "christian_themes": [
+          "personal development",
+          "leadership growth"
+        ],
+        "leadership_topics": [
+          "self-leadership",
+          "personal development"
+        ],
+        "focus_area": "Personal Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Heart of Leadership",
+        "author": "Mark Miller",
+        "category": "Books",
+        "description": "Servant leadership with Christian values.",
+        "christian_themes": [
+          "servant leadership",
+          "heart leadership"
+        ],
+        "leadership_topics": [
+          "heart-centered leadership",
+          "servant leadership"
+        ],
+        "focus_area": "Heart Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Lead Like It Matters",
+        "author": "Craig Groeschel",
+        "category": "Books",
+        "description": "Purpose-driven leadership.",
+        "christian_themes": [
+          "purpose",
+          "significance",
+          "impact"
+        ],
+        "leadership_topics": [
+          "purpose-driven leadership",
+          "meaningful leadership"
+        ],
+        "focus_area": "Purpose-Driven Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Call to Lead",
+        "author": "Bill Hybels",
+        "category": "Books",
+        "description": "Faith-based leadership strategies.",
+        "christian_themes": [
+          "calling",
+          "faith-based leadership"
+        ],
+        "leadership_topics": [
+          "leadership calling",
+          "faith-based strategies"
+        ],
+        "focus_area": "Faith-Based Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Spiritual Leadership",
+        "author": "J. Oswald Sanders",
+        "category": "Books",
+        "description": "Classic Christian leadership guide.",
+        "christian_themes": [
+          "spiritual leadership",
+          "Christian classics"
+        ],
+        "leadership_topics": [
+          "spiritual leadership",
+          "leadership fundamentals"
+        ],
+        "focus_area": "Spiritual Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Purpose Driven Life",
+        "author": "Rick Warren",
+        "category": "Books",
+        "description": "Purpose in work and leadership.",
+        "christian_themes": [
+          "purpose",
+          "life calling",
+          "God's plan"
+        ],
+        "leadership_topics": [
+          "purpose",
+          "life direction",
+          "calling"
+        ],
+        "focus_area": "Life Purpose",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Every Good Endeavor",
+        "author": "Timothy Keller",
+        "category": "Books",
+        "description": "Work as a Christian calling.",
+        "christian_themes": [
+          "work as calling",
+          "vocation",
+          "purpose"
+        ],
+        "leadership_topics": [
+          "work purpose",
+          "calling",
+          "vocation"
+        ],
+        "focus_area": "Work as Calling",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The 360 Degree Leader",
+        "author": "John C. Maxwell",
+        "category": "Books",
+        "description": "Leading from any position.",
+        "christian_themes": [
+          "influence",
+          "leadership opportunity"
+        ],
+        "leadership_topics": [
+          "influence",
+          "leadership from any level"
+        ],
+        "focus_area": "Influence Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Leadership Challenge",
+        "author": "James M. Kouzes",
+        "category": "Books",
+        "description": "Christian-compatible leadership.",
+        "christian_themes": [
+          "leadership excellence",
+          "integrity"
+        ],
+        "leadership_topics": [
+          "leadership practices",
+          "leadership excellence"
+        ],
+        "focus_area": "Leadership Excellence",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      }
+    ],
+    "neutral_business_productivity": [
+      {
+        "title": "The Amazon Way",
+        "author": "John Rossman",
+        "category": "Books",
+        "description": "Amazon's 14 leadership principles.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "leadership principles",
+          "business strategy",
+          "customer obsession"
+        ],
+        "focus_area": "Business Strategy",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Atomic Habits",
+        "author": "James Clear",
+        "category": "Books",
+        "description": "Building productive habits.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "habit formation",
+          "productivity",
+          "personal development"
+        ],
+        "focus_area": "Productivity",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Measure What Matters",
+        "author": "John Doerr",
+        "category": "Books",
+        "description": "OKRs for goal-setting.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "goal setting",
+          "OKRs",
+          "performance management"
+        ],
+        "focus_area": "Goal Management",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The AI Advantage",
+        "author": "Thomas Davenport",
+        "category": "Books",
+        "description": "AI strategies for business.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "artificial intelligence",
+          "technology strategy",
+          "innovation"
+        ],
+        "focus_area": "Technology Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Prediction Machines",
+        "author": "Ajay Agrawal",
+        "category": "Books",
+        "description": "AI's impact on decisions.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "artificial intelligence",
+          "decision making",
+          "predictive analytics"
+        ],
+        "focus_area": "AI Strategy",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Leaders Eat Last",
+        "author": "Simon Sinek",
+        "category": "Books",
+        "description": "Trust-based leadership.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "trust",
+          "team building",
+          "leadership sacrifice"
+        ],
+        "focus_area": "Trust Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Start with Why",
+        "author": "Simon Sinek",
+        "category": "Books",
+        "description": "Purpose-driven leadership.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "purpose",
+          "motivation",
+          "inspiration"
+        ],
+        "focus_area": "Purpose Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Lean Startup",
+        "author": "Eric Ries",
+        "category": "Books",
+        "description": "Innovation and efficiency.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "innovation",
+          "entrepreneurship",
+          "lean methodology"
+        ],
+        "focus_area": "Innovation",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Deep Work",
+        "author": "Cal Newport",
+        "category": "Books",
+        "description": "Focused productivity.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "focus",
+          "productivity",
+          "concentration"
+        ],
+        "focus_area": "Deep Focus",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Getting Things Done",
+        "author": "David Allen",
+        "category": "Books",
+        "description": "Productivity system.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "productivity",
+          "organization",
+          "time management"
+        ],
+        "focus_area": "Productivity Systems",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The 7 Habits of Highly Effective People",
+        "author": "Stephen Covey",
+        "category": "Books",
+        "description": "Timeless productivity.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "effectiveness",
+          "habits",
+          "personal development"
+        ],
+        "focus_area": "Personal Effectiveness",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Drive",
+        "author": "Daniel H. Pink",
+        "category": "Books",
+        "description": "Motivation in business.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "motivation",
+          "autonomy",
+          "mastery",
+          "purpose"
+        ],
+        "focus_area": "Motivation",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Good to Great",
+        "author": "Jim Collins",
+        "category": "Books",
+        "description": "Building great companies.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "organizational excellence",
+          "business transformation"
+        ],
+        "focus_area": "Organizational Excellence",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Infinite Game",
+        "author": "Simon Sinek",
+        "category": "Books",
+        "description": "Long-term leadership vision.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "long-term thinking",
+          "sustainable leadership"
+        ],
+        "focus_area": "Sustainable Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Dare to Lead",
+        "author": "Bren\u00e9 Brown",
+        "category": "Books",
+        "description": "Courage in leadership.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "courage",
+          "vulnerability",
+          "leadership courage"
+        ],
+        "focus_area": "Courageous Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Power of Habit",
+        "author": "Charles Duhigg",
+        "category": "Books",
+        "description": "Habit formation for success.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "habits",
+          "behavioral change",
+          "productivity"
+        ],
+        "focus_area": "Habit Formation",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Thinking, Fast and Slow",
+        "author": "Daniel Kahneman",
+        "category": "Books",
+        "description": "Decision-making insights.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "decision making",
+          "cognitive biases",
+          "thinking"
+        ],
+        "focus_area": "Decision Making",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Effective Executive",
+        "author": "Peter Drucker",
+        "category": "Books",
+        "description": "Executive productivity.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "executive effectiveness",
+          "management",
+          "productivity"
+        ],
+        "focus_area": "Executive Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "High Output Management",
+        "author": "Andrew S. Grove",
+        "category": "Books",
+        "description": "Management strategies.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "management",
+          "productivity",
+          "operations"
+        ],
+        "focus_area": "Operations Management",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Innovator's Dilemma",
+        "author": "Clayton M. Christensen",
+        "category": "Books",
+        "description": "Disruptive innovation.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "innovation",
+          "disruption",
+          "business strategy"
+        ],
+        "focus_area": "Innovation Strategy",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Extreme Ownership",
+        "author": "Jocko Willink",
+        "category": "Books",
+        "description": "Leadership accountability.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "accountability",
+          "ownership",
+          "responsibility"
+        ],
+        "focus_area": "Leadership Accountability",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The One Thing",
+        "author": "Gary Keller",
+        "category": "Books",
+        "description": "Focused productivity.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "focus",
+          "prioritization",
+          "productivity"
+        ],
+        "focus_area": "Focus & Priorities",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Essentialism",
+        "author": "Greg McKeown",
+        "category": "Books",
+        "description": "Prioritizing what matters.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "essentialism",
+          "prioritization",
+          "simplicity"
+        ],
+        "focus_area": "Simplicity",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The 4 Disciplines of Execution",
+        "author": "Chris McChesney",
+        "category": "Books",
+        "description": "Goal achievement.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "execution",
+          "goal achievement",
+          "strategy implementation"
+        ],
+        "focus_area": "Execution",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Leadershift",
+        "author": "John C. Maxwell",
+        "category": "Books",
+        "description": "Adapting to change.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "change management",
+          "adaptation",
+          "leadership evolution"
+        ],
+        "focus_area": "Change Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Art of Possibility",
+        "author": "Rosamund Stone Zander",
+        "category": "Books",
+        "description": "Creative leadership.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "creativity",
+          "possibility thinking",
+          "innovation"
+        ],
+        "focus_area": "Creative Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The First 90 Days",
+        "author": "Michael D. Watkins",
+        "category": "Books",
+        "description": "Transitioning to leadership roles.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "leadership transition",
+          "new role success"
+        ],
+        "focus_area": "Leadership Transition",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Never Split the Difference",
+        "author": "Chris Voss",
+        "category": "Books",
+        "description": "Negotiation skills.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "negotiation",
+          "communication",
+          "influence"
+        ],
+        "focus_area": "Negotiation",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Obstacle Is the Way",
+        "author": "Ryan Holiday",
+        "category": "Books",
+        "description": "Overcoming challenges.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "resilience",
+          "overcoming obstacles",
+          "stoicism"
+        ],
+        "focus_area": "Resilience",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Blue Ocean Strategy",
+        "author": "W. Chan Kim",
+        "category": "Books",
+        "description": "Innovative business strategy.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "strategy",
+          "innovation",
+          "market creation"
+        ],
+        "focus_area": "Strategic Innovation",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Culture Code",
+        "author": "Daniel Coyle",
+        "category": "Books",
+        "description": "Building strong teams.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "culture",
+          "team building",
+          "organizational culture"
+        ],
+        "focus_area": "Culture Building",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The E-Myth Revisited",
+        "author": "Michael E. Gerber",
+        "category": "Books",
+        "description": "Small business success.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "entrepreneurship",
+          "small business",
+          "systems"
+        ],
+        "focus_area": "Small Business",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Zero to One",
+        "author": "Peter Thiel",
+        "category": "Books",
+        "description": "Startup innovation.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "innovation",
+          "startups",
+          "monopoly creation"
+        ],
+        "focus_area": "Startup Strategy",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Hard Thing About Hard Things",
+        "author": "Ben Horowitz",
+        "category": "Books",
+        "description": "Tough leadership decisions.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "difficult decisions",
+          "leadership challenges"
+        ],
+        "focus_area": "Crisis Leadership",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Five Levels of Leadership",
+        "author": "John C. Maxwell",
+        "category": "Books",
+        "description": "Leadership growth stages.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "leadership development",
+          "leadership levels"
+        ],
+        "focus_area": "Leadership Development",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Productivity Project",
+        "author": "Chris Bailey",
+        "category": "Books",
+        "description": "Practical productivity tips.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "productivity",
+          "time management",
+          "efficiency"
+        ],
+        "focus_area": "Productivity Tips",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The Power of Now",
+        "author": "Eckhart Tolle",
+        "category": "Books",
+        "description": "Mindfulness in work (neutral).",
+        "christian_themes": [],
+        "leadership_topics": [
+          "mindfulness",
+          "presence",
+          "awareness"
+        ],
+        "focus_area": "Mindfulness",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Crucial Conversations",
+        "author": "Kerry Patterson",
+        "category": "Books",
+        "description": "Effective communication.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "communication",
+          "difficult conversations"
+        ],
+        "focus_area": "Communication",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "The War of Art",
+        "author": "Steven Pressfield",
+        "category": "Books",
+        "description": "Overcoming creative blocks.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "creativity",
+          "resistance",
+          "creative productivity"
+        ],
+        "focus_area": "Creative Productivity",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      },
+      {
+        "title": "Mindset",
+        "author": "Carol S. Dweck",
+        "category": "Books",
+        "description": "Growth mindset for success.",
+        "christian_themes": [],
+        "leadership_topics": [
+          "mindset",
+          "growth mindset",
+          "learning"
+        ],
+        "focus_area": "Growth Mindset",
+        "asin": null,
+        "price": null,
+        "affiliate_link": null,
+        "image_url": null,
+        "rating": null,
+        "review_count": null,
+        "research_status": "manual_research_needed"
+      }
+    ]
+  },
+  "accessories": [
+    {
+      "title": "Moleskine Classic Notebook",
+      "author": "",
+      "category": "All",
+      "description": "Hard cover, navy, for leadership notes.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Cross Bailey Fountain Pen",
+      "author": "",
+      "category": "All",
+      "description": "Elegant pen for signing and journaling.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Bose QuietComfort Earbuds",
+      "author": "",
+      "category": "All",
+      "description": "Noise-canceling for focused reading.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Leather Journal with Cross Charm",
+      "author": "",
+      "category": "All",
+      "description": "Christian-themed for reflections.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Adjustable Book Stand",
+      "author": "",
+      "category": "All",
+      "description": "Hands-free reading on desk.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "LED Desk Lamp with USB Port",
+      "author": "",
+      "category": "All",
+      "description": "Bright light for late-night study.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Engraved Wooden Bookmark (Proverbs 16:3)",
+      "author": "",
+      "category": "All",
+      "description": "Christian inspiration.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Pilot G2 Gel Pens (4-Pack)",
+      "author": "",
+      "category": "All",
+      "description": "Smooth writing for notes.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Anker Wireless Charger",
+      "author": "",
+      "category": "All",
+      "description": "Desk charger for executive devices.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Faux Leather Desk Organizer",
+      "author": "",
+      "category": "All",
+      "description": "Stores pens, notebooks, and Bible.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Sony Wireless Headphones",
+      "author": "",
+      "category": "All",
+      "description": "Over-ear for audiobooks.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Book Light (Rechargeable)",
+      "author": "",
+      "category": "All",
+      "description": "Clip-on for nighttime reading.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Inspirational Desk Plaque (\"Trust in the Lord\")",
+      "author": "",
+      "category": "All",
+      "description": "Christian decor.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Mead Spiral Notebook (3-Pack)",
+      "author": "",
+      "category": "All",
+      "description": "Budget-friendly for ideas.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Staedtler Highlighters (6-Pack)",
+      "author": "",
+      "category": "All",
+      "description": "Marking key leadership passages.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Laptop Stand (Aluminum)",
+      "author": "",
+      "category": "All",
+      "description": "Ergonomic for digital books.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Christian Planner 2025",
+      "author": "",
+      "category": "All",
+      "description": "Productivity with daily scriptures.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Wooden Pen Holder with Cross",
+      "author": "",
+      "category": "All",
+      "description": "Desk faith reminder.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Kindle Paperwhite",
+      "author": "",
+      "category": "All",
+      "description": "E-reader for digital leadership books.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Blue Light Blocking Glasses",
+      "author": "",
+      "category": "All",
+      "description": "Eye protection for screen reading.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Portable Document Scanner",
+      "author": "",
+      "category": "All",
+      "description": "Digitize notes for organization.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Desk Calendar with Bible Verses",
+      "author": "",
+      "category": "All",
+      "description": "Daily Christian inspiration.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Moleskine Pen Case",
+      "author": "",
+      "category": "All",
+      "description": "Stylish storage for executive pens.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Noise-Canceling Earplugs",
+      "author": "",
+      "category": "All",
+      "description": "Focus during travel or study.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    },
+    {
+      "title": "Leather Bible Cover",
+      "author": "",
+      "category": "All",
+      "description": "Protects scriptures on the desk.",
+      "christian_themes": [],
+      "leadership_topics": [],
+      "focus_area": "",
+      "asin": null,
+      "price": null,
+      "affiliate_link": null,
+      "image_url": null,
+      "rating": null,
+      "review_count": null,
+      "research_status": "manual_research_needed"
+    }
+  ]
+}

@@ -591,6 +591,10 @@ print(f'Database state: {len(response.data)} records')
 
 **Takeaway**: Always check script argument parsing and usage instructions. Update documentation and script help output to clarify the correct way to pass the authorization code. Recommend updating the script's usage instructions to explicitly warn against using --code or other flags.
 
+### LinkedIn Organization Admin Status
+
+- The MyBookShelf LinkedIn company page was created in 2015 by the project owner, who is the sole admin and has verified admin status. Repeatedly checking admin status is unnecessary if you are the original creator and sole admin.
+
 ## Process Lessons
 
 ### 22. Documentation Management

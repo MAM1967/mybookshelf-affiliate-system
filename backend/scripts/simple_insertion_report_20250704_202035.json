@@ -1,0 +1,479 @@
+{
+  "total_items": 100,
+  "books_inserted": 71,
+  "accessories_inserted": 23,
+  "duplicates_skipped": 3,
+  "errors": [],
+  "inserted_items": [
+    {
+      "title": "The Ideal Team Player",
+      "asin": "B0B31ZLCKK",
+      "type": "book"
+    },
+    {
+      "title": "Leadership and Emotional Sabotage",
+      "asin": "B0F4JCR4WB",
+      "type": "book"
+    },
+    {
+      "title": "The Christian Leader's Worldview",
+      "asin": "B01G7MOIG6",
+      "type": "book"
+    },
+    {
+      "title": "Christian Leadership Essentials",
+      "asin": "B004T0AB5G",
+      "type": "book"
+    },
+    {
+      "title": "Lead: 12 Gospel Principles for Leadership",
+      "asin": "1433599317",
+      "type": "book"
+    },
+    {
+      "title": "The Sacredness of Secular Work",
+      "asin": "0593193091",
+      "type": "book"
+    },
+    {
+      "title": "Strengthening the Soul of Your Leadership",
+      "asin": "B08JJR8GJ3",
+      "type": "book"
+    },
+    {
+      "title": "Servant Leadership",
+      "asin": "B012HV4V86",
+      "type": "book"
+    },
+    {
+      "title": "The Maxwell Daily Reader",
+      "asin": "1404174788",
+      "type": "book"
+    },
+    {
+      "title": "Faith Driven Entrepreneur",
+      "asin": "1496457234",
+      "type": "book"
+    },
+    {
+      "title": "H3 Leadership",
+      "asin": "B0BQJDT1XB",
+      "type": "book"
+    },
+    {
+      "title": "Leadership in Christian Perspective",
+      "asin": "1540960331",
+      "type": "book"
+    },
+    {
+      "title": "The Unhurried Pastor",
+      "asin": "1784989576",
+      "type": "book"
+    },
+    {
+      "title": "Spurgeon on Leadership",
+      "asin": "0825435366",
+      "type": "book"
+    },
+    {
+      "title": "The True Measure of a Man",
+      "asin": "B005046BYK",
+      "type": "book"
+    },
+    {
+      "title": "Money, Possessions, and Eternity",
+      "asin": "0842353607",
+      "type": "book"
+    },
+    {
+      "title": "Neither Poverty nor Riches",
+      "asin": "B00HTJP0A0",
+      "type": "book"
+    },
+    {
+      "title": "Garden City",
+      "asin": "B01K90123E",
+      "type": "book"
+    },
+    {
+      "title": "The Conviction to Lead",
+      "asin": "0764211250",
+      "type": "book"
+    },
+    {
+      "title": "Called to Lead",
+      "asin": "1400202868",
+      "type": "book"
+    },
+    {
+      "title": "The Emotionally Healthy Leader",
+      "asin": "0310494575",
+      "type": "book"
+    },
+    {
+      "title": "Managing God's Money",
+      "asin": "1414345534",
+      "type": "book"
+    },
+    {
+      "title": "The 21 Irrefutable Laws of Leadership",
+      "asin": "0310159490",
+      "type": "book"
+    },
+    {
+      "title": "Developing the Leader Within You 2.0",
+      "asin": "9124349763",
+      "type": "book"
+    },
+    {
+      "title": "The Heart of Leadership",
+      "asin": "1626561338",
+      "type": "book"
+    },
+    {
+      "title": "Lead Like It Matters",
+      "asin": "031015121X",
+      "type": "book"
+    },
+    {
+      "title": "The Call to Lead",
+      "asin": "0310495946",
+      "type": "book"
+    },
+    {
+      "title": "Spiritual Leadership",
+      "asin": "0802434126",
+      "type": "book"
+    },
+    {
+      "title": "The Purpose Driven Life",
+      "asin": "0310205719",
+      "type": "book"
+    },
+    {
+      "title": "Every Good Endeavor",
+      "asin": "1594632820",
+      "type": "book"
+    },
+    {
+      "title": "The 360 Degree Leader",
+      "asin": "0785260951",
+      "type": "book"
+    },
+    {
+      "title": "The Leadership Challenge",
+      "asin": "1394152221",
+      "type": "book"
+    },
+    {
+      "title": "The Amazon Way",
+      "asin": "B01MU2QC3R",
+      "type": "book"
+    },
+    {
+      "title": "Measure What Matters",
+      "asin": "B093XSXWVB",
+      "type": "book"
+    },
+    {
+      "title": "The AI Advantage",
+      "asin": "B07VXXS8B9",
+      "type": "book"
+    },
+    {
+      "title": "Prediction Machines",
+      "asin": "9863983810",
+      "type": "book"
+    },
+    {
+      "title": "Leaders Eat Last",
+      "asin": "1591848016",
+      "type": "book"
+    },
+    {
+      "title": "Start with Why",
+      "asin": "B0CSSFTMJX",
+      "type": "book"
+    },
+    {
+      "title": "The Lean Startup",
+      "asin": "B005MM7HY8",
+      "type": "book"
+    },
+    {
+      "title": "Deep Work",
+      "asin": "B0DSJ5DJY9",
+      "type": "book"
+    },
+    {
+      "title": "Getting Things Done",
+      "asin": "0143133438",
+      "type": "book"
+    },
+    {
+      "title": "The 7 Habits of Highly Effective People",
+      "asin": "1982137274",
+      "type": "book"
+    },
+    {
+      "title": "Drive",
+      "asin": "9124063452",
+      "type": "book"
+    },
+    {
+      "title": "Good to Great",
+      "asin": "B00A2OCQYC",
+      "type": "book"
+    },
+    {
+      "title": "The Infinite Game",
+      "asin": "B07DKHFTB7",
+      "type": "book"
+    },
+    {
+      "title": "Dare to Lead",
+      "asin": "B07DJYFLX8",
+      "type": "book"
+    },
+    {
+      "title": "The Power of Habit",
+      "asin": "B00NBILMDC",
+      "type": "book"
+    },
+    {
+      "title": "Thinking, Fast and Slow",
+      "asin": "0111573742",
+      "type": "book"
+    },
+    {
+      "title": "The Effective Executive",
+      "asin": "B00KVIBWOO",
+      "type": "book"
+    },
+    {
+      "title": "High Output Management",
+      "asin": "0679762884",
+      "type": "book"
+    },
+    {
+      "title": "The Innovator's Dilemma",
+      "asin": "B0076ZFPKW",
+      "type": "book"
+    },
+    {
+      "title": "Extreme Ownership",
+      "asin": "0981618871",
+      "type": "book"
+    },
+    {
+      "title": "The One Thing",
+      "asin": "9124037737",
+      "type": "book"
+    },
+    {
+      "title": "Essentialism",
+      "asin": "0593578414",
+      "type": "book"
+    },
+    {
+      "title": "The 4 Disciplines of Execution",
+      "asin": "9124219975",
+      "type": "book"
+    },
+    {
+      "title": "Leadershift",
+      "asin": "0310109884",
+      "type": "book"
+    },
+    {
+      "title": "The Art of Possibility",
+      "asin": "B099NRFM34",
+      "type": "book"
+    },
+    {
+      "title": "The First 90 Days",
+      "asin": "B07ZQGM5WY",
+      "type": "book"
+    },
+    {
+      "title": "Never Split the Difference",
+      "asin": "B01COR1GM2",
+      "type": "book"
+    },
+    {
+      "title": "The Obstacle Is the Way",
+      "asin": "B09TWBNG55",
+      "type": "book"
+    },
+    {
+      "title": "Blue Ocean Strategy",
+      "asin": "B0CVLFJCRP",
+      "type": "book"
+    },
+    {
+      "title": "The Culture Code",
+      "asin": "B077B1WF85",
+      "type": "book"
+    },
+    {
+      "title": "The E-Myth Revisited",
+      "asin": "B00E27YS0A",
+      "type": "book"
+    },
+    {
+      "title": "Zero to One",
+      "asin": "9124278920",
+      "type": "book"
+    },
+    {
+      "title": "The Hard Thing About Hard Things",
+      "asin": "9124311413",
+      "type": "book"
+    },
+    {
+      "title": "The Five Levels of Leadership",
+      "asin": "B00CB5YV7U",
+      "type": "book"
+    },
+    {
+      "title": "The Productivity Project",
+      "asin": "9124208515",
+      "type": "book"
+    },
+    {
+      "title": "The Power of Now",
+      "asin": "B09TWHF29Q",
+      "type": "book"
+    },
+    {
+      "title": "Crucial Conversations",
+      "asin": "007145540X",
+      "type": "book"
+    },
+    {
+      "title": "The War of Art",
+      "asin": "B07PTBYH2G",
+      "type": "book"
+    },
+    {
+      "title": "Mindset",
+      "asin": "B09YNRKLY7",
+      "type": "book"
+    },
+    {
+      "title": "Cross Bailey Fountain Pen",
+      "asin": "B08JRJWT1P",
+      "type": "accessory"
+    },
+    {
+      "title": "Bose QuietComfort Earbuds",
+      "asin": "B0D8BZDPXB",
+      "type": "accessory"
+    },
+    {
+      "title": "Leather Journal with Cross Charm",
+      "asin": "B0DGQWH1WK",
+      "type": "accessory"
+    },
+    {
+      "title": "Adjustable Book Stand",
+      "asin": "B0C3TSQ4VQ",
+      "type": "accessory"
+    },
+    {
+      "title": "LED Desk Lamp with USB Port",
+      "asin": "B08923SXXP",
+      "type": "accessory"
+    },
+    {
+      "title": "Engraved Wooden Bookmark (Proverbs 16:3)",
+      "asin": "B019YKATFW",
+      "type": "accessory"
+    },
+    {
+      "title": "Pilot G2 Gel Pens (4-Pack)",
+      "asin": "B0030F32L6",
+      "type": "accessory"
+    },
+    {
+      "title": "Anker Wireless Charger",
+      "asin": "B07THHQMHM",
+      "type": "accessory"
+    },
+    {
+      "title": "Faux Leather Desk Organizer",
+      "asin": "B08V8B7PGF",
+      "type": "accessory"
+    },
+    {
+      "title": "Sony Wireless Headphones",
+      "asin": "B0BS1PRC4L",
+      "type": "accessory"
+    },
+    {
+      "title": "Book Light (Rechargeable)",
+      "asin": "B08GG42WXY",
+      "type": "accessory"
+    },
+    {
+      "title": "Inspirational Desk Plaque (\"Trust in the Lord\")",
+      "asin": "B0DJ2R98S1",
+      "type": "accessory"
+    },
+    {
+      "title": "Mead Spiral Notebook (3-Pack)",
+      "asin": "B008BVY28G",
+      "type": "accessory"
+    },
+    {
+      "title": "Laptop Stand (Aluminum)",
+      "asin": "B08M94BTYC",
+      "type": "accessory"
+    },
+    {
+      "title": "Christian Planner 2025",
+      "asin": "147077626X",
+      "type": "accessory"
+    },
+    {
+      "title": "Wooden Pen Holder with Cross",
+      "asin": "B0DC6ZTWFY",
+      "type": "accessory"
+    },
+    {
+      "title": "Kindle Paperwhite",
+      "asin": "B0CFPJYX7P",
+      "type": "accessory"
+    },
+    {
+      "title": "Blue Light Blocking Glasses",
+      "asin": "B0D9HRSR11",
+      "type": "accessory"
+    },
+    {
+      "title": "Portable Document Scanner",
+      "asin": "B073119ZSJ",
+      "type": "accessory"
+    },
+    {
+      "title": "Desk Calendar with Bible Verses",
+      "asin": "B0D6XS7HXY",
+      "type": "accessory"
+    },
+    {
+      "title": "Moleskine Pen Case",
+      "asin": "B07V9G3M3P",
+      "type": "accessory"
+    },
+    {
+      "title": "Noise-Canceling Earplugs",
+      "asin": "B0F4D92RMG",
+      "type": "accessory"
+    },
+    {
+      "title": "Leather Bible Cover",
+      "asin": "B0BDJ9LGJ8",
+      "type": "accessory"
+    }
+  ]
+}
