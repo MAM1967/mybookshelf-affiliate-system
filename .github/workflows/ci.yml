@@ -1,27 +1,31 @@
-name: MyBookshelf CI/CD Pipeline
+# MyBookshelf CI/CD Pipeline - TEMPORARILY DISABLED
+# Disabled until LinkedIn API approval and coding efforts resume
+# Uncomment entire workflow when ready to restart CI/CD
 
-on:
-  push:
-    branches: [main, staging, dev]
-  pull_request:
-    branches: [main, staging, dev]
+# name: MyBookshelf CI/CD Pipeline
 
-env:
-  NODE_VERSION: "18"
-  PYTHON_VERSION: "3.9"
+# on:
+#   push:
+#     branches: [main, staging, dev]
+#   pull_request:
+#     branches: [main, staging, dev]
 
-# Test suite disabled until LinkedIn Community Management API approval is granted
-# Uncomment when API access is approved and system is ready for full testing
-# jobs:
-#   test:
-#     name: Run Test Suite
-#     runs-on: ubuntu-latest
-#     env:
-#       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-#       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-#       SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-#       RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-#       ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+# env:
+#   NODE_VERSION: "18"
+#   PYTHON_VERSION: "3.9"
+
+# # Test suite disabled until LinkedIn Community Management API approval is granted
+# # Uncomment when API access is approved and system is ready for full testing
+# # jobs:
+# #   test:
+# #     name: Run Test Suite
+# #     runs-on: ubuntu-latest
+# #     env:
+# #       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+# #       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+# #       SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+# #       RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+# #       ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
 
 #     steps:
 #       - name: Checkout code
@@ -105,125 +109,125 @@ env:
 #               });
 #             }
 
-jobs:
-  security-scan:
-    name: Security Scan
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
+# jobs:
+#   security-scan:
+#     name: Security Scan
+#     runs-on: ubuntu-latest
+#     permissions:
+#       actions: read
+#       contents: read
+#       security-events: write
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: "fs"
-          scan-ref: "."
-          format: "sarif"
-          output: "trivy-results.sarif"
+#       - name: Run Trivy vulnerability scanner
+#         uses: aquasecurity/trivy-action@master
+#         with:
+#           scan-type: "fs"
+#           scan-ref: "."
+#           format: "sarif"
+#           output: "trivy-results.sarif"
 
-      - name: Upload Trivy scan results
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: "trivy-results.sarif"
+#       - name: Upload Trivy scan results
+#         uses: github/codeql-action/upload-sarif@v3
+#         if: always()
+#         with:
+#           sarif_file: "trivy-results.sarif"
 
-  deploy-staging:
-    name: Deploy to Staging
-    needs: [security-scan] # Removed test dependency
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
+#   deploy-staging:
+#     name: Deploy to Staging
+#     needs: [security-scan]  # Removed test dependency
+#     runs-on: ubuntu-latest
+#     if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
 
-    environment:
-      name: staging
-      url: https://mybookshelf-affiliate-system-staging.vercel.app
+#     environment:
+#       name: staging
+#       url: https://mybookshelf-affiliate-system-staging.vercel.app
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Deploy to Vercel (Staging)
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          working-directory: frontend/mini-app
-          vercel-args: "--prod"
+#       - name: Deploy to Vercel (Staging)
+#         uses: amondnet/vercel-action@v25
+#         with:
+#           vercel-token: ${{ secrets.VERCEL_TOKEN }}
+#           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+#           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+#           working-directory: frontend/mini-app
+#           vercel-args: "--prod"
 
-      # Post-deployment tests disabled until LinkedIn API approval
-      # - name: Run post-deployment tests
-      #   run: |
-      #     cd backend/scripts
-      #     # Test staging deployment
-      #     STAGING_URL="https://mybookshelf-affiliate-system-staging.vercel.app" python test_deployment.py
+#       # Post-deployment tests disabled until LinkedIn API approval
+#       # - name: Run post-deployment tests
+#       #   run: |
+#       #     cd backend/scripts
+#       #     # Test staging deployment
+#       #     STAGING_URL="https://mybookshelf-affiliate-system-staging.vercel.app" python test_deployment.py
 
-  deploy-production:
-    name: Deploy to Production
-    needs: [security-scan] # Removed test dependency
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+#   deploy-production:
+#     name: Deploy to Production
+#     needs: [security-scan]  # Removed test dependency
+#     runs-on: ubuntu-latest
+#     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
-    environment:
-      name: production
-      url: https://mybookshelf.shop
+#     environment:
+#       name: production
+#       url: https://mybookshelf.shop
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Deploy to Vercel (Production)
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          working-directory: frontend/mini-app
-          vercel-args: "--prod"
+#       - name: Deploy to Vercel (Production)
+#         uses: amondnet/vercel-action@v25
+#         with:
+#           vercel-token: ${{ secrets.VERCEL_TOKEN }}
+#           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+#           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+#           working-directory: frontend/mini-app
+#           vercel-args: "--prod"
 
-      # Post-deployment tests disabled until LinkedIn API approval
-      # - name: Run post-deployment tests
-      #   run: |
-      #     cd backend/scripts
-      #     # Test production deployment
-      #     PRODUCTION_URL="https://mybookshelf.shop" python test_deployment.py
+#       # Post-deployment tests disabled until LinkedIn API approval
+#       # - name: Run post-deployment tests
+#       #   run: |
+#       #     cd backend/scripts
+#       #     # Test production deployment
+#       #     PRODUCTION_URL="https://mybookshelf.shop" python test_deployment.py
 
-      # Slack notifications removed - not configured
+#       # Slack notifications removed - not configured
 
-  dependency-update:
-    name: Update Dependencies
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule'
+#   dependency-update:
+#     name: Update Dependencies
+#     runs-on: ubuntu-latest
+#     if: github.event_name == 'schedule'
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
+#       - name: Set up Python
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Update Python dependencies
-        run: |
-          cd backend
-          pip install --upgrade pip
-          pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
-          pip freeze > requirements.txt
+#       - name: Update Python dependencies
+#         run: |
+#           cd backend
+#           pip install --upgrade pip
+#           pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
+#           pip freeze > requirements.txt
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update Python dependencies"
-          title: "chore: update Python dependencies"
-          body: |
-            Automated dependency update
+#       - name: Create Pull Request
+#         uses: peter-evans/create-pull-request@v5
+#         with:
+#           token: ${{ secrets.GITHUB_TOKEN }}
+#           commit-message: "chore: update Python dependencies"
+#           title: "chore: update Python dependencies"
+#           body: |
+#             Automated dependency update
 
-            This PR updates Python dependencies to their latest versions.
-            Please review the changes and test thoroughly before merging.
-          branch: "chore/update-dependencies"
+#             This PR updates Python dependencies to their latest versions.
+#             Please review the changes and test thoroughly before merging.
+#           branch: "chore/update-dependencies"
