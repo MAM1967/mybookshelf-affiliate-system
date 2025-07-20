@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyBookshelf Admin - Content Approval</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: #fff;
+        min-height: 100vh;
+        padding: 20px;
+        color: #222;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+        overflow: hidden;
+      }
+
+      .header {
+        background: #fff;
+        color: #795548;
+        padding: 30px 40px 16px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+      }
+
+      .header-logo {
+        width: 210px;
+        height: auto;
+        margin-right: 18px;
+      }
+
+      .header-left h1 {
+        font-size: 2.2em;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #ff9800;
+      }
+
+      .header-left p {
+        opacity: 0.85;
+        font-size: 1.1em;
+        color: #795548;
+      }
+
+      .header-right {
+        text-align: right;
+      }
+
+      .session-info {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+
+      .stats-bar {
+        background: #f8f9fa;
+        padding: 20px 40px;
+        border-bottom: 1px solid #e9ecef;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+      }
+
+      .stat-item {
+        text-align: center;
+        padding: 15px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .stat-number {
+        font-size: 2em;
+        font-weight: 700;
+        color: #ff9800;
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        color: #795548;
+        font-size: 0.9em;
+        font-weight: 500;
+      }
+
+      .content {
+        padding: 40px;
+      }
+
+      .filter-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 15px;
+      }
+
+      .tab-btn {
+        background: #fff3e0;
+        color: #ff9800;
+        border: 2px solid #ff9800;
+        padding: 12px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .tab-btn:hover,
+      .tab-btn.active {
+        background: #ff9800;
+        color: #fff;
+      }
+
+      .books-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+      }
+
+      .book-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: 2px solid #f1f3f4;
+        transition: all 0.3s ease;
+      }
+
+      .book-card.pending {
+        border-left: 5px solid #fbbf24;
+      }
+
+      .book-card.approved {
+        border-left: 5px solid #ff9800;
+      }
+
+      .book-card.rejected {
+        border-left: 5px solid #ef4444;
+      }
+
+      .book-card.needs_review {
+        border-left: 5px solid #f59e0b;
+      }
+
+      .card-header {
+        padding: 20px 20px 0 20px;
+        display: flex;
+        gap: 15px;
+      }
+
+      .book-image {
+        width: 100px;
+        height: 140px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      .book-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .book-info {
+        flex: 1;
+      }
+
+      .book-title {
+        font-size: 1.3em;
+        font-weight: 700;
+        color: #795548;
+        margin-bottom: 8px;
+        line-height: 1.3;
+      }
+
+      .book-author {
+        color: #6b7280;
+        font-size: 1.05em;
+        margin-bottom: 10px;
+      }
+
+      .book-category {
+        display: inline-block;
+        background: #e5e7eb;
+        color: #374151;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: 500;
+      }
+
+      .book-price {
+        font-size: 1.4em;
+        font-weight: 700;
+        color: #059669;
+        margin-top: 8px;
+      }
+
+      .card-content {
+        padding: 20px;
+      }
+
+      .content-analysis {
+        background: #f9fafb;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+
+      .analysis-section {
+        margin-bottom: 12px;
+      }
+
+      .analysis-label {
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.9em;
+        margin-bottom: 5px;
+      }
+
+      .analysis-value {
+        color: #6b7280;
+        font-size: 0.9em;
+        line-height: 1.4;
+      }
+
+      .content-score {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .score-bar {
+        flex: 1;
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .score-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          #ef4444 0%,
+          #f59e0b 50%,
+          #10b981 100%
+        );
+        transition: width 0.3s ease;
+      }
+
+      .score-text {
+        font-weight: 700;
+        color: #374151;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.95em;
+      }
+
+      .btn-approve {
+        background: #10b981;
+        color: white;
+      }
+
+      .btn-approve:hover {
+        background: #059669;
+        transform: translateY(-2px);
+      }
+
+      .btn-reject {
+        background: #ef4444;
+        color: white;
+      }
+
+      .btn-reject:hover {
+        background: #dc2626;
+        transform: translateY(-2px);
+      }
+
+      .btn-review {
+        background: #f59e0b;
+        color: white;
+      }
+
+      .btn-review:hover {
+        background: #d97706;
+        transform: translateY(-2px);
+      }
+
+      .btn-schedule {
+        background: #6366f1;
+        color: white;
+      }
+
+      .btn-schedule:hover {
+        background: #4f46e5;
+        transform: translateY(-2px);
+      }
+
+      .admin-notes {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        margin-top: 10px;
+        font-size: 0.9em;
+        font-family: inherit;
+      }
+
+      .admin-notes:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .loading {
+        text-align: center;
+        padding: 60px;
+        color: #6b7280;
+      }
+
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #e5e7eb;
+        border-top: 4px solid #2563eb;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error {
+        background: #fef2f2;
+        color: #dc2626;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+        border: 1px solid #fecaca;
+      }
+
+      .success {
+        background: #f0fdf4;
+        color: #166534;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+        border: 1px solid #bbf7d0;
+      }
+
+      .week-selector {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .week-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .week-title {
+        font-size: 1.2em;
+        font-weight: 600;
+        color: #1f2937;
+      }
+
+      .week-nav {
+        display: flex;
+        gap: 10px;
+      }
+
+      .nav-btn {
+        background: #f3f4f6;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        background: #e5e7eb;
+      }
+
+      .bulk-actions {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        padding: 20px;
+        background: #f9fafb;
+        border-radius: 10px;
+        margin-bottom: 30px;
+      }
+
+      .bulk-actions label {
+        font-weight: 600;
+        color: #374151;
+      }
+
+      .bulk-btn {
+        background: #6366f1;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .bulk-btn:hover {
+        background: #4f46e5;
+      }
+
+      .footer {
+        background: #fff3e0;
+        color: #795548;
+        text-align: center;
+        padding: 24px 0 12px 0;
+        font-size: 1em;
+        border-top: 1px solid #eee;
+      }
+
+      .footer a {
+        color: #ff9800;
+        text-decoration: underline;
+        margin: 0 10px;
+      }
+
+      .footer a:hover {
+        color: #795548;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          margin: 10px;
+          border-radius: 10px;
+        }
+
+        .header {
+          padding: 20px;
+          flex-direction: column;
+          text-align: center;
+          gap: 20px;
+        }
+
+        .stats-bar {
+          grid-template-columns: repeat(2, 1fr);
+          padding: 20px;
+        }
+
+        .content {
+          padding: 20px;
+        }
+
+        .books-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .card-header {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      style="
+        background: red;
+        color: white;
+        text-align: center;
+        font-size: 2em;
+        padding: 20px;
+      "
+    >
+      ADMIN.HTML - TEST BANNER
+    </div>
+    <!-- TEST BANNER ABOVE -->
+
+    <div class="container">
+      <header class="header">
+        <div class="header-left" style="display: flex; align-items: center">
+          <img
+            src="/mybookshelf-logo.jpg"
+            alt="MyBookshelf Logo"
+            class="header-logo"
+          />
+          <div>
+            <h1>myBookshelf Admin</h1>
+            <p>Content Approval & Automation</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="session-info">
+            <div>
+              <strong>Admin:</strong>
+              <span id="admin-email">mcddsl@icloud.com</span>
+            </div>
+            <div>
+              <strong>Session:</strong>
+              <span id="session-date">Sunday, December 30, 2024</span>
+            </div>
+          </div>
+          <button onclick="completeSession()" class="btn btn-schedule">
+            Complete Session
+          </button>
+        </div>
+      </header>
+
+      <!-- Stats Bar -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-number" id="pending-count">0</div>
+          <div class="stat-label">Pending Review</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="approved-count">0</div>
+          <div class="stat-label">Approved</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="filtered-count">0</div>
+          <div class="stat-label">Auto-Filtered</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="review-count">0</div>
+          <div class="stat-label">Need Review</div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <!-- Week Selector -->
+        <div class="week-selector">
+          <div class="week-info">
+            <h3 class="week-title">Week of January 6-12, 2025</h3>
+            <div class="week-nav">
+              <button class="nav-btn" onclick="previousWeek()">
+                &larr; Previous
+              </button>
+              <button class="nav-btn" onclick="nextWeek()">Next &rarr;</button>
+            </div>
+          </div>
+          <p style="color: #6b7280; margin-bottom: 0">
+            Goal: Select 3 books + 1 accessory for automated posting on
+            Tuesday/Wednesday/Thursday
+          </p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+          <button class="tab-btn active" onclick="filterByStatus('all')">
+            All Items
+          </button>
+          <button class="tab-btn" onclick="filterByStatus('pending')">
+            Pending
+          </button>
+          <button class="tab-btn" onclick="filterByStatus('approved')">
+            Approved
+          </button>
+          <button class="tab-btn" onclick="filterByStatus('needs_review')">
+            Needs Review
+          </button>
+          <button class="tab-btn" onclick="filterByStatus('rejected')">
+            Rejected
+          </button>
+        </div>
+
+        <!-- Bulk Actions -->
+        <div class="bulk-actions">
+          <label>Quick Actions:</label>
+          <button class="bulk-btn" onclick="approveSelected()">
+            Approve Selected
+          </button>
+          <button class="bulk-btn" onclick="scheduleWeek()">
+            Schedule This Week
+          </button>
+          <span style="margin-left: auto; font-size: 0.9em; color: #6b7280">
+            Email content and LinkedIn posts will be auto-generated from your
+            approved selections
+          </span>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="loading">
+          <div class="loading-spinner"></div>
+          <p>Loading pending books and accessories...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="error" style="display: none">
+          <h3>❌ Error Loading Content</h3>
+          <p id="error-message"></p>
+          <button
+            onclick="loadPendingBooks()"
+            style="
+              margin-top: 10px;
+              padding: 8px 16px;
+              background: #dc2626;
+              color: white;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+            "
+          >
+            Retry
+          </button>
+        </div>
+
+        <!-- Books Grid -->
+        <div id="books-grid" class="books-grid" style="display: none">
+          <!-- Book cards will be populated here -->
+        </div>
+
+        <!-- Empty State -->
+        <div
+          id="empty-state"
+          style="
+            display: none;
+            text-align: center;
+            padding: 60px;
+            color: #6b7280;
+          "
+        >
+          <h3>📖 No Books Pending Approval</h3>
+          <p>All caught up! Check back Sunday for the next week's content.</p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div>
+          &copy; 2025 MyBookshelf. All rights reserved. &middot;
+          <a href="/frontend/mini-app/privacy.html">Privacy Policy</a> &middot;
+          <a href="/frontend/mini-app/terms.html">Terms of Service</a>
+        </div>
+        <div style="margin-top: 8px; font-size: 0.95em">
+          Powered by MyBookshelf
+        </div>
+      </footer>
+    </div>
+
+    <!-- Passwordless Login Modal -->
+
+    <script>
+      // Supabase Configuration
+      const SUPABASE_URL = "https://ackcgrnizuhauccnbiml.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFja2Nncm5penVoYXVjY25iaW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMjc4MzEsImV4cCI6MjA2NjgwMzgzMX0.SXpIMuNBgUhcEQUHzpEB1zZAdF-UTGvmY81EFUtsAwc";
+
+      const supabase = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+      // Global state
+      let pendingBooks = [];
+      let currentFilter = "all";
+      let sessionToken = null;
+      let sessionId = null;
+
+      // Initialize the dashboard
+      async function initDashboard() {
+        try {
+          // Get session token from URL
+          const urlParams = new URLSearchParams(window.location.search);
+          sessionToken = urlParams.get("token");
+
+          // Always update week title to current week
+          updateWeekTitleToCurrent();
+
+          if (!sessionToken) {
+            // Show today's date if no session
+            document.getElementById("session-date").textContent =
+              new Date().toLocaleDateString("en-US", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              });
+            showError(
+              "Access token missing. Please use the link from your approval email."
+            );
+            // Still try to load books for demo/testing
+            await loadPendingBooks();
+            updateStats();
+            return;
+          }
+
+          // Validate session and load data
+          await validateSession();
+          await loadPendingBooks();
+          updateStats();
+
+          // Start session timer
+          startSessionTimer();
+        } catch (error) {
+          console.error("Dashboard initialization error:", error);
+          showError("Failed to initialize dashboard: " + error.message);
+        }
+      }
+
+      // Update the week title to the current week (Monday-Sunday)
+      function updateWeekTitleToCurrent() {
+        const weekTitleEl = document.querySelector(".week-title");
+        const today = new Date();
+        // Get Monday of this week
+        const day = today.getDay();
+        const diffToMonday = (day === 0 ? -6 : 1) - day; // Sunday=0, Monday=1
+        const monday = new Date(today);
+        monday.setDate(today.getDate() + diffToMonday);
+        // Get Sunday of this week
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        // Format dates
+        const options = { month: "long", day: "numeric" };
+        const year = today.getFullYear();
+        const weekStr = `Week of ${monday.toLocaleDateString(
+          "en-US",
+          options
+        )}-${sunday.toLocaleDateString("en-US", options)}, ${year}`;
+        weekTitleEl.textContent = weekStr;
+      }
+
+      // Validate admin session
+      async function validateSession() {
+        try {
+          const { data, error } = await supabase
+            .from("approval_sessions")
+            .select("*")
+            .eq("access_token", sessionToken)
+            .eq("status", "pending")
+            .single();
+
+          if (error || !data) {
+            throw new Error("Invalid or expired session token");
+          }
+
+          sessionId = data.id;
+          document.getElementById("session-date").textContent = new Date(
+            data.session_date
+          ).toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+
+          // Update session to in_progress
+          await supabase
+            .from("approval_sessions")
+            .update({
+              status: "in_progress",
+              started_at: new Date().toISOString(),
+              last_accessed: new Date().toISOString(),
+            })
+            .eq("id", sessionId);
+        } catch (error) {
+          throw new Error("Session validation failed: " + error.message);
+        }
+      }
+
+      // Load pending books from database
+      async function loadPendingBooks() {
+        try {
+          document.getElementById("loading").style.display = "block";
+          document.getElementById("books-grid").style.display = "none";
+          document.getElementById("error").style.display = "none";
+          document.getElementById("empty-state").style.display = "none";
+
+          const { data, error } = await supabase
+            .from("pending_books")
+            .select("*")
+            .order("submitted_at", { ascending: false });
+
+          if (error) {
+            throw new Error("Database query failed: " + error.message);
+          }
+
+          pendingBooks = data || [];
+          renderBooks();
+          updateStats();
+
+          document.getElementById("loading").style.display = "none";
+
+          if (pendingBooks.length === 0) {
+            document.getElementById("empty-state").style.display = "block";
+            document.getElementById("books-grid").style.display = "none";
+          } else {
+            document.getElementById("books-grid").style.display = "grid";
+            document.getElementById("empty-state").style.display = "none";
+          }
+        } catch (error) {
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("books-grid").style.display = "none";
+          document.getElementById("empty-state").style.display = "none";
+          showError("Failed to load books: " + error.message);
+        }
+      }
+
+      // Render books grid
+      function renderBooks() {
+        const grid = document.getElementById("books-grid");
+        const filteredBooks =
+          currentFilter === "all"
+            ? pendingBooks
+            : pendingBooks.filter((book) => book.status === currentFilter);
+
+        grid.innerHTML = filteredBooks
+          .map((book) => createBookCard(book))
+          .join("");
+      }
+
+      // Create individual book card HTML
+      function createBookCard(book) {
+        const contentScore =
+          book.content_filter_score || Math.floor(Math.random() * 4) + 7; // Mock score 7-10
+        const scorePercentage = (contentScore / 10) * 100;
+
+        return `
+          <div class="book-card ${book.status}" data-book-id="${book.id}">
+            <div class="card-header">
+              <div class="book-image">
+                ${
+                  book.image_url
+                    ? `<img src="${book.image_url}" alt="${book.title}" onerror="this.parentElement.innerHTML='📖 No Image'">`
+                    : "📖 No Image"
+                }
+              </div>
+              <div class="book-info">
+                <h3 class="book-title">${book.title}</h3>
+                <p class="book-author">by ${book.author}</p>
+                <span class="book-category">${book.category}</span>
+                <div class="book-price">$${parseFloat(
+                  book.suggested_price || 0
+                ).toFixed(2)}</div>
+              </div>
+            </div>
+
+            <div class="card-content">
+              <div class="content-analysis">
+                <div class="content-score">
+                  <div class="score-bar">
+                    <div class="score-fill" style="width: ${scorePercentage}%"></div>
+                  </div>
+                  <span class="score-text">${contentScore}/10</span>
+                </div>
+
+                ${
+                  book.christian_themes
+                    ? `
+                  <div class="analysis-section">
+                    <div class="analysis-label">📖 Christian Themes:</div>
+                    <div class="analysis-value">${
+                      Array.isArray(book.christian_themes)
+                        ? book.christian_themes.join(", ")
+                        : book.christian_themes
+                    }</div>
+                  </div>
+                `
+                    : ""
+                }
+
+                ${
+                  book.leadership_topics
+                    ? `
+                  <div class="analysis-section">
+                    <div class="analysis-label">🎯 Leadership Topics:</div>
+                    <div class="analysis-value">${
+                      Array.isArray(book.leadership_topics)
+                        ? book.leadership_topics.join(", ")
+                        : book.leadership_topics
+                    }</div>
+                  </div>
+                `
+                    : ""
+                }
+
+                ${
+                  book.content_filter_notes
+                    ? `
+                  <div class="analysis-section">
+                    <div class="analysis-label">⚠️ Review Notes:</div>
+                    <div class="analysis-value">${book.content_filter_notes}</div>
+                  </div>
+                `
+                    : ""
+                }
+              </div>
+
+              ${
+                book.status === "pending" || book.status === "needs_review"
+                  ? `
+                <div class="action-buttons">
+                  <button class="btn btn-approve" onclick="approveBook(${
+                    book.id
+                  })">✅ Approve</button>
+                  <button class="btn btn-reject" onclick="rejectBook(${
+                    book.id
+                  })">❌ Reject</button>
+                  ${
+                    book.status === "pending"
+                      ? `<button class="btn btn-review" onclick="markForReview(${book.id})">⚠️ Review</button>`
+                      : ""
+                  }
+                </div>
+                <textarea class="admin-notes" placeholder="Add notes (optional)..." id="notes-${
+                  book.id
+                }"></textarea>
+              `
+                  : `
+                <div style="padding: 15px; background: ${getStatusColor(
+                  book.status
+                )}; border-radius: 8px; text-align: center; font-weight: 600;">
+                  ${getStatusText(book.status)} ${
+                      book.reviewed_at
+                        ? "• " + new Date(book.reviewed_at).toLocaleDateString()
+                        : ""
+                    }
+                </div>
+                ${
+                  book.admin_notes
+                    ? `<div style="margin-top: 10px; padding: 10px; background: #f9fafb; border-radius: 6px; font-size: 0.9em; color: #6b7280;"><strong>Notes:</strong> ${book.admin_notes}</div>`
+                    : ""
+                }
+              `
+              }
+
+              ${
+                book.scheduled_post_at
+                  ? `<div style="margin-top:8px; color:#2563eb; font-weight:600; font-size:1em;">
+                      📅 Scheduled: ${new Date(
+                        book.scheduled_post_at
+                      ).toLocaleDateString("en-US", {
+                        weekday: "short",
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </div>`
+                  : ""
+              }
+            </div>
+          </div>
+        `;
+      }
+
+      // Helper functions for status display
+      function getStatusColor(status) {
+        switch (status) {
+          case "approved":
+            return "#d1fae5";
+          case "rejected":
+            return "#fee2e2";
+          case "needs_review":
+            return "#fef3c7";
+          default:
+            return "#f3f4f6";
+        }
+      }
+
+      function getStatusText(status) {
+        switch (status) {
+          case "approved":
+            return "✅ Approved for Publishing";
+          case "rejected":
+            return "❌ Rejected";
+          case "needs_review":
+            return "⚠️ Needs Review";
+          default:
+            return "📋 Pending Review";
+        }
+      }
+
+      // Book approval actions
+      async function approveBook(bookId) {
+        await updateBookStatus(bookId, "approved", "Approved for publishing");
+      }
+
+      async function rejectBook(bookId) {
+        await updateBookStatus(bookId, "rejected", "Rejected by admin");
+      }
+
+      async function markForReview(bookId) {
+        await updateBookStatus(
+          bookId,
+          "needs_review",
+          "Marked for additional review"
+        );
+      }
+
+      // Update book status in database
+      async function updateBookStatus(bookId, status, reason) {
+        try {
+          const notes = document.getElementById(`notes-${bookId}`)?.value || "";
+          let updateData = {
+            status: status,
+            reviewed_by: "admin",
+            reviewed_at: new Date().toISOString(),
+            admin_notes: notes,
+            rejection_reason: status === "rejected" ? reason : null,
+          };
+          // Auto-scheduling logic: only for approval
+          if (status === "approved") {
+            // Get all approved books for this week (with scheduled_post_at)
+            const today = new Date();
+            // Find Monday of this week
+            const day = today.getDay();
+            const diffToMonday = (day === 0 ? -6 : 1) - day;
+            const monday = new Date(today);
+            monday.setDate(today.getDate() + diffToMonday);
+            // Posting days: Tue, Wed, Thu
+            const postingDays = [1, 2, 3].map((offset) => {
+              const d = new Date(monday);
+              d.setDate(monday.getDate() + offset);
+              d.setHours(9, 0, 0, 0); // 9:00 AM
+              return d;
+            });
+            // Fetch already scheduled books for this week
+            const { data: scheduled, error: fetchError } = await supabase
+              .from("pending_books")
+              .select("scheduled_post_at")
+              .eq("status", "approved")
+              .gte("scheduled_post_at", postingDays[0].toISOString())
+              .lte("scheduled_post_at", postingDays[2].toISOString());
+            let usedDays = (scheduled || []).map(
+              (b) =>
+                b.scheduled_post_at &&
+                new Date(b.scheduled_post_at).toDateString()
+            );
+            let assigned = false;
+            for (let d of postingDays) {
+              if (!usedDays.includes(d.toDateString())) {
+                updateData.scheduled_post_at = d.toISOString();
+                assigned = true;
+                break;
+              }
+            }
+            // If all days are filled, leave scheduled_post_at undefined
+          }
+          const { error } = await supabase
+            .from("pending_books")
+            .update(updateData)
+            .eq("id", bookId);
+          if (error) {
+            throw new Error("Failed to update book status: " + error.message);
+          }
+          // Log the action
+          await supabase.from("approval_audit_log").insert({
+            book_id: bookId,
+            session_id: sessionId,
+            action:
+              status === "approved"
+                ? "approved"
+                : status === "rejected"
+                ? "rejected"
+                : "reviewed",
+            performed_by: "admin",
+            notes: notes,
+            old_status: "pending",
+            new_status: status,
+          });
+          // Reload books to reflect changes
+          await loadPendingBooks();
+          showSuccess(
+            `Book ${
+              status === "approved"
+                ? "approved"
+                : status === "rejected"
+                ? "rejected"
+                : "marked for review"
+            } successfully!`
+          );
+        } catch (error) {
+          showError("Action failed: " + error.message);
+        }
+      }
+
+      // Filter books by status
+      function filterByStatus(status) {
+        currentFilter = status;
+
+        // Update active tab
+        document
+          .querySelectorAll(".tab-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+
+        renderBooks();
+      }
+
+      // Update stats display
+      function updateStats() {
+        const stats = {
+          pending: pendingBooks.filter((b) => b.status === "pending").length,
+          approved: pendingBooks.filter((b) => b.status === "approved").length,
+          filtered: pendingBooks.filter((b) => !b.passes_content_filter).length,
+          review: pendingBooks.filter((b) => b.status === "needs_review")
+            .length,
+        };
+
+        document.getElementById("pending-count").textContent = stats.pending;
+        document.getElementById("approved-count").textContent = stats.approved;
+        document.getElementById("filtered-count").textContent = stats.filtered;
+        document.getElementById("review-count").textContent = stats.review;
+      }
+
+      // Complete approval session
+      async function completeSession() {
+        if (
+          !confirm(
+            "Complete this approval session? This will finalize your selections for this week."
+          )
+        ) {
+          return;
+        }
+
+        try {
+          await supabase
+            .from("approval_sessions")
+            .update({
+              status: "completed",
+              completed_at: new Date().toISOString(),
+              books_reviewed: pendingBooks.length,
+              books_approved: pendingBooks.filter(
+                (b) => b.status === "approved"
+              ).length,
+              books_rejected: pendingBooks.filter(
+                (b) => b.status === "rejected"
+              ).length,
+            })
+            .eq("id", sessionId);
+
+          showSuccess(
+            "Approval session completed! LinkedIn posts will be automatically scheduled for Tuesday, Wednesday, and Thursday."
+          );
+
+          // Disable further actions
+          document
+            .querySelectorAll("button")
+            .forEach((btn) => (btn.disabled = true));
+        } catch (error) {
+          showError("Failed to complete session: " + error.message);
+        }
+      }
+
+      // Utility functions
+      function showError(message) {
+        const errorDiv = document.getElementById("error");
+        document.getElementById("error-message").textContent = message;
+        errorDiv.style.display = "block";
+        setTimeout(() => (errorDiv.style.display = "none"), 8000);
+      }
+
+      function showSuccess(message) {
+        const successDiv = document.createElement("div");
+        successDiv.className = "success";
+        successDiv.textContent = message;
+        document
+          .querySelector(".content")
+          .insertBefore(successDiv, document.querySelector(".week-selector"));
+        setTimeout(() => successDiv.remove(), 5000);
+      }
+
+      function startSessionTimer() {
+        // Mock timer - would connect to actual session expiry
+        let timeLeft = 6 * 24 * 60 * 60 * 1000; // 6 days in milliseconds
+
+        setInterval(() => {
+          timeLeft -= 1000;
+          const days = Math.floor(timeLeft / (24 * 60 * 60 * 1000));
+          const hours = Math.floor(
+            (timeLeft % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000)
+          );
+          document.getElementById(
+            "session-timer"
+          ).textContent = `${days} days, ${hours} hours`;
+        }, 60000); // Update every minute
+      }
+
+      // Bulk actions (placeholder)
+      function approveSelected() {
+        alert("Bulk approve functionality would be implemented here");
+      }
+
+      function scheduleWeek() {
+        alert("Week scheduling functionality would be implemented here");
+      }
+
+      function previousWeek() {
+        alert("Previous week navigation would be implemented here");
+      }
+
+      function nextWeek() {
+        alert("Next week navigation would be implemented here");
+      }
+
+      // Authentication disabled - always show dashboard
+      function showLoginModal() {
+        // Do nothing - no login required
+      }
+      function hideLoginModal() {
+        // Do nothing - no login required
+      }
+
+      function isAuthenticated() {
+        return true; // Always authenticated
+      }
+
+      // On page load, always show dashboard (no authentication required)
+      window.addEventListener("DOMContentLoaded", function () {
+        // Always show dashboard - no authentication required
+        document.querySelector(".container").style.filter = "";
+        document.querySelector(".container").style.pointerEvents = "";
+      });
+
+      // Initialize dashboard when page loads
+      document.addEventListener("DOMContentLoaded", initDashboard);
+    </script>
+  </body>
+</html>

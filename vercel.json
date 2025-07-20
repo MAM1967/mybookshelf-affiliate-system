@@ -6,11 +6,11 @@
     },
     {
       "src": "/admin",
-      "dest": "/frontend/mini-app/admin-open.html"
+      "dest": "/frontend/mini-app/admin.html"
     },
     {
       "src": "/admin/(.*)",
-      "dest": "/frontend/mini-app/admin-open.html"
+      "dest": "/frontend/mini-app/admin.html"
     },
     {
       "src": "/(.*)",
