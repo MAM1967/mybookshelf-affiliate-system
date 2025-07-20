@@ -26,8 +26,8 @@
 ### **Technology Stack**
 
 - **Frontend**: HTML/CSS/JavaScript (modern responsive design)
-- **Backend**: Python scripts with Supabase PostgreSQL database
-- **Hosting**: Vercel with automatic GitHub deployments
+- **Backend**: Python scripts + Node.js 22.x API endpoints with Supabase PostgreSQL database
+- **Hosting**: Vercel with automatic GitHub deployments (Node.js 22.x runtime)
 - **Domain**: mybookshelf.shop (production) with SSL
 - **Email**: Resend API for professional notifications
 - **Social**: LinkedIn API OAuth integration
@@ -97,6 +97,14 @@ Production Environment:
 
 ### **Environment Variables (Production)**
 
+**Vercel Configuration:**
+
+- **Node.js Runtime**: 22.x (specified in vercel.json functions config)
+- **Deployment**: Automatic GitHub integration
+- **Cron Jobs**: Enabled with protection bypass authentication
+
+**Current Environment Variables:**
+
 ```
 SUPABASE_URL=https://ackcgrnizuhauccnbiml.supabase.co
 SUPABASE_ANON_KEY=[anon_key]
@@ -106,6 +114,7 @@ ADMIN_EMAIL=mcddsl@icloud.com
 LINKEDIN_CLIENT_ID=78wmrhdd99ssbi
 LINKEDIN_CLIENT_SECRET=WPL_AP1.hCyy0nkGz9y5i1tP.ExgKnQ==
 AMAZON_ASSOCIATE_ID=mybookshelf-20
+VERCEL_AUTOMATION_BYPASS_SECRET=amybookshelfautomationbypass2025
 ```
 
 ---
@@ -363,14 +372,17 @@ AMAZON_ASSOCIATE_ID=mybookshelf-20
 - ✅ **Phase 1**: LinkedIn Automation System (98% complete - blocked by API approval)
 - ✅ **Phase 2**: Automated Price Tracking System (100% complete)
 
-### **Phase 3 Candidates**
+### **Phase 3 Status: On Hold**
 
-- **Revenue Analytics Dashboard**: Real-time affiliate performance tracking
+**Phase 3 Focus**: Advanced analytics and optimization to be implemented after LinkedIn posting system is operational and generating data.
+
+**Future Analytics Candidates** (post-LinkedIn approval):
+
+- **Revenue Analytics Dashboard**: Real-time Amazon affiliate performance tracking
 - **Intelligent Content Optimization**: AI-driven posting strategy based on performance data
-- **Advanced Price Intelligence**: Competitor price tracking and dynamic pricing alerts
 - **Customer Behavior Analytics**: LinkedIn engagement analysis and optimization
-- **Automated Inventory Management**: Out-of-stock handling and product rotation
-- **Performance-Based Product Curation**: Data-driven book/accessory selection
+
+**Note**: Competitor price tracking and complex inventory management not needed for Amazon affiliate program model.
 
 ---
 
