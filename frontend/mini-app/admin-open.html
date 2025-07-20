@@ -191,52 +191,133 @@
       .book-details strong {
         color: #333;
       }
+
+      .nav-tabs {
+        display: flex;
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .nav-tab {
+        flex: 1;
+        padding: 15px 20px;
+        background: white;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        color: #666;
+      }
+
+      .nav-tab.active {
+        background: #ff9800;
+        color: white;
+      }
+
+      .nav-tab:hover:not(.active) {
+        background: #f5f5f5;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .price-info {
+        background: #e8f5e8;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin: 5px 0;
+        font-size: 0.9em;
+      }
+
+      .price-out-of-stock {
+        background: #ffebee;
+        color: #d32f2f;
+      }
+
+      .price-updated {
+        background: #e3f2fd;
+        color: #1976d2;
+      }
     </style>
   </head>
   <body>
-    <div
-      style="
-        background: red;
-        color: white;
-        text-align: center;
-        font-size: 2em;
-        padding: 20px;
-      "
-    >
-      ADMIN-OPEN.HTML - TEST BANNER
-    </div>
-    <!-- TEST BANNER ABOVE -->
-
-    <button class="refresh-btn" onclick="loadBooks()">🔄 Refresh</button>
+    <button class="refresh-btn" onclick="refreshCurrentTab()">
+      🔄 Refresh
+    </button>
 
     <div class="container">
       <div class="header">
         <h1>📚 MyBookshelf Admin Dashboard</h1>
-        <p>Manage book approvals and LinkedIn posting schedule</p>
+        <p>Manage book approvals and price tracking system</p>
       </div>
 
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-number" id="total-books">-</div>
-          <div class="stat-label">Total Books</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="pending-books">-</div>
-          <div class="stat-label">Pending Approval</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="approved-books">-</div>
-          <div class="stat-label">Approved</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="rejected-books">-</div>
-          <div class="stat-label">Rejected</div>
-        </div>
+      <div class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('pending')">
+          📋 Pending Books
+        </button>
+        <button class="nav-tab" onclick="switchTab('pricing')">
+          💰 Price Tracking
+        </button>
       </div>
 
-      <div id="loading" class="loading">Loading books...</div>
+      <!-- Pending Books Tab -->
+      <div id="pending-tab" class="tab-content active">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="total-books">-</div>
+            <div class="stat-label">Total Books</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="pending-books">-</div>
+            <div class="stat-label">Pending Approval</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="approved-books">-</div>
+            <div class="stat-label">Approved</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="rejected-books">-</div>
+            <div class="stat-label">Rejected</div>
+          </div>
+        </div>
 
-      <div id="books-grid" class="books-grid" style="display: none"></div>
+        <div id="loading" class="loading">Loading books...</div>
+        <div id="books-grid" class="books-grid" style="display: none"></div>
+      </div>
+
+      <!-- Price Tracking Tab -->
+      <div id="pricing-tab" class="tab-content">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="total-items">-</div>
+            <div class="stat-label">Total Items</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="active-items">-</div>
+            <div class="stat-label">Active Items</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="out-of-stock-items">-</div>
+            <div class="stat-label">Out of Stock</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="checked-today">-</div>
+            <div class="stat-label">Checked Today</div>
+          </div>
+        </div>
+
+        <div id="price-loading" class="loading">Loading price data...</div>
+        <div id="price-grid" class="books-grid" style="display: none"></div>
+      </div>
     </div>
 
     <script>
@@ -251,6 +332,29 @@
       );
 
       let pendingBooks = [];
+      let priceData = [];
+
+      // Tab switching function
+      function switchTab(tabName) {
+        // Remove active class from all tabs and content
+        document
+          .querySelectorAll(".nav-tab")
+          .forEach((tab) => tab.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((content) => content.classList.remove("active"));
+
+        // Add active class to selected tab and content
+        event.target.classList.add("active");
+        document.getElementById(tabName + "-tab").classList.add("active");
+
+        // Load data for the selected tab
+        if (tabName === "pending") {
+          loadBooks();
+        } else if (tabName === "pricing") {
+          loadPriceData();
+        }
+      }
 
       // Load books from Supabase
       async function loadBooks() {
@@ -367,6 +471,121 @@
           alert(`Book ${status} successfully!`);
         } catch (error) {
           alert("Error updating book: " + error.message);
+        }
+      }
+
+      // Load price tracking data
+      async function loadPriceData() {
+        try {
+          document.getElementById("price-loading").style.display = "block";
+          document.getElementById("price-grid").style.display = "none";
+
+          const { data, error } = await supabase
+            .from("books_accessories")
+            .select("*")
+            .order("price_updated_at", { ascending: false });
+
+          if (error) {
+            throw new Error("Failed to load price data: " + error.message);
+          }
+
+          priceData = data || [];
+          updatePriceStats();
+          renderPriceGrid();
+
+          document.getElementById("price-loading").style.display = "none";
+          document.getElementById("price-grid").style.display = "grid";
+        } catch (error) {
+          document.getElementById("price-loading").style.display = "none";
+          alert("Error loading price data: " + error.message);
+        }
+      }
+
+      // Update price statistics
+      function updatePriceStats() {
+        const now = new Date();
+        const today = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate()
+        );
+
+        const totalItems = priceData.length;
+        const activeItems = priceData.filter(
+          (item) => item.price_status === "active"
+        ).length;
+        const outOfStockItems = priceData.filter(
+          (item) => item.price_status === "out_of_stock"
+        ).length;
+        const checkedToday = priceData.filter((item) => {
+          if (!item.last_price_check) return false;
+          const checkDate = new Date(item.last_price_check);
+          return checkDate >= today;
+        }).length;
+
+        document.getElementById("total-items").textContent = totalItems;
+        document.getElementById("active-items").textContent = activeItems;
+        document.getElementById("out-of-stock-items").textContent =
+          outOfStockItems;
+        document.getElementById("checked-today").textContent = checkedToday;
+      }
+
+      // Render price tracking grid
+      function renderPriceGrid() {
+        const grid = document.getElementById("price-grid");
+        grid.innerHTML = priceData
+          .map((item) => {
+            const lastCheck = item.last_price_check
+              ? new Date(item.last_price_check).toLocaleDateString()
+              : "Never";
+            const lastUpdate = item.price_updated_at
+              ? new Date(item.price_updated_at).toLocaleDateString()
+              : "Never";
+
+            const statusClass =
+              item.price_status === "out_of_stock"
+                ? "price-out-of-stock"
+                : item.price_status === "active"
+                ? "price-info"
+                : "price-updated";
+
+            return `
+              <div class="book-card">
+                <div class="book-title">${item.title}</div>
+                <div class="book-author">by ${item.author || "Unknown"}</div>
+                
+                <div class="price-info ${statusClass}">
+                  <strong>Status:</strong> ${item.price_status || "unknown"}<br>
+                  <strong>Current Price:</strong> $${item.price || "N/A"}<br>
+                  <strong>Last Check:</strong> ${lastCheck}<br>
+                  <strong>Last Update:</strong> ${lastUpdate}<br>
+                  <strong>Fetch Attempts:</strong> ${
+                    item.price_fetch_attempts || 0
+                  }
+                </div>
+                
+                <div class="book-details">
+                  <strong>Category:</strong> ${item.category || "N/A"}<br>
+                  <strong>Source:</strong> ${item.price_source || "manual"}<br>
+                  ${
+                    item.affiliate_link
+                      ? "<strong>Affiliate Link:</strong> ✅<br>"
+                      : "<strong>Affiliate Link:</strong> ❌<br>"
+                  }
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      // Refresh current tab
+      function refreshCurrentTab() {
+        const activeTab = document.querySelector(".tab-content.active");
+        if (activeTab.id === "pending-tab") {
+          loadBooks();
+        } else if (activeTab.id === "pricing-tab") {
+          loadPriceData();
         }
       }
 
