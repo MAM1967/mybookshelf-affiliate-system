@@ -1,5 +1,7 @@
 # MyBookshelf Affiliate System - Status Update (as of July 20, 2025)
 
+Last Updated: July 20, 2025 - Book cover scraping and psychological pricing implementation complete
+
 ## System Overview
 
 - Automates LinkedIn posting of Christian leadership and business books with Amazon affiliate links.
@@ -28,19 +30,32 @@
 
 ## Recent Developments
 
+- **BOOK COVER & PRICING BREAKTHROUGH (July 20, 2025)**: Completed visual approval system with real Amazon book covers:
+
+  - **Real Amazon Book Covers**: Successfully implemented web scraping to bypass PA API restrictions (8/8 pending books updated)
+  - **Psychological Pricing**: Fixed price extraction to include proper cents ($9.99, $14.81) instead of artificial round numbers ($10.00, $15.00)
+  - **Enhanced Daily Price Updates**: Integrated improved price extraction logic into nightly cron job for format-aware pricing
+  - **Visual Admin Interface**: Admin dashboard now displays professional book covers with realistic pricing for approval workflow
+  - **Amazon Integration**: Direct scraping with Goodreads fallback, proper ASIN tracking, and mybookshelf-20 affiliate links
+  - **No PA API Dependency**: Completely bypassed Amazon Product Advertising API rate limit issues with direct web scraping
+
 - **MCP Server Implementation**: Completed comprehensive MCP server with 8 monitoring tools:
+
   - LinkedIn posting status and visibility tracking
   - Revenue and affiliate link monitoring
   - Approval workflow status
   - Performance metrics and error tracking
   - System health checks
   - Affiliate product management
+
 - **CI/CD Pipeline Completely Disabled**: Disabled entire CI/CD pipeline to stop GitHub job error emails:
+
   - Commented out entire workflow file to prevent any CI/CD jobs from running
   - Stops all GitHub job error notifications and failed build emails
   - Preserves all configuration for easy re-enablement later
   - Clear instructions on when to uncomment and restart CI/CD
   - Status: All CI/CD paused until LinkedIn API approval and coding efforts resume
+
 - Fixed Supabase environment variable issues in Vercel (set as plain values, not secrets).
 - Added missing `refresh_token` column to `linkedin_tokens` table.
 - Confirmed new tokens are being stored and used.
