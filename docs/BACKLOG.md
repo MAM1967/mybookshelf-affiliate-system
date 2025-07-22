@@ -374,3 +374,38 @@
 ## TOP PRIORITY (after approval)
 
 - Complete LinkedIn organization posting integration and test with w_organization_social scope.
+
+## NEXT TECHNICAL PRIORITY - SCALABILITY
+
+### Price Updater Generalization & Scalability
+
+**Priority**: HIGH - **T-Shirt Size**: M (1-2 weeks)
+
+**Problem**: Current price updater system is designed for a specific case of 97 items. As the catalog grows beyond 97 items, the system needs to be more generalized to handle any number of items dynamically.
+
+**Current State**:
+
+- Fixed references to "97 items" in code and documentation
+- System assumes specific item count in processing logic
+- Not scalable for future catalog expansion
+
+**Required Changes**:
+
+- ✅ **Dynamic Item Counting**: Remove hardcoded references to "97 items"
+- ✅ **Scalable Processing**: Ensure system handles 100, 200, 500+ items efficiently
+- ✅ **Performance Optimization**: Implement batching for large catalogs
+- ✅ **Memory Management**: Handle large datasets without memory issues
+- ✅ **Timeout Management**: Ensure Vercel function limits are respected (5-minute max)
+- ✅ **Progress Reporting**: Enhanced logging for larger item sets
+- ✅ **Rate Limiting**: Adaptive delays based on catalog size
+- ✅ **Error Recovery**: Better handling of failures in large batches
+
+**Technical Specifications**:
+
+- **Target**: Support up to 1,000+ items efficiently
+- **Batch Size**: Process items in configurable batches (50-100 items per batch)
+- **Timeout Handling**: Graceful handling of Vercel's 5-minute function limit
+- **Progress Tracking**: Report progress every 10% completion for large catalogs
+- **Adaptive Rate Limiting**: Scale delay times based on total item count
+
+**Implementation Priority**: Address immediately after LinkedIn API approval to ensure system scales with business growth.
