@@ -19,7 +19,7 @@
   ],
   "crons": [
     {
-      "path": "/api/price-updater-js",
+      "path": "/api/update-prices",
       "schedule": "0 1 * * *"
     }
   ],
