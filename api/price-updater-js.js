@@ -226,6 +226,17 @@ class PriceUpdater {
       const itemId = item.id;
       const oldPrice = parseFloat(item.price) || 0;
 
+      // 🔍 DEBUG: Function entry point logging
+      console.log(`🔍 DEBUG: updateItemPrice ENTRY for "${item.title}"`);
+      console.log(
+        `🔍 DEBUG: oldPrice=${oldPrice}, newPrice=${newPrice}, status="${status}"`
+      );
+      console.log(`🔍 DEBUG: item.id=${itemId}, item.price="${item.price}"`);
+      console.log(`🔍 DEBUG: Notes: "${notes}"`);
+      console.log(
+        `🔍 DEBUG: About to check if newPrice !== null: ${newPrice !== null}`
+      );
+
       // Prepare update data
       const updateData = {
         last_price_check: new Date().toISOString(),
@@ -236,6 +247,11 @@ class PriceUpdater {
 
       // Update price if we got a valid price
       if (newPrice !== null) {
+        console.log(`🔍 DEBUG: newPrice is not null, proceeding to validation`);
+        console.log(
+          `🔍 DEBUG: About to call validatePriceChange with oldPrice=${oldPrice}, newPrice=${newPrice}`
+        );
+
         // PRICE VALIDATION: Check for extreme price changes (bidirectional)
         const priceValidation = this.validatePriceChange(
           oldPrice,
@@ -243,7 +259,18 @@ class PriceUpdater {
           item.title
         );
 
+        console.log(`🔍 DEBUG: validatePriceChange returned:`, priceValidation);
+        console.log(
+          `🔍 DEBUG: priceValidation.isValid = ${priceValidation.isValid}`
+        );
+
+        console.log(`🔍 DEBUG: Evaluating validation result...`);
+        console.log(
+          `🔍 DEBUG: priceValidation.isValid = ${priceValidation.isValid}`
+        );
+
         if (!priceValidation.isValid) {
+          console.log(`🚨 DEBUG: ENTERING REJECTION PATH`);
           console.warn(`🚨 Price change REJECTED: ${item.title}`);
           console.warn(
             `   $${oldPrice} → $${newPrice} (${
@@ -261,6 +288,9 @@ class PriceUpdater {
 
           // Track rejected price changes in statistics
           this.stats.rejectedPriceChanges++;
+          console.log(
+            `🔍 DEBUG: Incremented rejectedPriceChanges to ${this.stats.rejectedPriceChanges}`
+          );
 
           // Don't update price, but still update check timestamp
           updateData.price_fetch_attempts =
@@ -268,7 +298,12 @@ class PriceUpdater {
           notes = `${notes} | REJECTED: ${
             priceValidation.reason
           } (${priceValidation.percentChange.toFixed(1)}%)`;
+          console.log(`🔍 DEBUG: NOT updating price, only updating timestamp`);
         } else {
+          console.log(`✅ DEBUG: ENTERING APPROVAL PATH`);
+          console.log(
+            `🔍 DEBUG: Price change approved, proceeding with database update`
+          );
           // Valid price change - proceed with update
           updateData.price = newPrice;
           updateData.price_updated_at = new Date().toISOString();
@@ -357,8 +392,15 @@ class PriceUpdater {
   }
 
   validatePriceChange(oldPrice, newPrice, itemTitle = "") {
+    // 🔍 DEBUG: Function entry logging
+    console.log(`🔍 DEBUG: validatePriceChange CALLED for "${itemTitle}"`);
+    console.log(
+      `🔍 DEBUG: Input parameters - oldPrice=${oldPrice}, newPrice=${newPrice}`
+    );
+
     // Configuration
     const MAX_CHANGE_PERCENT = 50; // Maximum allowed price change percentage
+    console.log(`🔍 DEBUG: MAX_CHANGE_PERCENT=${MAX_CHANGE_PERCENT}`);
 
     const validation = {
       isValid: true,
@@ -366,53 +408,91 @@ class PriceUpdater {
       percentChange: 0,
     };
 
+    console.log(`🔍 DEBUG: Initial validation object:`, validation);
+
     // Calculate percentage change
+    console.log(`🔍 DEBUG: Starting percentage calculation...`);
+
     if (oldPrice > 0) {
+      console.log(`🔍 DEBUG: oldPrice > 0, calculating percentage change`);
       validation.percentChange = ((newPrice - oldPrice) / oldPrice) * 100;
+      console.log(
+        `🔍 DEBUG: Calculated percentChange = ${validation.percentChange}`
+      );
     } else if (newPrice > 0) {
       // 0 → positive price (restocking) - always allowed
+      console.log(`🔍 DEBUG: Restocking case (0 → positive), allowing change`);
       validation.reason = "restocking_from_zero";
+      console.log(`🔍 DEBUG: RETURNING for restocking:`, validation);
       return validation;
     } else {
       // Both prices are 0 - no change
+      console.log(`🔍 DEBUG: Both prices are 0, no change`);
       validation.reason = "no_change";
+      console.log(`🔍 DEBUG: RETURNING for no change:`, validation);
       return validation;
     }
 
     // Check for legitimate out-of-stock (price → 0)
+    console.log(`🔍 DEBUG: Checking for out-of-stock case...`);
     if (oldPrice > 0 && newPrice === 0) {
+      console.log(`🔍 DEBUG: Out-of-stock case (price → 0), allowing change`);
       validation.reason = "out_of_stock";
+      console.log(`🔍 DEBUG: RETURNING for out-of-stock:`, validation);
       return validation; // Always allow going out of stock
     }
 
     // Check for extreme price changes (bidirectional)
+    console.log(`🔍 DEBUG: Checking for extreme price changes...`);
     const absChangePercent = Math.abs(validation.percentChange);
+    console.log(`🔍 DEBUG: absChangePercent = ${absChangePercent}`);
+    console.log(`🔍 DEBUG: MAX_CHANGE_PERCENT = ${MAX_CHANGE_PERCENT}`);
+    console.log(
+      `🔍 DEBUG: Is ${absChangePercent} > ${MAX_CHANGE_PERCENT}? ${
+        absChangePercent > MAX_CHANGE_PERCENT
+      }`
+    );
 
     if (absChangePercent > MAX_CHANGE_PERCENT) {
+      console.log(`🚨 DEBUG: EXTREME CHANGE DETECTED! Setting isValid = false`);
       validation.isValid = false;
 
       if (validation.percentChange > 0) {
         validation.reason = `extreme_increase_${absChangePercent.toFixed(
           1
         )}pct`;
+        console.log(
+          `🔍 DEBUG: Extreme increase case, reason = ${validation.reason}`
+        );
       } else {
         validation.reason = `extreme_decrease_${absChangePercent.toFixed(
           1
         )}pct`;
+        console.log(
+          `🔍 DEBUG: Extreme decrease case, reason = ${validation.reason}`
+        );
       }
 
+      console.log(`🔍 DEBUG: RETURNING for EXTREME change:`, validation);
       return validation;
+    } else {
+      console.log(`✅ DEBUG: Change is within acceptable limits`);
     }
 
     // Valid price change
+    console.log(`🔍 DEBUG: Categorizing acceptable change...`);
     if (absChangePercent > 25) {
       validation.reason = "large_but_acceptable_change";
+      console.log(`🔍 DEBUG: Large but acceptable change (>25%)`);
     } else if (absChangePercent > 10) {
       validation.reason = "moderate_change";
+      console.log(`🔍 DEBUG: Moderate change (10-25%)`);
     } else {
       validation.reason = "normal_change";
+      console.log(`🔍 DEBUG: Normal change (<10%)`);
     }
 
+    console.log(`🔍 DEBUG: FINAL RETURN for acceptable change:`, validation);
     return validation;
   }
 
