@@ -221,187 +221,17 @@ class PriceUpdater {
     }
   }
 
-  async updateItemPrice(item, newPrice, status, notes) {
+  // 🏗️ REFACTORED: Main orchestration function with single responsibility
+  async updateItemPrice(item, newPrice, status, notes = "") {
     try {
-      const itemId = item.id;
-      const oldPrice = parseFloat(item.price) || 0;
-
-      // 🔍 DEBUG: Function entry point logging
-      console.log(`🔍 DEBUG: updateItemPrice ENTRY for "${item.title}"`);
-      console.log(
-        `🔍 DEBUG: oldPrice=${oldPrice}, newPrice=${newPrice}, status="${status}"`
+      const context = this.buildUpdateContext(item, newPrice, status, notes);
+      const validationResult = this.validatePriceUpdate(context);
+      const updateResult = await this.persistPriceUpdate(
+        context,
+        validationResult
       );
-      console.log(`🔍 DEBUG: item.id=${itemId}, item.price="${item.price}"`);
-      console.log(`🔍 DEBUG: Notes: "${notes}"`);
-      console.log(
-        `🔍 DEBUG: About to check if newPrice !== null: ${newPrice !== null}`
-      );
-
-      // Prepare update data
-      const updateData = {
-        last_price_check: new Date().toISOString(),
-        price_status: status,
-        price_source: "automated",
-        price_fetch_attempts: (item.price_fetch_attempts || 0) + 1,
-      };
-
-      // Update price if we got a valid price
-      if (newPrice !== null) {
-        console.log(`🔍 DEBUG: newPrice is not null, proceeding to validation`);
-        console.log(
-          `🔍 DEBUG: About to call validatePriceChange with oldPrice=${oldPrice}, newPrice=${newPrice}`
-        );
-
-        // PRICE VALIDATION: Check for extreme price changes (bidirectional)
-        const priceValidation = this.validatePriceChange(
-          oldPrice,
-          newPrice,
-          item.title
-        );
-
-        console.log(`🔍 DEBUG: validatePriceChange returned:`, priceValidation);
-        console.log(
-          `🔍 DEBUG: priceValidation.isValid = ${priceValidation.isValid}`
-        );
-
-        console.log(`🔍 DEBUG: Evaluating validation result...`);
-        console.log(
-          `🔍 DEBUG: priceValidation.isValid = ${priceValidation.isValid}`
-        );
-
-        if (!priceValidation.isValid) {
-          console.log(`🚨 DEBUG: ENTERING REJECTION PATH`);
-          console.warn(`🚨 Price change REJECTED: ${item.title}`);
-          console.warn(
-            `   $${oldPrice} → $${newPrice} (${
-              priceValidation.percentChange > 0 ? "+" : ""
-            }${priceValidation.percentChange.toFixed(1)}%)`
-          );
-          console.warn(`   Reason: ${priceValidation.reason}`);
-          console.warn(
-            `   ASIN: ${
-              item.affiliate_link
-                ? item.affiliate_link.split("/dp/")[1]?.split("/")[0]
-                : "unknown"
-            }`
-          );
-
-          // Track rejected price changes in statistics
-          this.stats.rejectedPriceChanges++;
-          console.log(
-            `🔍 DEBUG: Incremented rejectedPriceChanges to ${this.stats.rejectedPriceChanges}`
-          );
-
-          // Don't update price, but still update check timestamp
-          updateData.price_fetch_attempts =
-            (item.price_fetch_attempts || 0) + 1;
-          notes = `${notes} | REJECTED: ${
-            priceValidation.reason
-          } (${priceValidation.percentChange.toFixed(1)}%)`;
-          console.log(`🔍 DEBUG: NOT updating price, only updating timestamp`);
-
-          // 🔧 FIX: Update database with rejection data (no price change)
-          const { error: updateError } = await supabase
-            .from("books_accessories")
-            .update(updateData)
-            .eq("id", itemId);
-
-          if (updateError) throw updateError;
-        } else {
-          console.log(`✅ DEBUG: ENTERING APPROVAL PATH`);
-          console.log(
-            `🔍 DEBUG: Price change approved, proceeding with database update`
-          );
-
-          // Valid price change - proceed with update
-          updateData.price = newPrice;
-          updateData.price_updated_at = new Date().toISOString();
-          updateData.price_fetch_attempts = 0; // Reset attempts on success
-
-          if (Math.abs(priceValidation.percentChange) > 25) {
-            console.log(`📊 Large price change APPROVED: ${item.title}`);
-            console.log(
-              `   $${oldPrice} → $${newPrice} (${
-                priceValidation.percentChange > 0 ? "+" : ""
-              }${priceValidation.percentChange.toFixed(1)}%)`
-            );
-            console.log(`   Reason: ${priceValidation.reason}`);
-          }
-
-          // 🔧 FIX: Update database with approved price change
-          const { error: updateError } = await supabase
-            .from("books_accessories")
-            .update(updateData)
-            .eq("id", itemId);
-
-          if (updateError) throw updateError;
-
-          // 🔧 FIX: Log price change history only for APPROVED changes
-          if (newPrice !== oldPrice) {
-            const priceChange = newPrice - oldPrice;
-            const priceChangePercent =
-              oldPrice > 0 ? (priceChange / oldPrice) * 100 : null;
-
-            // Insert into price history
-            const historyData = {
-              book_id: itemId,
-              old_price: oldPrice,
-              new_price: newPrice,
-              price_change: priceChange,
-              price_change_percent: priceChangePercent,
-              update_source: "automated",
-              notes: notes,
-            };
-
-            const { error: historyError } = await supabase
-              .from("price_history")
-              .insert(historyData);
-
-            if (historyError) {
-              console.warn("Failed to insert price history:", historyError);
-            }
-
-            // Update statistics
-            if (priceChange > 0) {
-              this.stats.priceIncreases++;
-            } else if (priceChange < 0) {
-              this.stats.priceDecreases++;
-            }
-
-            this.stats.totalPriceChange += priceChange;
-
-            console.log(
-              `   📊 Price change: $${oldPrice} → $${newPrice} (${
-                priceChange >= 0 ? "+" : ""
-              }${priceChange.toFixed(2)})`
-            );
-          } else {
-            this.stats.unchangedItems++;
-          }
-        }
-      } else {
-        // 🔧 FIX: Handle case where newPrice is null (no price found)
-        const { error: updateError } = await supabase
-          .from("books_accessories")
-          .update(updateData)
-          .eq("id", itemId);
-
-        if (updateError) throw updateError;
-      }
-
-      // 🔧 FIX: Price history logging moved inside validation approval block
-
-      // Track successful item update regardless of price change
-      this.stats.updatedItems++;
-
-      // Update status counters
-      if (status === "out_of_stock") {
-        this.stats.outOfStockItems++;
-      } else if (status === "error") {
-        this.stats.errorItems++;
-      }
-
-      return true;
+      this.updateStatistics(context, validationResult, updateResult);
+      return updateResult.success;
     } catch (error) {
       console.error(
         `❌ Failed to update item ${item.title || "unknown"}:`,
@@ -412,16 +242,272 @@ class PriceUpdater {
     }
   }
 
-  validatePriceChange(oldPrice, newPrice, itemTitle = "") {
-    // 🔍 DEBUG: Function entry logging
-    console.log(`🔍 DEBUG: validatePriceChange CALLED for "${itemTitle}"`);
-    console.log(
-      `🔍 DEBUG: Input parameters - oldPrice=${oldPrice}, newPrice=${newPrice}`
+  // 🏗️ EXTRACTED: Build immutable context object
+  buildUpdateContext(item, newPrice, status, notes) {
+    const oldPrice = parseFloat(item.price) || 0;
+    const timestamp = new Date().toISOString();
+
+    return {
+      item: {
+        id: item.id,
+        title: item.title,
+        price: oldPrice,
+        priceString: item.price,
+        affiliateLink: item.affiliate_link,
+        fetchAttempts: item.price_fetch_attempts || 0,
+      },
+      pricing: {
+        oldPrice,
+        newPrice,
+        hasNewPrice: newPrice !== null,
+      },
+      metadata: {
+        status,
+        notes,
+        timestamp,
+        source: "automated",
+      },
+    };
+  }
+
+  // 🏗️ EXTRACTED: Clean validation with clear business rules
+  validatePriceUpdate(context) {
+    const { pricing, item } = context;
+
+    // No price found - always valid (will update timestamp only)
+    if (!pricing.hasNewPrice) {
+      return {
+        isValid: true,
+        action: "timestamp_only",
+        reason: "no_price_found",
+        percentChange: 0,
+      };
+    }
+
+    // Delegate to existing price change validation
+    const validation = this.validatePriceChange(
+      pricing.oldPrice,
+      pricing.newPrice,
+      item.title
     );
 
-    // Configuration
-    const MAX_CHANGE_PERCENT = 50; // Maximum allowed price change percentage
-    console.log(`🔍 DEBUG: MAX_CHANGE_PERCENT=${MAX_CHANGE_PERCENT}`);
+    return {
+      isValid: validation.isValid,
+      action: validation.isValid
+        ? "approve_price_change"
+        : "reject_price_change",
+      reason: validation.reason,
+      percentChange: validation.percentChange,
+    };
+  }
+
+  // 🏗️ EXTRACTED: Single database operation with clear transaction boundaries
+  async persistPriceUpdate(context, validationResult) {
+    const { item, pricing, metadata } = context;
+
+    const baseUpdateData = {
+      last_price_check: metadata.timestamp,
+      price_status: metadata.status,
+      price_source: metadata.source,
+      price_fetch_attempts: item.fetchAttempts + 1,
+    };
+
+    try {
+      if (validationResult.action === "approve_price_change") {
+        return await this.persistApprovedPriceChange(
+          context,
+          validationResult,
+          baseUpdateData
+        );
+      } else if (validationResult.action === "reject_price_change") {
+        return await this.persistRejectedPriceChange(
+          context,
+          validationResult,
+          baseUpdateData
+        );
+      } else {
+        return await this.persistTimestampUpdate(context, baseUpdateData);
+      }
+    } catch (error) {
+      console.error("Database operation failed:", error);
+      return { success: false, error };
+    }
+  }
+
+  // 🏗️ EXTRACTED: Handle approved price changes with transaction safety
+  async persistApprovedPriceChange(context, validationResult, baseUpdateData) {
+    const { item, pricing, metadata } = context;
+
+    // Prepare approved price update
+    const updateData = {
+      ...baseUpdateData,
+      price: pricing.newPrice,
+      price_updated_at: metadata.timestamp,
+      price_fetch_attempts: 0, // Reset on successful update
+    };
+
+    // Update main record
+    const { error: updateError } = await supabase
+      .from("books_accessories")
+      .update(updateData)
+      .eq("id", item.id);
+
+    if (updateError) throw updateError;
+
+    // Log price history for approved changes
+    if (pricing.newPrice !== pricing.oldPrice) {
+      await this.logPriceHistory(context, validationResult);
+    }
+
+    // Log large approved changes
+    if (Math.abs(validationResult.percentChange) > 25) {
+      console.log(`📊 Large price change APPROVED: ${item.title}`);
+      console.log(
+        `   $${pricing.oldPrice} → $${pricing.newPrice} (${
+          validationResult.percentChange > 0 ? "+" : ""
+        }${validationResult.percentChange.toFixed(1)}%)`
+      );
+      console.log(`   Reason: ${validationResult.reason}`);
+    }
+
+    return {
+      success: true,
+      action: "approved",
+      priceChanged: pricing.newPrice !== pricing.oldPrice,
+    };
+  }
+
+  // 🏗️ EXTRACTED: Handle rejected price changes
+  async persistRejectedPriceChange(context, validationResult, baseUpdateData) {
+    const { item, pricing, metadata } = context;
+
+    // Log rejection
+    console.warn(`🚨 Price change REJECTED: ${item.title}`);
+    console.warn(
+      `   $${pricing.oldPrice} → $${pricing.newPrice} (${
+        validationResult.percentChange > 0 ? "+" : ""
+      }${validationResult.percentChange.toFixed(1)}%)`
+    );
+    console.warn(`   Reason: ${validationResult.reason}`);
+    console.warn(`   ASIN: ${this.extractASIN(item.affiliateLink)}`);
+
+    // Update notes with rejection reason
+    const updatedNotes = `${metadata.notes} | REJECTED: ${
+      validationResult.reason
+    } (${validationResult.percentChange.toFixed(1)}%)`;
+
+    const updateData = {
+      ...baseUpdateData,
+      // Don't update price - keep existing price
+    };
+
+    // Update main record (timestamp only)
+    const { error: updateError } = await supabase
+      .from("books_accessories")
+      .update(updateData)
+      .eq("id", item.id);
+
+    if (updateError) throw updateError;
+
+    return {
+      success: true,
+      action: "rejected",
+      priceChanged: false,
+    };
+  }
+
+  // 🏗️ EXTRACTED: Handle timestamp-only updates
+  async persistTimestampUpdate(context, baseUpdateData) {
+    const { item } = context;
+
+    const { error: updateError } = await supabase
+      .from("books_accessories")
+      .update(baseUpdateData)
+      .eq("id", item.id);
+
+    if (updateError) throw updateError;
+
+    return {
+      success: true,
+      action: "timestamp_only",
+      priceChanged: false,
+    };
+  }
+
+  // 🏗️ EXTRACTED: Clean price history logging
+  async logPriceHistory(context, validationResult) {
+    const { item, pricing, metadata } = context;
+    const priceChange = pricing.newPrice - pricing.oldPrice;
+    const priceChangePercent =
+      pricing.oldPrice > 0 ? (priceChange / pricing.oldPrice) * 100 : null;
+
+    const historyData = {
+      book_id: item.id,
+      old_price: pricing.oldPrice,
+      new_price: pricing.newPrice,
+      price_change: priceChange,
+      price_change_percent: priceChangePercent,
+      update_source: metadata.source,
+      notes: metadata.notes,
+    };
+
+    const { error: historyError } = await supabase
+      .from("price_history")
+      .insert(historyData);
+
+    if (historyError) {
+      console.warn("Failed to insert price history:", historyError);
+    }
+  }
+
+  // 🏗️ EXTRACTED: Clean statistics updates with no side effects
+  updateStatistics(context, validationResult, updateResult) {
+    const { pricing, metadata } = context;
+
+    // Track overall processing
+    this.stats.updatedItems++;
+
+    // Track status-specific counters
+    if (metadata.status === "out_of_stock") {
+      this.stats.outOfStockItems++;
+    } else if (metadata.status === "error") {
+      this.stats.errorItems++;
+    }
+
+    // Track validation results
+    if (validationResult.action === "reject_price_change") {
+      this.stats.rejectedPriceChanges++;
+    } else if (updateResult.priceChanged) {
+      const priceChange = pricing.newPrice - pricing.oldPrice;
+
+      if (priceChange > 0) {
+        this.stats.priceIncreases++;
+      } else if (priceChange < 0) {
+        this.stats.priceDecreases++;
+      }
+
+      this.stats.totalPriceChange += priceChange;
+
+      console.log(
+        `   📊 Price change: $${pricing.oldPrice} → $${pricing.newPrice} (${
+          priceChange >= 0 ? "+" : ""
+        }${priceChange.toFixed(2)})`
+      );
+    } else {
+      this.stats.unchangedItems++;
+    }
+  }
+
+  // 🏗️ EXTRACTED: Utility function for ASIN extraction
+  extractASIN(affiliateLink) {
+    if (!affiliateLink) return "unknown";
+    const match = affiliateLink.split("/dp/")[1];
+    return match ? match.split("/")[0] : "unknown";
+  }
+
+  // 🏗️ CLEANED: Validation function with clear business logic
+  validatePriceChange(oldPrice, newPrice, itemTitle = "") {
+    const MAX_CHANGE_PERCENT = 50;
 
     const validation = {
       isValid: true,
@@ -429,91 +515,53 @@ class PriceUpdater {
       percentChange: 0,
     };
 
-    console.log(`🔍 DEBUG: Initial validation object:`, validation);
-
     // Calculate percentage change
-    console.log(`🔍 DEBUG: Starting percentage calculation...`);
-
     if (oldPrice > 0) {
-      console.log(`🔍 DEBUG: oldPrice > 0, calculating percentage change`);
       validation.percentChange = ((newPrice - oldPrice) / oldPrice) * 100;
-      console.log(
-        `🔍 DEBUG: Calculated percentChange = ${validation.percentChange}`
-      );
     } else if (newPrice > 0) {
       // 0 → positive price (restocking) - always allowed
-      console.log(`🔍 DEBUG: Restocking case (0 → positive), allowing change`);
       validation.reason = "restocking_from_zero";
-      console.log(`🔍 DEBUG: RETURNING for restocking:`, validation);
       return validation;
     } else {
       // Both prices are 0 - no change
-      console.log(`🔍 DEBUG: Both prices are 0, no change`);
       validation.reason = "no_change";
-      console.log(`🔍 DEBUG: RETURNING for no change:`, validation);
       return validation;
     }
 
     // Check for legitimate out-of-stock (price → 0)
-    console.log(`🔍 DEBUG: Checking for out-of-stock case...`);
     if (oldPrice > 0 && newPrice === 0) {
-      console.log(`🔍 DEBUG: Out-of-stock case (price → 0), allowing change`);
       validation.reason = "out_of_stock";
-      console.log(`🔍 DEBUG: RETURNING for out-of-stock:`, validation);
-      return validation; // Always allow going out of stock
+      return validation;
     }
 
     // Check for extreme price changes (bidirectional)
-    console.log(`🔍 DEBUG: Checking for extreme price changes...`);
     const absChangePercent = Math.abs(validation.percentChange);
-    console.log(`🔍 DEBUG: absChangePercent = ${absChangePercent}`);
-    console.log(`🔍 DEBUG: MAX_CHANGE_PERCENT = ${MAX_CHANGE_PERCENT}`);
-    console.log(
-      `🔍 DEBUG: Is ${absChangePercent} > ${MAX_CHANGE_PERCENT}? ${
-        absChangePercent > MAX_CHANGE_PERCENT
-      }`
-    );
 
     if (absChangePercent > MAX_CHANGE_PERCENT) {
-      console.log(`🚨 DEBUG: EXTREME CHANGE DETECTED! Setting isValid = false`);
       validation.isValid = false;
 
       if (validation.percentChange > 0) {
         validation.reason = `extreme_increase_${absChangePercent.toFixed(
           1
         )}pct`;
-        console.log(
-          `🔍 DEBUG: Extreme increase case, reason = ${validation.reason}`
-        );
       } else {
         validation.reason = `extreme_decrease_${absChangePercent.toFixed(
           1
         )}pct`;
-        console.log(
-          `🔍 DEBUG: Extreme decrease case, reason = ${validation.reason}`
-        );
       }
 
-      console.log(`🔍 DEBUG: RETURNING for EXTREME change:`, validation);
       return validation;
-    } else {
-      console.log(`✅ DEBUG: Change is within acceptable limits`);
     }
 
-    // Valid price change
-    console.log(`🔍 DEBUG: Categorizing acceptable change...`);
+    // Valid price change - categorize by magnitude
     if (absChangePercent > 25) {
       validation.reason = "large_but_acceptable_change";
-      console.log(`🔍 DEBUG: Large but acceptable change (>25%)`);
     } else if (absChangePercent > 10) {
       validation.reason = "moderate_change";
-      console.log(`🔍 DEBUG: Moderate change (10-25%)`);
     } else {
       validation.reason = "normal_change";
-      console.log(`🔍 DEBUG: Normal change (<10%)`);
     }
 
-    console.log(`🔍 DEBUG: FINAL RETURN for acceptable change:`, validation);
     return validation;
   }
 
