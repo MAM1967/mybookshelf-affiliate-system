@@ -299,11 +299,20 @@ class PriceUpdater {
             priceValidation.reason
           } (${priceValidation.percentChange.toFixed(1)}%)`;
           console.log(`🔍 DEBUG: NOT updating price, only updating timestamp`);
+
+          // 🔧 FIX: Update database with rejection data (no price change)
+          const { error: updateError } = await supabase
+            .from("books_accessories")
+            .update(updateData)
+            .eq("id", itemId);
+
+          if (updateError) throw updateError;
         } else {
           console.log(`✅ DEBUG: ENTERING APPROVAL PATH`);
           console.log(
             `🔍 DEBUG: Price change approved, proceeding with database update`
           );
+
           // Valid price change - proceed with update
           updateData.price = newPrice;
           updateData.price_updated_at = new Date().toISOString();
@@ -318,60 +327,72 @@ class PriceUpdater {
             );
             console.log(`   Reason: ${priceValidation.reason}`);
           }
+
+          // 🔧 FIX: Update database with approved price change
+          const { error: updateError } = await supabase
+            .from("books_accessories")
+            .update(updateData)
+            .eq("id", itemId);
+
+          if (updateError) throw updateError;
+
+          // 🔧 FIX: Log price change history only for APPROVED changes
+          if (newPrice !== oldPrice) {
+            const priceChange = newPrice - oldPrice;
+            const priceChangePercent =
+              oldPrice > 0 ? (priceChange / oldPrice) * 100 : null;
+
+            // Insert into price history
+            const historyData = {
+              book_id: itemId,
+              old_price: oldPrice,
+              new_price: newPrice,
+              price_change: priceChange,
+              price_change_percent: priceChangePercent,
+              update_source: "automated",
+              notes: notes,
+            };
+
+            const { error: historyError } = await supabase
+              .from("price_history")
+              .insert(historyData);
+
+            if (historyError) {
+              console.warn("Failed to insert price history:", historyError);
+            }
+
+            // Update statistics
+            if (priceChange > 0) {
+              this.stats.priceIncreases++;
+            } else if (priceChange < 0) {
+              this.stats.priceDecreases++;
+            }
+
+            this.stats.totalPriceChange += priceChange;
+
+            console.log(
+              `   📊 Price change: $${oldPrice} → $${newPrice} (${
+                priceChange >= 0 ? "+" : ""
+              }${priceChange.toFixed(2)})`
+            );
+          } else {
+            this.stats.unchangedItems++;
+          }
         }
-      }
-
-      // Update the main record
-      const { error: updateError } = await supabase
-        .from("books_accessories")
-        .update(updateData)
-        .eq("id", itemId);
-
-      if (updateError) throw updateError;
-
-      // Log price change if price actually changed
-      if (newPrice !== null && newPrice !== oldPrice) {
-        const priceChange = newPrice - oldPrice;
-        const priceChangePercent =
-          oldPrice > 0 ? (priceChange / oldPrice) * 100 : null;
-
-        // Insert into price history
-        const historyData = {
-          book_id: itemId,
-          old_price: oldPrice,
-          new_price: newPrice,
-          price_change: priceChange,
-          price_change_percent: priceChangePercent,
-          update_source: "automated",
-          notes: notes,
-        };
-
-        const { error: historyError } = await supabase
-          .from("price_history")
-          .insert(historyData);
-
-        if (historyError) {
-          console.warn("Failed to insert price history:", historyError);
-        }
-
-        // Update statistics
-        if (priceChange > 0) {
-          this.stats.priceIncreases++;
-        } else if (priceChange < 0) {
-          this.stats.priceDecreases++;
-        }
-
-        this.stats.totalPriceChange += priceChange;
-        this.stats.updatedItems++;
-
-        console.log(
-          `   📊 Price change: $${oldPrice} → $${newPrice} (${
-            priceChange >= 0 ? "+" : ""
-          }${priceChange.toFixed(2)})`
-        );
       } else {
-        this.stats.unchangedItems++;
+        // 🔧 FIX: Handle case where newPrice is null (no price found)
+        const { error: updateError } = await supabase
+          .from("books_accessories")
+          .update(updateData)
+          .eq("id", itemId);
+
+        if (updateError) throw updateError;
       }
+
+      // 🔧 FIX: Price history logging moved inside validation approval block
+
+      // Track successful item update regardless of price change
+      this.stats.updatedItems++;
 
       // Update status counters
       if (status === "out_of_stock") {
