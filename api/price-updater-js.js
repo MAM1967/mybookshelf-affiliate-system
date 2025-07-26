@@ -423,8 +423,8 @@ class PriceUpdater {
 }
 
 export default async function handler(req, res) {
-  // Only allow POST requests (for security)
-  if (req.method !== "POST") {
+  // Allow GET requests for Vercel cron jobs and POST for manual triggers
+  if (req.method !== "GET" && req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
