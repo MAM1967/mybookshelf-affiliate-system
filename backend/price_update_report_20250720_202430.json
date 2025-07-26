@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-07-20T20:24:30.483260",
+  "statistics": {
+    "total_items": 24,
+    "updated_items": 23,
+    "unchanged_items": 1,
+    "out_of_stock_items": 14,
+    "error_items": 0,
+    "price_increases": 0,
+    "price_decreases": 23,
+    "total_price_change": -712.71
+  }
+}

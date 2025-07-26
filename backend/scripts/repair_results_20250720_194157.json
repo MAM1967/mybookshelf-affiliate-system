@@ -1,0 +1,55 @@
+{
+  "requested_count": 10,
+  "created_count": 8,
+  "errors": [],
+  "created_items": [
+    {
+      "id": 221,
+      "title": "The 7 Habits of Highly Effective People",
+      "author": "Stephen R. Covey",
+      "category": "Books"
+    },
+    {
+      "id": 222,
+      "title": "Good to Great",
+      "author": "Jim Collins",
+      "category": "Books"
+    },
+    {
+      "id": 223,
+      "title": "The Maxwell Daily Reader",
+      "author": "John C. Maxwell",
+      "category": "Books"
+    },
+    {
+      "id": 224,
+      "title": "The Purpose Driven Life",
+      "author": "Rick Warren",
+      "category": "Books"
+    },
+    {
+      "id": 225,
+      "title": "Lead Like Jesus",
+      "author": "Ken Blanchard",
+      "category": "Books"
+    },
+    {
+      "id": 226,
+      "title": "The Servant Leader",
+      "author": "James A. Autry",
+      "category": "Books"
+    },
+    {
+      "id": 227,
+      "title": "Praying for Your Future Husband",
+      "author": "Robin Jones Gunn",
+      "category": "Books"
+    },
+    {
+      "id": 228,
+      "title": "Business by the Book",
+      "author": "Larry Burkett",
+      "category": "Books"
+    }
+  ]
+}

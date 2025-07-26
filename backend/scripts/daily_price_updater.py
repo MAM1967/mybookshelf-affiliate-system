@@ -160,9 +160,19 @@ class DailyPriceUpdater:
             response = requests.get(amazon_url, headers=headers, timeout=15)
             response.raise_for_status()
             
+            # Price extraction patterns (multiple formats)
+            price_patterns = [
+                r'<span class="a-price-whole">([0-9,]+)</span><span class="a-price-fraction">([0-9]+)</span>',
+                r'<span class="a-price a-text-price a-size-medium apb-price-current"><span class="a-offscreen">\$([0-9,]+\.?[0-9]*)</span>',
+                r'"priceAmount":([0-9]+\.?[0-9]*)',
+                r'<span class="a-price-range">.*?\$([0-9,]+\.?[0-9]*)',
+                r'id="apex_desktop".*?<span class="a-offscreen">\$([0-9,]+\.?[0-9]*)</span>',
+                r'<span class="a-offscreen">\$([0-9,]+\.?[0-9]*)</span>'
+            ]
+            
             content = response.text
             
-            # Check for out of stock indicators first
+            # Check for out of stock indicators
             out_of_stock_patterns = [
                 r'Currently unavailable',
                 r'Out of Stock',
@@ -175,64 +185,7 @@ class DailyPriceUpdater:
                 if re.search(pattern, content, re.IGNORECASE):
                     return Decimal('0'), 'out_of_stock', 'Product currently unavailable'
             
-            # IMPROVED PRICE EXTRACTION (with format preference and cents handling)
-            from bs4 import BeautifulSoup
-            
-            try:
-                soup = BeautifulSoup(content, 'html.parser')
-                
-                # Get all price elements and find valid prices
-                all_price_elements = soup.select('.a-price')
-                valid_prices = []
-                
-                for price_elem in all_price_elements:
-                    price_text = price_elem.get_text(strip=True)
-                    
-                    # Extract all price values from this element
-                    price_matches = re.findall(r'\$(\d+\.?\d{0,2})', price_text.replace(',', ''))
-                    
-                    for price_match in price_matches:
-                        try:
-                            price_value = float(price_match)
-                            
-                            # Skip free/promotional prices and unreasonably high prices
-                            if 0.01 <= price_value <= 200.00:
-                                valid_prices.append(price_value)
-                        except ValueError:
-                            continue
-                
-                # Choose the best price (prefer paperback range $5-$30)
-                if valid_prices:
-                    # Sort prices and prefer reasonable book prices
-                    valid_prices = sorted(set(valid_prices))  # Remove duplicates and sort
-                    
-                    # Prefer prices in typical paperback range
-                    paperback_prices = [p for p in valid_prices if 5.00 <= p <= 30.00]
-                    if paperback_prices:
-                        price = Decimal(str(paperback_prices[0]))  # Take lowest reasonable price
-                    else:
-                        # Take lowest valid price if no paperback range found
-                        price = Decimal(str(valid_prices[0]))
-                    
-                    logger.info(f"   ✅ Found price: ${price} (from {len(valid_prices)} valid options)")
-                    return price, 'active', 'Price updated successfully'
-                
-                # Fallback: Use regex patterns if BeautifulSoup fails
-                logger.info("   🔄 Falling back to regex price extraction...")
-                
-            except ImportError:
-                logger.warning("   ⚠️ BeautifulSoup not available, using regex fallback")
-            except Exception as e:
-                logger.warning(f"   ⚠️ Advanced price extraction failed ({e}), using regex fallback")
-            
-            # FALLBACK: Basic regex patterns
-            price_patterns = [
-                r'<span class="a-price-whole">([0-9,]+)</span><span class="a-price-fraction">([0-9]+)</span>',
-                r'<span class="a-price a-text-price a-size-medium apb-price-current"><span class="a-offscreen">\$([0-9,]+\.?[0-9]*)</span>',
-                r'"priceAmount":([0-9]+\.?[0-9]*)',
-                r'<span class="a-offscreen">\$([0-9,]+\.?[0-9]*)</span>'
-            ]
-            
+            # Try to extract price
             for pattern in price_patterns:
                 match = re.search(pattern, content)
                 if match:
@@ -244,7 +197,7 @@ class DailyPriceUpdater:
                     try:
                         price = Decimal(price_str)
                         if price > 0:
-                            logger.info(f"   ✅ Found price (regex): ${price}")
+                            logger.info(f"   ✅ Found price: ${price}")
                             return price, 'active', 'Price updated successfully'
                         else:
                             return Decimal('0'), 'out_of_stock', 'Price is zero'
