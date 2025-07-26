@@ -17,6 +17,7 @@ class PriceUpdater {
       priceIncreases: 0,
       priceDecreases: 0,
       totalPriceChange: 0,
+      rejectedPriceChanges: 0,
     };
   }
 
@@ -235,9 +236,54 @@ class PriceUpdater {
 
       // Update price if we got a valid price
       if (newPrice !== null) {
-        updateData.price = newPrice;
-        updateData.price_updated_at = new Date().toISOString();
-        updateData.price_fetch_attempts = 0; // Reset attempts on success
+        // PRICE VALIDATION: Check for extreme price changes (bidirectional)
+        const priceValidation = this.validatePriceChange(
+          oldPrice,
+          newPrice,
+          item.title
+        );
+
+        if (!priceValidation.isValid) {
+          console.warn(`🚨 Price change REJECTED: ${item.title}`);
+          console.warn(
+            `   $${oldPrice} → $${newPrice} (${
+              priceValidation.percentChange > 0 ? "+" : ""
+            }${priceValidation.percentChange.toFixed(1)}%)`
+          );
+          console.warn(`   Reason: ${priceValidation.reason}`);
+          console.warn(
+            `   ASIN: ${
+              item.affiliate_link
+                ? item.affiliate_link.split("/dp/")[1]?.split("/")[0]
+                : "unknown"
+            }`
+          );
+
+          // Track rejected price changes in statistics
+          this.stats.rejectedPriceChanges++;
+
+          // Don't update price, but still update check timestamp
+          updateData.price_fetch_attempts =
+            (item.price_fetch_attempts || 0) + 1;
+          notes = `${notes} | REJECTED: ${
+            priceValidation.reason
+          } (${priceValidation.percentChange.toFixed(1)}%)`;
+        } else {
+          // Valid price change - proceed with update
+          updateData.price = newPrice;
+          updateData.price_updated_at = new Date().toISOString();
+          updateData.price_fetch_attempts = 0; // Reset attempts on success
+
+          if (Math.abs(priceValidation.percentChange) > 25) {
+            console.log(`📊 Large price change APPROVED: ${item.title}`);
+            console.log(
+              `   $${oldPrice} → $${newPrice} (${
+                priceValidation.percentChange > 0 ? "+" : ""
+              }${priceValidation.percentChange.toFixed(1)}%)`
+            );
+            console.log(`   Reason: ${priceValidation.reason}`);
+          }
+        }
       }
 
       // Update the main record
@@ -310,6 +356,66 @@ class PriceUpdater {
     }
   }
 
+  validatePriceChange(oldPrice, newPrice, itemTitle = "") {
+    // Configuration
+    const MAX_CHANGE_PERCENT = 50; // Maximum allowed price change percentage
+
+    const validation = {
+      isValid: true,
+      reason: "",
+      percentChange: 0,
+    };
+
+    // Calculate percentage change
+    if (oldPrice > 0) {
+      validation.percentChange = ((newPrice - oldPrice) / oldPrice) * 100;
+    } else if (newPrice > 0) {
+      // 0 → positive price (restocking) - always allowed
+      validation.reason = "restocking_from_zero";
+      return validation;
+    } else {
+      // Both prices are 0 - no change
+      validation.reason = "no_change";
+      return validation;
+    }
+
+    // Check for legitimate out-of-stock (price → 0)
+    if (oldPrice > 0 && newPrice === 0) {
+      validation.reason = "out_of_stock";
+      return validation; // Always allow going out of stock
+    }
+
+    // Check for extreme price changes (bidirectional)
+    const absChangePercent = Math.abs(validation.percentChange);
+
+    if (absChangePercent > MAX_CHANGE_PERCENT) {
+      validation.isValid = false;
+
+      if (validation.percentChange > 0) {
+        validation.reason = `extreme_increase_${absChangePercent.toFixed(
+          1
+        )}pct`;
+      } else {
+        validation.reason = `extreme_decrease_${absChangePercent.toFixed(
+          1
+        )}pct`;
+      }
+
+      return validation;
+    }
+
+    // Valid price change
+    if (absChangePercent > 25) {
+      validation.reason = "large_but_acceptable_change";
+    } else if (absChangePercent > 10) {
+      validation.reason = "moderate_change";
+    } else {
+      validation.reason = "normal_change";
+    }
+
+    return validation;
+  }
+
   async processPriceUpdates(items, delaySeconds = 2) {
     console.log(`🔄 Starting price updates for ${items.length} items...`);
 
@@ -372,8 +478,18 @@ class PriceUpdater {
         errorItems: this.stats.errorItems,
         priceIncreases: this.stats.priceIncreases,
         priceDecreases: this.stats.priceDecreases,
+        rejectedPriceChanges: this.stats.rejectedPriceChanges,
         totalPriceChange: this.stats.totalPriceChange,
         successRate: Math.round(successRate * 10) / 10,
+        validationRate:
+          this.stats.totalItems > 0
+            ? Math.round(
+                ((this.stats.totalItems - this.stats.rejectedPriceChanges) /
+                  this.stats.totalItems) *
+                  100 *
+                  10
+              ) / 10
+            : 100,
       },
     };
   }
