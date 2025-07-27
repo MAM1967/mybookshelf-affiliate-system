@@ -391,6 +391,9 @@ class PriceUpdater {
     console.warn(`   Reason: ${validationResult.reason}`);
     console.warn(`   ASIN: ${this.extractASIN(item.affiliateLink)}`);
 
+    // Add to approval queue for admin review
+    await this.addToApprovalQueue(context, validationResult);
+
     // Update notes with rejection reason
     const updatedNotes = `${metadata.notes} | REJECTED: ${
       validationResult.reason
@@ -399,6 +402,7 @@ class PriceUpdater {
     const updateData = {
       ...baseUpdateData,
       // Don't update price - keep existing price
+      requires_approval: true, // Mark as requiring approval
     };
 
     // Update main record (timestamp only)
@@ -830,6 +834,57 @@ class PriceUpdater {
         factors: factors.length > 0 ? factors : ["no_suspicious_factors"],
       },
     };
+  }
+
+  // 🏗️ ADD TO APPROVAL QUEUE
+  async addToApprovalQueue(context, validationResult) {
+    const { item, pricing, metadata } = context;
+
+    try {
+      // Check if item is already in queue
+      const { data: existingQueue } = await supabase
+        .from("price_validation_queue")
+        .select("id")
+        .eq("item_id", item.id)
+        .eq("status", "pending")
+        .single();
+
+      if (existingQueue) {
+        console.log(`   ⚠️ Item ${item.title} already in approval queue`);
+        return;
+      }
+
+      // Add to approval queue
+      const { error: queueError } = await supabase
+        .from("price_validation_queue")
+        .insert({
+          item_id: item.id,
+          old_price: pricing.oldPrice,
+          new_price: pricing.newPrice,
+          percentage_change: validationResult.percentChange,
+          validation_reason: validationResult.reason,
+          validation_layer: validationResult.layer || "unknown",
+          validation_details: validationResult.details || {},
+          status: "pending",
+          flagged_at: new Date().toISOString(),
+        });
+
+      if (queueError) {
+        console.error(
+          `   ❌ Failed to add ${item.title} to approval queue:`,
+          queueError
+        );
+      } else {
+        console.log(
+          `   📋 Added ${item.title} to approval queue for admin review`
+        );
+      }
+    } catch (error) {
+      console.error(
+        `   ❌ Error adding ${item.title} to approval queue:`,
+        error
+      );
+    }
   }
 
   async processPriceUpdates(items, delaySeconds = 2) {

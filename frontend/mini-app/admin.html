@@ -381,6 +381,131 @@
         margin: 5px 0;
         font-size: 0.9em;
       }
+
+      /* Price Approval Styles */
+      .price-increase {
+        border-left: 4px solid #f44336;
+      }
+
+      .price-decrease {
+        border-left: 4px solid #4caf50;
+      }
+
+      .book-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .approval-status {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8em;
+        font-weight: 600;
+      }
+
+      .approval-status.pending {
+        background: #fff3e0;
+        color: #f57c00;
+      }
+
+      .approval-status.approved {
+        background: #e8f5e8;
+        color: #2e7d32;
+      }
+
+      .approval-status.rejected {
+        background: #ffebee;
+        color: #c62828;
+      }
+
+      .price-change-info {
+        margin-bottom: 15px;
+      }
+
+      .price-change {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+        font-weight: 600;
+      }
+
+      .change-icon {
+        font-size: 1.2em;
+      }
+
+      .old-price {
+        color: #666;
+        text-decoration: line-through;
+      }
+
+      .new-price {
+        color: #333;
+        font-weight: 700;
+      }
+
+      .percentage {
+        color: #666;
+        font-size: 0.9em;
+      }
+
+      .validation-info {
+        font-size: 0.9em;
+        color: #666;
+        padding: 10px;
+        background: #f5f5f5;
+        border-radius: 6px;
+      }
+
+      .approval-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 15px;
+      }
+
+      .approve-btn {
+        padding: 8px 16px;
+        background: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9em;
+      }
+
+      .approve-btn:hover {
+        background: #388e3c;
+      }
+
+      .reject-btn {
+        padding: 8px 16px;
+        background: #f44336;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9em;
+      }
+
+      .reject-btn:hover {
+        background: #d32f2f;
+      }
+
+      .processed-info {
+        color: #666;
+        font-size: 0.9em;
+        font-style: italic;
+      }
+
+      .approval-checkbox {
+        margin-left: auto;
+      }
     </style>
   </head>
   <body>
@@ -399,6 +524,9 @@
       <div class="nav-tabs">
         <button class="nav-tab active" onclick="switchTab('approvals')">
           📋 Book Approvals
+        </button>
+        <button class="nav-tab" onclick="switchTab('price-approvals')">
+          🚨 Price Approvals
         </button>
         <button class="nav-tab" onclick="switchTab('schedule')">
           📅 LinkedIn Schedule
@@ -461,6 +589,68 @@
           Loading pending books...
         </div>
         <div id="approvals-grid" class="books-grid" style="display: none"></div>
+      </div>
+
+      <!-- Price Approvals Tab -->
+      <div id="price-approvals-tab" class="tab-content">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="pending-approvals">-</div>
+            <div class="stat-label">Pending Review</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="approved-today-price">-</div>
+            <div class="stat-label">Approved Today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="rejected-today-price">-</div>
+            <div class="stat-label">Rejected Today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="total-flagged">-</div>
+            <div class="stat-label">Total Flagged</div>
+          </div>
+        </div>
+
+        <div class="filter-tabs">
+          <button
+            class="filter-tab active"
+            onclick="filterPriceApprovals('all')"
+          >
+            All Items
+          </button>
+          <button class="filter-tab" onclick="filterPriceApprovals('pending')">
+            Pending
+          </button>
+          <button class="filter-tab" onclick="filterPriceApprovals('approved')">
+            Approved
+          </button>
+          <button class="filter-tab" onclick="filterPriceApprovals('rejected')">
+            Rejected
+          </button>
+        </div>
+
+        <div class="bulk-actions">
+          <label>Quick Actions:</label>
+          <button class="bulk-btn" onclick="approveSelectedPriceChanges()">
+            Approve Selected
+          </button>
+          <button class="bulk-btn" onclick="rejectSelectedPriceChanges()">
+            Reject Selected
+          </button>
+          <span style="margin-left: auto; font-size: 0.9em; color: #666">
+            Review flagged price changes from validation system
+          </span>
+        </div>
+
+        <div id="price-approvals-loading" class="loading">
+          Loading price approvals...
+        </div>
+        <div
+          id="price-approvals-grid"
+          class="books-grid"
+          style="display: none"
+        ></div>
       </div>
 
       <!-- LinkedIn Schedule Tab -->
@@ -1118,6 +1308,324 @@
 
       // Initialize on page load
       document.addEventListener("DOMContentLoaded", loadPendingBooks);
+
+      // Price Approval Functions
+      let priceApprovals = [];
+      let currentPriceFilter = "all";
+
+      // Load price approvals
+      async function loadPriceApprovals() {
+        try {
+          document.getElementById("price-approvals-loading").style.display =
+            "block";
+          document.getElementById("price-approvals-grid").style.display =
+            "none";
+
+          const response = await fetch("/api/price-approvals");
+          const data = await response.json();
+
+          if (data.success) {
+            priceApprovals = data.data;
+            updatePriceApprovalStats(data.statistics);
+            renderPriceApprovals();
+          } else {
+            console.error("Failed to load price approvals:", data.error);
+          }
+        } catch (error) {
+          console.error("Error loading price approvals:", error);
+        } finally {
+          document.getElementById("price-approvals-loading").style.display =
+            "none";
+        }
+      }
+
+      // Update price approval statistics
+      function updatePriceApprovalStats(stats) {
+        document.getElementById("pending-approvals").textContent =
+          stats.pending || 0;
+        document.getElementById("approved-today-price").textContent =
+          stats.approved_today || 0;
+        document.getElementById("rejected-today-price").textContent =
+          stats.rejected_today || 0;
+        document.getElementById("total-flagged").textContent =
+          stats.total_flagged || 0;
+      }
+
+      // Render price approvals grid
+      function renderPriceApprovals() {
+        const grid = document.getElementById("price-approvals-grid");
+
+        if (priceApprovals.length === 0) {
+          grid.innerHTML =
+            '<div class="no-data">No price approvals found</div>';
+          grid.style.display = "block";
+          return;
+        }
+
+        const filteredApprovals = filterPriceApprovalsByStatus(
+          priceApprovals,
+          currentPriceFilter
+        );
+
+        grid.innerHTML = filteredApprovals
+          .map((approval) => {
+            const book = approval.books_accessories;
+            const percentageChange = approval.percentage_change;
+            const changeClass =
+              percentageChange > 0 ? "price-increase" : "price-decrease";
+            const changeIcon = percentageChange > 0 ? "📈" : "📉";
+
+            return `
+              <div class="book-card ${changeClass}" data-id="${approval.id}">
+                <div class="book-header">
+                  <div class="book-title">${book.title}</div>
+                  <div class="approval-status ${
+                    approval.status
+                  }">${approval.status.toUpperCase()}</div>
+                </div>
+                
+                <div class="price-change-info">
+                  <div class="price-change">
+                    <span class="change-icon">${changeIcon}</span>
+                    <span class="old-price">$${approval.old_price}</span>
+                    <span class="arrow">→</span>
+                    <span class="new-price">$${approval.new_price}</span>
+                    <span class="percentage">(${
+                      percentageChange > 0 ? "+" : ""
+                    }${percentageChange.toFixed(1)}%)</span>
+                  </div>
+                  
+                  <div class="validation-info">
+                    <strong>Reason:</strong> ${approval.validation_reason}<br>
+                    <strong>Layer:</strong> ${approval.validation_layer}<br>
+                    <strong>Flagged:</strong> ${new Date(
+                      approval.flagged_at
+                    ).toLocaleDateString()}
+                  </div>
+                </div>
+
+                <div class="approval-actions">
+                  ${
+                    approval.status === "pending"
+                      ? `
+                    <button class="approve-btn" onclick="approvePriceChange(${approval.id})">
+                      ✅ Approve
+                    </button>
+                    <button class="reject-btn" onclick="rejectPriceChange(${approval.id})">
+                      ❌ Reject
+                    </button>
+                    <input type="checkbox" class="approval-checkbox" data-id="${approval.id}">
+                  `
+                      : `
+                    <div class="processed-info">
+                      ${
+                        approval.status === "approved"
+                          ? "✅ Approved"
+                          : "❌ Rejected"
+                      }
+                      ${
+                        approval.reviewed_at
+                          ? `on ${new Date(
+                              approval.reviewed_at
+                            ).toLocaleDateString()}`
+                          : ""
+                      }
+                    </div>
+                  `
+                  }
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+
+        grid.style.display = "block";
+      }
+
+      // Filter price approvals by status
+      function filterPriceApprovalsByStatus(approvals, filter) {
+        if (filter === "all") return approvals;
+        return approvals.filter((approval) => approval.status === filter);
+      }
+
+      // Filter price approvals
+      function filterPriceApprovals(filter) {
+        currentPriceFilter = filter;
+
+        // Update filter tab states
+        document.querySelectorAll(".filter-tab").forEach((tab) => {
+          tab.classList.remove("active");
+        });
+        event.target.classList.add("active");
+
+        renderPriceApprovals();
+      }
+
+      // Approve individual price change
+      async function approvePriceChange(id) {
+        const notes = prompt("Enter approval notes (optional):");
+
+        try {
+          const response = await fetch(
+            `/api/price-approvals?action=approve&id=${id}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-admin-id": "admin",
+              },
+              body: JSON.stringify({ admin_notes: notes }),
+            }
+          );
+
+          const data = await response.json();
+
+          if (data.success) {
+            alert("Price change approved successfully!");
+            loadPriceApprovals(); // Reload the list
+          } else {
+            alert("Failed to approve price change: " + data.error);
+          }
+        } catch (error) {
+          console.error("Error approving price change:", error);
+          alert("Error approving price change");
+        }
+      }
+
+      // Reject individual price change
+      async function rejectPriceChange(id) {
+        const notes = prompt("Enter rejection notes (optional):");
+
+        try {
+          const response = await fetch(
+            `/api/price-approvals?action=reject&id=${id}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-admin-id": "admin",
+              },
+              body: JSON.stringify({ admin_notes: notes }),
+            }
+          );
+
+          const data = await response.json();
+
+          if (data.success) {
+            alert("Price change rejected successfully!");
+            loadPriceApprovals(); // Reload the list
+          } else {
+            alert("Failed to reject price change: " + data.error);
+          }
+        } catch (error) {
+          console.error("Error rejecting price change:", error);
+          alert("Error rejecting price change");
+        }
+      }
+
+      // Bulk approve selected price changes
+      async function approveSelectedPriceChanges() {
+        const selectedIds = Array.from(
+          document.querySelectorAll(".approval-checkbox:checked")
+        ).map((checkbox) => checkbox.dataset.id);
+
+        if (selectedIds.length === 0) {
+          alert("Please select at least one price change to approve");
+          return;
+        }
+
+        const notes = prompt(
+          "Enter approval notes for all selected items (optional):"
+        );
+
+        try {
+          const response = await fetch(
+            "/api/price-approvals?action=bulk-approve",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-admin-id": "admin",
+              },
+              body: JSON.stringify({
+                ids: selectedIds,
+                admin_notes: notes,
+              }),
+            }
+          );
+
+          const data = await response.json();
+
+          if (data.success) {
+            alert(
+              `Bulk approved ${data.data.approved_count} price changes successfully!`
+            );
+            loadPriceApprovals(); // Reload the list
+          } else {
+            alert("Failed to bulk approve price changes: " + data.error);
+          }
+        } catch (error) {
+          console.error("Error bulk approving price changes:", error);
+          alert("Error bulk approving price changes");
+        }
+      }
+
+      // Bulk reject selected price changes
+      async function rejectSelectedPriceChanges() {
+        const selectedIds = Array.from(
+          document.querySelectorAll(".approval-checkbox:checked")
+        ).map((checkbox) => checkbox.dataset.id);
+
+        if (selectedIds.length === 0) {
+          alert("Please select at least one price change to reject");
+          return;
+        }
+
+        const notes = prompt(
+          "Enter rejection notes for all selected items (optional):"
+        );
+
+        try {
+          const response = await fetch(
+            "/api/price-approvals?action=bulk-reject",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-admin-id": "admin",
+              },
+              body: JSON.stringify({
+                ids: selectedIds,
+                admin_notes: notes,
+              }),
+            }
+          );
+
+          const data = await response.json();
+
+          if (data.success) {
+            alert(
+              `Bulk rejected ${data.data.rejected_count} price changes successfully!`
+            );
+            loadPriceApprovals(); // Reload the list
+          } else {
+            alert("Failed to bulk reject price changes: " + data.error);
+          }
+        } catch (error) {
+          console.error("Error bulk rejecting price changes:", error);
+          alert("Error bulk rejecting price changes");
+        }
+      }
+
+      // Update tab switching to load price approvals when tab is selected
+      const originalSwitchTab = window.switchTab;
+      window.switchTab = function (tabName) {
+        originalSwitchTab(tabName);
+
+        if (tabName === "price-approvals") {
+          loadPriceApprovals();
+        }
+      };
     </script>
   </body>
 </html>
