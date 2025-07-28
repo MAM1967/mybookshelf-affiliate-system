@@ -1,0 +1,49 @@
+name: Daily Price Update
+
+on:
+  schedule:
+    - cron: "0 1 * * *" # 1 AM UTC daily
+  workflow_dispatch: # Allow manual triggers
+
+jobs:
+  price-update:
+    runs-on: ubuntu-latest
+    name: Trigger Price Update
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Trigger Price Update
+        run: |
+          echo "🚀 Triggering daily price update..."
+
+          # Make the API call to our Vercel function
+          response=$(curl -s -w "\nHTTP_STATUS:%{http_code}\nTIME:%{time_total}s" \
+            -X GET "https://mybookshelf-affiliate-system.vercel.app/api/price-updater-js" \
+            -H "User-Agent: vercel-cron/1.0" \
+            -H "Accept: application/json")
+
+          # Extract response and status
+          http_status=$(echo "$response" | grep "HTTP_STATUS:" | cut -d: -f2)
+          response_time=$(echo "$response" | grep "TIME:" | cut -d: -f2)
+          response_body=$(echo "$response" | sed '/HTTP_STATUS:/d' | sed '/TIME:/d')
+
+          echo "📊 Response Status: $http_status"
+          echo "⏱️ Response Time: ${response_time}s"
+          echo "📄 Response Body: $response_body"
+
+          # Check if the request was successful
+          if [ "$http_status" = "200" ]; then
+            echo "✅ Price update triggered successfully"
+          else
+            echo "❌ Price update failed with status: $http_status"
+            exit 1
+          fi
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Daily price update failed!"
+          echo "Check the logs above for details."
+          echo "Manual trigger available at: https://github.com/${{ github.repository }}/actions"
