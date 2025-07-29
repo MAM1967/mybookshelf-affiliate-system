@@ -18,9 +18,9 @@ jobs:
         run: |
           echo "🚀 Triggering daily price update..."
 
-                           # Make the API call to our new Amazon API-based Vercel function
+                           # Make the API call to our simple Amazon API-based Vercel function
                  response=$(curl -s -w "\nHTTP_STATUS:%{http_code}\nTIME:%{time_total}s" \
-                   -X GET "https://mybookshelf-affiliate-system.vercel.app/api/price-updater-amazon-api" \
+                   -X GET "https://mybookshelf-affiliate-system.vercel.app/api/price-updater-amazon-api-simple" \
                    -H "User-Agent: vercel-cron/1.0" \
                    -H "Accept: application/json")
 
