@@ -21,16 +21,18 @@ class PriceUpdater {
     };
   }
 
-  async getItemsToUpdate(limitHours = 25) {
+  async getItemsToUpdate(limitHours = 12) {
     try {
       console.log("🔍 Fetching items for price update...");
 
+      // Get items that need updates - prioritize error and out_of_stock items
       const { data: items, error } = await supabase
         .from("books_accessories")
         .select(
           "id, title, affiliate_link, price, price_status, last_price_check, price_fetch_attempts"
         )
-        .neq("price_status", "disabled");
+        .or("price_status.eq.error,price_status.eq.out_of_stock")
+        .limit(20); // Limit to prevent timeout
 
       if (error) throw error;
 
@@ -40,28 +42,44 @@ class PriceUpdater {
 
       for (const item of items) {
         let shouldUpdate = false;
+        let reason = "";
 
-        // Never been checked
-        if (!item.last_price_check) {
+        // Always update error and out_of_stock items unless they have too many attempts
+        if (
+          item.price_status === "error" ||
+          item.price_status === "out_of_stock"
+        ) {
           shouldUpdate = true;
+          reason = `Status: ${item.price_status}`;
         } else {
-          // Parse last check time
-          const lastCheck = new Date(item.last_price_check);
-          if (lastCheck < cutoffTime) {
+          // For other items, check time
+          if (!item.last_price_check || item.last_price_check === null) {
             shouldUpdate = true;
+            reason = "No last_price_check";
+          } else {
+            const lastCheck = new Date(item.last_price_check);
+            if (isNaN(lastCheck.getTime()) || lastCheck < cutoffTime) {
+              shouldUpdate = true;
+              reason = isNaN(lastCheck.getTime())
+                ? "Invalid date"
+                : "Older than cutoff";
+            }
           }
         }
 
         // Skip items with too many failed attempts (max 5)
         if (item.price_fetch_attempts >= 5) {
           console.log(
-            `   ⚠️ Skipping ${item.title} - too many failed attempts`
+            `   ⚠️ Skipping ${item.title} - too many failed attempts (${item.price_fetch_attempts})`
           );
           continue;
         }
 
         if (shouldUpdate) {
+          console.log(`   ✅ Adding ${item.title} to update list (${reason})`);
           itemsToUpdate.push(item);
+        } else {
+          console.log(`   ⏭️ Skipping ${item.title} - recently updated`);
         }
       }
 
@@ -403,6 +421,7 @@ class PriceUpdater {
       ...baseUpdateData,
       // Don't update price - keep existing price
       requires_approval: true, // Mark as requiring approval
+      validation_notes: updatedNotes, // Save rejection notes
     };
 
     // Update main record (timestamp only)
@@ -422,11 +441,17 @@ class PriceUpdater {
 
   // 🏗️ EXTRACTED: Handle timestamp-only updates
   async persistTimestampUpdate(context, baseUpdateData) {
-    const { item } = context;
+    const { item, metadata } = context;
+
+    // Add error notes to the update data
+    const updateData = {
+      ...baseUpdateData,
+      validation_notes: metadata.notes || "No error details captured",
+    };
 
     const { error: updateError } = await supabase
       .from("books_accessories")
-      .update(baseUpdateData)
+      .update(updateData)
       .eq("id", item.id);
 
     if (updateError) throw updateError;
