@@ -131,23 +131,15 @@ class PriceUpdater {
         };
       }
 
-      // TODO: Implement real Amazon PA API
-      // For now, use web scraping as fallback
-      const priceData = await this.scrapeAmazonPrice(asin);
-      
-      if (priceData.price) {
-        console.log(`   ✅ Found price: $${priceData.price}`);
-        return priceData;
-      } else {
-        console.log(`   ❌ No price found for ${asin}`);
-        return {
-          price: null,
-          priceText: null,
-          inStock: false,
-          error: priceData.error || "No price found",
-          source: "amazon_scraping_failed",
-        };
+      // Try Amazon PA API first, then fallback to web scraping
+      const paApiResult = await this.fetchAmazonPAAPI(asin);
+      if (paApiResult.price) {
+        return paApiResult;
       }
+
+      // Fallback to web scraping
+      const scrapeResult = await this.scrapeAmazonPrice(asin);
+      return scrapeResult;
     } catch (error) {
       console.error(`   ❌ Amazon API error for ${asin}:`, error.message);
       return {
@@ -160,11 +152,37 @@ class PriceUpdater {
     }
   }
 
+  async fetchAmazonPAAPI(asin) {
+    try {
+      console.log(`   🔍 Trying Amazon PA API for ASIN: ${asin}`);
+      
+      // TODO: Implement real Amazon PA API
+      // This would use the Amazon Product Advertising API
+      // For now, return null to indicate no real pricing
+      console.log(`   ⚠️ Amazon PA API not implemented - trying web scraping`);
+      return {
+        price: null,
+        priceText: null,
+        inStock: false,
+        error: "Amazon PA API not implemented",
+        source: "amazon_pa_api_not_implemented",
+      };
+    } catch (error) {
+      return {
+        price: null,
+        priceText: null,
+        inStock: false,
+        error: error.message,
+        source: "amazon_pa_api_error",
+      };
+    }
+  }
+
   async scrapeAmazonPrice(asin) {
     try {
       console.log(`   🔍 Scraping price for ASIN: ${asin}`);
       
-      // Use a simple web scraping approach as fallback
+      // Use a simple web scraping approach
       const url = `https://www.amazon.com/dp/${asin}`;
       
       // For now, return null to indicate no real pricing
