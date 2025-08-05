@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { AmazonScraper } from "./amazon-scraper.js";
 
 // Environment variables for security
 const supabaseUrl = process.env.SUPABASE_URL || "https://ackcgrnizuhauccnbiml.supabase.co";
@@ -22,6 +23,7 @@ class PriceUpdater {
       startTime: null,
       endTime: null,
     };
+    this.amazonScraper = new AmazonScraper();
   }
 
   async getItemsToUpdate(limitHours = 12) {
@@ -180,21 +182,18 @@ class PriceUpdater {
 
   async scrapeAmazonPrice(asin) {
     try {
-      console.log(`   🔍 Scraping price for ASIN: ${asin}`);
+      console.log(`   🔍 Using Amazon scraper for ASIN: ${asin}`);
       
-      // Use a simple web scraping approach
-      const url = `https://www.amazon.com/dp/${asin}`;
+      // Use the real Amazon scraper
+      const result = await this.amazonScraper.scrapePrice(asin);
       
-      // For now, return null to indicate no real pricing
-      // This prevents fake data from being stored
-      console.log(`   ⚠️ Web scraping not implemented - skipping ${asin}`);
-      return {
-        price: null,
-        priceText: null,
-        inStock: false,
-        error: "Web scraping not implemented",
-        source: "amazon_scraping_not_implemented",
-      };
+      if (result.price) {
+        console.log(`   ✅ Scraped price: $${result.price} for ${asin}`);
+        return result;
+      } else {
+        console.log(`   ❌ No price found for ${asin}: ${result.error}`);
+        return result;
+      }
     } catch (error) {
       return {
         price: null,
