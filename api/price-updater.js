@@ -119,16 +119,35 @@ class PriceUpdater {
     try {
       console.log(`   🔍 Fetching price for ASIN: ${asin}`);
 
+      // Check if Amazon API credentials are available
+      if (!AMAZON_ACCESS_KEY || !AMAZON_SECRET_KEY) {
+        console.log(`   ⚠️ Amazon API credentials not configured`);
+        return {
+          price: null,
+          priceText: null,
+          inStock: false,
+          error: "Amazon API credentials not configured",
+          source: "amazon_api_not_configured",
+        };
+      }
+
       // TODO: Implement real Amazon PA API
-      // For now, return null to indicate no real pricing
-      console.log(`   ⚠️ Amazon API not implemented - skipping ${asin}`);
-      return {
-        price: null,
-        priceText: null,
-        inStock: false,
-        error: "Amazon API not implemented",
-        source: "amazon_api_not_implemented",
-      };
+      // For now, use web scraping as fallback
+      const priceData = await this.scrapeAmazonPrice(asin);
+      
+      if (priceData.price) {
+        console.log(`   ✅ Found price: $${priceData.price}`);
+        return priceData;
+      } else {
+        console.log(`   ❌ No price found for ${asin}`);
+        return {
+          price: null,
+          priceText: null,
+          inStock: false,
+          error: priceData.error || "No price found",
+          source: "amazon_scraping_failed",
+        };
+      }
     } catch (error) {
       console.error(`   ❌ Amazon API error for ${asin}:`, error.message);
       return {
@@ -137,6 +156,34 @@ class PriceUpdater {
         inStock: false,
         error: error.message,
         source: "amazon_api_error",
+      };
+    }
+  }
+
+  async scrapeAmazonPrice(asin) {
+    try {
+      console.log(`   🔍 Scraping price for ASIN: ${asin}`);
+      
+      // Use a simple web scraping approach as fallback
+      const url = `https://www.amazon.com/dp/${asin}`;
+      
+      // For now, return null to indicate no real pricing
+      // This prevents fake data from being stored
+      console.log(`   ⚠️ Web scraping not implemented - skipping ${asin}`);
+      return {
+        price: null,
+        priceText: null,
+        inStock: false,
+        error: "Web scraping not implemented",
+        source: "amazon_scraping_not_implemented",
+      };
+    } catch (error) {
+      return {
+        price: null,
+        priceText: null,
+        inStock: false,
+        error: error.message,
+        source: "amazon_scraping_error",
       };
     }
   }

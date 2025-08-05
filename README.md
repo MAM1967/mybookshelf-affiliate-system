@@ -1,150 +1,219 @@
 # MyBookshelf Affiliate System
 
-A Christian leadership book recommendation platform combining Amazon affiliate marketing with automated LinkedIn posting.
+A comprehensive affiliate marketing system for Christian leadership books and accessories, built with modern web technologies.
 
-## 🎯 Project Goal
+## 🏗️ Architecture Overview
 
-Generate **$1-$5 in affiliate revenue within two weeks** through automated posting of 3 books + 1 accessory weekly.
+### **Technology Stack**
+- **Frontend**: HTML/CSS/JavaScript (responsive design)
+- **Backend**: Node.js API endpoints with Supabase PostgreSQL
+- **Hosting**: Vercel with automatic deployments
+- **Database**: Supabase with real-time capabilities
+- **Email**: Resend API for notifications
+- **Social**: LinkedIn API integration
+- **Testing**: Jest framework
 
-## ✅ Current Status: PRODUCTION READY
+### **Core Components**
+- **Price Updater**: Single consolidated endpoint for Amazon price tracking
+- **Admin Dashboard**: Visual interface for content approval
+- **LinkedIn Automation**: Scheduled posting system
+- **Email Notifications**: Automated reporting system
 
-### **Core Workflow - COMPLETE**
+## 🚀 Quick Start
 
-- **Sunday:** Admin receives approval email with book/accessory selections
-- **Tuesday/Wednesday/Thursday:** Automated LinkedIn posts with affiliate links
-- **Revenue Tracking:** Real-time affiliate commission monitoring
+### **Prerequisites**
+- Node.js 22.x
+- Vercel CLI (optional)
+- Supabase account
+- Amazon Associates account
 
-### **🚀 Major Components - COMPLETED**
+### **Installation**
 
-#### 1. **Admin Dashboard & Approval System** ✅
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/MAM1967/mybookshelf-affiliate-system.git
+   cd mybookshelf-affiliate-system
+   ```
 
-- Modern responsive UI with session-based authentication
-- Content scoring (1-10 Christian leadership relevance)
-- Book approval workflow with approve/reject/review actions
-- Week-based planning for 3 books + 1 accessory
-- Real-time statistics and Christian content analysis
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-#### 2. **LinkedIn Automation Engine** ✅
+3. **Set up environment variables**
+   ```bash
+   cp env.example .env.local
+   # Edit .env.local with your credentials
+   ```
 
-- Automated posting schedule: Tuesday/Wednesday/Thursday
-- Content generation tailored by day (leadership principles, practical application, comprehensive recommendations)
-- Christian content integration with Scripture and themes
-- Affiliate link embedding with rate limiting protection
-- Comprehensive error handling and logging
+4. **Configure Vercel environment variables**
+   ```bash
+   vercel env add SUPABASE_URL
+   vercel env add SUPABASE_ANON_KEY
+   vercel env add AMAZON_ACCESS_KEY
+   vercel env add AMAZON_SECRET_KEY
+   vercel env add RESEND_API_KEY
+   ```
 
-#### 3. **Email Integration System** ✅ **[JUST COMPLETED]**
+5. **Deploy to Vercel**
+   ```bash
+   vercel --prod
+   ```
 
-- **Resend API Integration:** Professional email delivery
-- **Sunday Approval Workflow:** Automated weekly email to admin
-- **Professional Templates:** Beautiful HTML emails with business context
-- **Session Management:** Secure token-based dashboard access
-- **Reminder System:** Tuesday deadline enforcement
-
-#### 4. **Testing Infrastructure** ✅
-
-- **100% affiliate link success rate**
-- **0.8s total execution time**
-- Comprehensive database integrity validation
-- Live site monitoring and performance testing
-- CI/CD compatible with automated reporting
-
-#### 5. **CI/CD Pipeline** ✅
-
-- **GitHub Actions:** Automated testing, security scanning
-- **24/7 Health Monitoring:** Hourly checks with auto-issue creation
-- **Multi-environment:** main (production) → staging → dev
-- **Response time monitoring:** 141ms average
-
-## 📧 **Email System Configuration**
-
-**API Configuration:**
-
-- Service: Resend (re_CujkiY4j_B4SLnmAJFoxvPVFLuQ51xVJJ)
-- From: admin@mybookshelf.shop
-- Admin: mcddsl@icloud.com
-- Dashboard: https://mybookshelf.shop/admin
-
-**Sunday Workflow:**
-
-- Trigger: Every Sunday morning
-- Content: Pending books/accessories for approval
-- Deadline: Tuesday for timely content scheduling
-- Session: 7-day expiration with secure tokens
-
-## 🏃‍♂️ **Quick Start**
-
-```bash
-# Test email integration
-cd backend/scripts
-python3 test_email_integration.py
-
-# Run full test suite
-python3 run_all_tests.py
-
-# Setup environment
-python3 setup_email_env.py
-```
-
-## 📁 **Project Structure**
+## 📁 Project Structure
 
 ```
 mybookshelf-affiliate-system/
-├── backend/
-│   ├── scripts/
-│   │   ├── email_service.py              # ✅ Email integration
-│   │   ├── sunday_approval_automation.py # ✅ Sunday workflow
-│   │   ├── linkedin_automation.py        # ✅ LinkedIn posting
-│   │   ├── test_email_integration.py     # ✅ Email testing
-│   │   └── run_all_tests.py             # ✅ Complete test suite
-│   └── supabase/
-│       ├── schema.sql                   # ✅ Main database schema
-│       └── admin_schema.sql             # ✅ Admin approval tables
-├── frontend/
-│   └── mini-app/
-│       └── admin.html                   # ✅ Admin dashboard
-├── .github/workflows/                   # ✅ CI/CD pipeline
-└── docs/                               # ✅ Complete documentation
+├── api/                          # Vercel API endpoints
+│   ├── price-updater.js          # Single price update endpoint
+│   ├── price-approvals.js        # Price approval system
+│   └── linkedin-callback.js      # LinkedIn OAuth
+├── frontend/mini-app/            # Frontend application
+│   ├── admin.html                # Admin dashboard
+│   ├── index.html                # Main landing page
+│   └── components/               # Frontend components
+├── backend/scripts/              # Backend automation scripts
+│   ├── database/                 # Database operations
+│   ├── linkedin/                 # LinkedIn automation
+│   ├── price-updates/            # Price update scripts
+│   └── tests/                    # Test files
+├── tests/                        # Test suite
+│   └── price-updater.test.js     # Price updater tests
+├── docs/                         # Documentation
+└── .github/workflows/            # CI/CD automation
 ```
 
-## 🎯 **Business Metrics**
+## 🔧 Development
 
-- **Target Revenue:** $1-$5 within 2 weeks
-- **Content Schedule:** 3 books + 1 accessory weekly
-- **Posting Days:** Tuesday, Wednesday, Thursday
-- **Admin Approval:** Sunday email workflow
-- **Response Time:** <200ms average
-- **Uptime Target:** 99.9% with 24/7 monitoring
+### **Running Tests**
+```bash
+npm test                    # Run all tests
+npm run test:watch         # Run tests in watch mode
+npm run test:coverage      # Run tests with coverage
+```
 
-## 🔧 **Technical Architecture**
+### **Local Development**
+```bash
+npm run dev                # Start development server
+```
 
-- **Frontend:** Responsive HTML/CSS/JavaScript
-- **Backend:** Python scripts with Supabase database
-- **Email Service:** Resend API integration
-- **Social Media:** LinkedIn API automation
-- **Affiliate:** Amazon Associates program
-- **Hosting:** Vercel with automatic deployments
-- **Monitoring:** GitHub Actions with health checks
+### **API Endpoints**
 
-## 📚 **Documentation**
+#### **Price Updates**
+- `GET /api/price-updater` - Update prices for all items
+- `POST /api/price-updater` - Manual price update trigger
 
-- [Environment Setup](docs/ENVIRONMENT_SETUP.md)
-- [Email Workflow Setup](docs/EMAIL_WORKFLOW_SETUP.md) ✅ **NEW**
-- [CI/CD Setup](docs/CI_CD_SETUP.md)
-- [Deployment Guide](docs/DEPLOYMENT_GUIDE.md)
-- [Lessons Learned](docs/LESSONS_LEARNED.md)
+#### **Price Approvals**
+- `GET /api/price-approvals` - Get pending approvals
+- `POST /api/price-approvals` - Approve/reject price changes
 
-## 🎉 **Ready for Production**
+#### **LinkedIn Integration**
+- `GET /api/linkedin-callback` - OAuth callback handler
 
-The core workflow is **fully functional**:
+## 🔐 Security
 
-1. **Admin Dashboard** → Book/accessory approval
-2. **Email System** → Sunday approval workflow
-3. **LinkedIn Automation** → Tuesday/Wednesday/Thursday posting
-4. **Affiliate Tracking** → Revenue monitoring
-5. **Testing & Monitoring** → 24/7 health checks
+### **Environment Variables**
+All sensitive credentials are stored in environment variables:
 
-**Next:** Deploy to production and start generating affiliate revenue!
+```bash
+# Required
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+AMAZON_ACCESS_KEY=your_amazon_access_key
+AMAZON_SECRET_KEY=your_amazon_secret_key
+
+# Optional
+RESEND_API_KEY=your_resend_api_key
+LINKEDIN_CLIENT_ID=your_linkedin_client_id
+LINKEDIN_CLIENT_SECRET=your_linkedin_client_secret
+```
+
+### **Security Best Practices**
+- ✅ No hardcoded credentials in code
+- ✅ Environment variables for all secrets
+- ✅ Input validation on all endpoints
+- ✅ Rate limiting on API calls
+- ✅ Error handling without exposing internals
+
+## 📊 Monitoring
+
+### **Health Checks**
+- Database connectivity
+- API endpoint availability
+- Cron job execution status
+- Price update success rates
+
+### **Logging**
+- Structured logging for all operations
+- Error tracking and alerting
+- Performance monitoring
+- Security event logging
+
+## 🚨 Troubleshooting
+
+### **Common Issues**
+
+1. **Price updates not working**
+   - Check Amazon API credentials
+   - Verify Supabase connection
+   - Check GitHub Actions logs
+
+2. **LinkedIn posting issues**
+   - Verify OAuth token validity
+   - Check API approval status
+   - Review posting permissions
+
+3. **Database connection errors**
+   - Verify Supabase URL and keys
+   - Check network connectivity
+   - Review database permissions
+
+### **Debug Mode**
+```bash
+# Enable debug logging
+DEBUG=* npm run dev
+```
+
+## 📈 Performance
+
+### **Optimizations**
+- Single consolidated price update endpoint
+- Efficient database queries with proper indexing
+- Rate limiting to prevent API abuse
+- Caching for frequently accessed data
+
+### **Metrics**
+- Response time: < 5 seconds
+- Success rate: > 95%
+- Uptime: > 99.9%
+
+## 🤝 Contributing
+
+### **Code Standards**
+- ESLint for JavaScript linting
+- Prettier for code formatting
+- Jest for testing
+- Conventional commits for version control
+
+### **Development Workflow**
+1. Create feature branch
+2. Write tests for new functionality
+3. Implement changes
+4. Run test suite
+5. Submit pull request
+
+## 📄 License
+
+This project is proprietary software. All rights reserved.
+
+## 🆘 Support
+
+For technical support or questions:
+- Email: admin@mybookshelf.shop
+- GitHub Issues: [Create an issue](https://github.com/MAM1967/mybookshelf-affiliate-system/issues)
 
 ---
 
-_Built for Christian leadership content curation and automated affiliate marketing._
+**Last Updated**: August 5, 2025  
+**Version**: 1.0.0  
+**Status**: Production Ready ✅

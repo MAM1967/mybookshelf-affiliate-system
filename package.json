@@ -5,7 +5,9 @@
   "scripts": {
     "start": "node mcp-server.js",
     "dev": "node --watch mcp-server.js",
-    "test": "node test-mcp.js"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.15.0",
@@ -13,7 +15,19 @@
     "node-fetch": "^3.3.2",
     "zod": "^3.25.75"
   },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@jest/globals": "^29.7.0"
+  },
   "engines": {
     "node": "22.x"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/tests/**/*.test.js"],
+    "collectCoverageFrom": [
+      "api/**/*.js",
+      "!**/node_modules/**"
+    ]
   }
 }
