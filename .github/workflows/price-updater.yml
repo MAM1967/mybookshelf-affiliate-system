@@ -8,20 +8,20 @@ on:
 jobs:
   price-update:
     runs-on: ubuntu-latest
-    name: Trigger Price Update with Email Report
+    name: Trigger Price Update
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Trigger Price Update with Email Report
+      - name: Trigger Price Update
         run: |
-          echo "🚀 Triggering daily price update with email report..."
+          echo "🚀 Triggering daily price update..."
           echo "⏰ Started at: $(date -u)"
           
-          # Make the API call to our new endpoint with email reporting
+          # Make the API call to our single consolidated endpoint
           response=$(curl -s -w "\nHTTP_STATUS:%{http_code}\nTIME:%{time_total}s" \
-            -X GET "https://mybookshelf-affiliate-system.vercel.app/api/price-updater-with-email-report" \
+            -X GET "https://mybookshelf-affiliate-system.vercel.app/api/price-updater" \
             -H "User-Agent: github-actions-cron/1.0" \
             -H "Accept: application/json" \
             --max-time 300)  # 5 minute timeout
@@ -37,8 +37,7 @@ jobs:
 
           # Check if the request was successful
           if [ "$http_status" = "200" ]; then
-            echo "✅ Price update with email report triggered successfully"
-            echo "📧 Email report should be sent to mcddsl@icloud.com"
+            echo "✅ Price update triggered successfully"
           else
             echo "❌ Price update failed with status: $http_status"
             echo "📄 Full response: $response_body"
@@ -51,4 +50,3 @@ jobs:
           echo "❌ Daily price update failed!"
           echo "Check the logs above for details."
           echo "Manual trigger available at: https://github.com/${{ github.repository }}/actions"
-          echo "Email: mcddsl@icloud.com"

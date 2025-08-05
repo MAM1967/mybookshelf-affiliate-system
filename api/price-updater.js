@@ -1,24 +1,26 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Supabase configuration
-const supabaseUrl = "https://ackcgrnizuhauccnbiml.supabase.co";
-const supabaseKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFja2Nncm5penVoYXVjY25iaW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMjc4MzEsImV4cCI6MjA2NjgwMzgzMX0.SXpIMuNBgUhcEQUHzpEB1zZAdF-UTGvmY81EFUtsAwc";
+// Environment variables for security
+const supabaseUrl = process.env.SUPABASE_URL || "https://ackcgrnizuhauccnbiml.supabase.co";
+const supabaseKey = process.env.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFja2Nncm5penVoYXVjY25iaW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMjc4MzEsImV4cCI6MjA2NjgwMzgzMX0.SXpIMuNBgUhcEQUHzpEB1zZAdF-UTGvmY81EFUtsAwc";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Amazon PA API credentials
-const AMAZON_ACCESS_KEY = "AKPAKBWO841751230292";
-const AMAZON_SECRET_KEY = "5oKcOURG4kWFu09+bhHHXSUCusTwWzevVIV0e9Qx";
-const AMAZON_ASSOCIATE_TAG = "mybookshelf-20";
+// Amazon API credentials from environment
+const AMAZON_ACCESS_KEY = process.env.AMAZON_ACCESS_KEY;
+const AMAZON_SECRET_KEY = process.env.AMAZON_SECRET_KEY;
+const AMAZON_ASSOCIATE_TAG = process.env.AMAZON_ASSOCIATE_TAG || "mybookshelf-20";
 
-class AmazonAPIPriceUpdater {
+class PriceUpdater {
   constructor() {
     this.stats = {
       totalItems: 0,
       processedItems: 0,
       successfulUpdates: 0,
       failedUpdates: 0,
+      priceChanges: [],
       errors: [],
+      startTime: null,
+      endTime: null,
     };
   }
 
@@ -33,7 +35,7 @@ class AmazonAPIPriceUpdater {
           "id, title, affiliate_link, price, price_status, last_price_check, price_fetch_attempts"
         )
         .or("price_status.eq.error,price_status.eq.out_of_stock")
-        .limit(5); // Reduced for testing
+        .limit(20); // Process more items
 
       if (error) throw error;
 
@@ -113,25 +115,19 @@ class AmazonAPIPriceUpdater {
     return null;
   }
 
-  async fetchAmazonPriceSimple(asin) {
+  async fetchAmazonPrice(asin) {
     try {
-      console.log(`   🔍 Fetching price for ASIN: ${asin} via simple method`);
+      console.log(`   🔍 Fetching price for ASIN: ${asin}`);
 
-      // For now, let's use a simple approach that simulates successful price extraction
-      // This will help us test the rest of the system while we work on the API integration
-
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // For testing, return a simulated price
-      const simulatedPrice = 19.99 + Math.random() * 10; // Random price between $19.99-$29.99
-
-      console.log(`   ✅ Found simulated price: $${simulatedPrice.toFixed(2)}`);
+      // TODO: Implement real Amazon PA API
+      // For now, return null to indicate no real pricing
+      console.log(`   ⚠️ Amazon API not implemented - skipping ${asin}`);
       return {
-        price: simulatedPrice,
-        priceText: `$${simulatedPrice.toFixed(2)}`,
-        inStock: true,
-        source: "amazon_api_simulation",
+        price: null,
+        priceText: null,
+        inStock: false,
+        error: "Amazon API not implemented",
+        source: "amazon_api_not_implemented",
       };
     } catch (error) {
       console.error(`   ❌ Amazon API error for ${asin}:`, error.message);
@@ -140,7 +136,7 @@ class AmazonAPIPriceUpdater {
         priceText: null,
         inStock: false,
         error: error.message,
-        source: "amazon_api_simulation",
+        source: "amazon_api_error",
       };
     }
   }
@@ -179,6 +175,17 @@ class AmazonAPIPriceUpdater {
 
       if (error) throw error;
 
+      // Record price change for reporting
+      if (currentPrice !== newPrice) {
+        this.stats.priceChanges.push({
+          title: item.title,
+          oldPrice: currentPrice,
+          newPrice: newPrice,
+          changePercent: priceChange,
+          changeAmount: newPrice - currentPrice,
+        });
+      }
+
       console.log(`   ✅ Successfully updated ${item.title}: $${newPrice}`);
       this.stats.successfulUpdates++;
 
@@ -206,7 +213,7 @@ class AmazonAPIPriceUpdater {
       }
 
       try {
-        const priceData = await this.fetchAmazonPriceSimple(asin);
+        const priceData = await this.fetchAmazonPrice(asin);
 
         if (priceData.price) {
           await this.updateItemPrice(item, priceData);
@@ -240,10 +247,10 @@ class AmazonAPIPriceUpdater {
   }
 
   async run() {
-    console.log("🔄 Starting Amazon API Price Update (Simple Version)");
+    console.log("🔄 Starting Price Update");
     console.log("=" * 60);
 
-    const startTime = Date.now();
+    this.stats.startTime = Date.now();
 
     try {
       const items = await this.getItemsToUpdate();
@@ -259,7 +266,8 @@ class AmazonAPIPriceUpdater {
 
       await this.processItems(items);
 
-      const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+      this.stats.endTime = Date.now();
+      const duration = ((this.stats.endTime - this.stats.startTime) / 1000).toFixed(2);
 
       console.log("\n📊 Update Complete!");
       console.log("=" * 30);
@@ -267,6 +275,7 @@ class AmazonAPIPriceUpdater {
       console.log(`📦 Total Items: ${this.stats.totalItems}`);
       console.log(`✅ Successful: ${this.stats.successfulUpdates}`);
       console.log(`❌ Failed: ${this.stats.failedUpdates}`);
+      console.log(`💰 Price Changes: ${this.stats.priceChanges.length}`);
 
       if (this.stats.errors.length > 0) {
         console.log(`⚠️ Errors: ${this.stats.errors.length}`);
@@ -296,7 +305,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const updater = new AmazonAPIPriceUpdater();
+    const updater = new PriceUpdater();
     const result = await updater.run();
 
     res.status(200).json(result);
@@ -307,4 +316,4 @@ export default async function handler(req, res) {
       message: error.message,
     });
   }
-}
+} 
