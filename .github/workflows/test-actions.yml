@@ -1,0 +1,49 @@
+name: Test GitHub Actions
+
+on:
+  workflow_dispatch: # Manual trigger only
+  push:
+    branches: [main]
+    paths: ['.github/workflows/test-actions.yml']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test GitHub Actions Functionality
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Test basic functionality
+        run: |
+          echo "🚀 GitHub Actions test started at $(date -u)"
+          echo "✅ Basic GitHub Actions functionality is working"
+          echo "📊 Current time: $(date)"
+          echo "🌍 Timezone: UTC"
+          
+      - name: Test API endpoint
+        run: |
+          echo "🔍 Testing price updater endpoint..."
+          response=$(curl -s -w "\nHTTP_STATUS:%{http_code}" \
+            -X GET "https://mybookshelf-affiliate-system.vercel.app/api/price-updater" \
+            -H "User-Agent: test-workflow/1.0" \
+            --max-time 30)
+          
+          http_status=$(echo "$response" | grep "HTTP_STATUS:" | cut -d: -f2)
+          response_body=$(echo "$response" | sed '/HTTP_STATUS:/d')
+          
+          echo "📊 API Response Status: $http_status"
+          echo "📄 API Response: $response_body"
+          
+          if [ "$http_status" = "200" ]; then
+            echo "✅ API endpoint is working correctly"
+          else
+            echo "❌ API endpoint returned status: $http_status"
+            exit 1
+          fi
+          
+      - name: Test completion
+        run: |
+          echo "🎉 GitHub Actions test completed successfully!"
+          echo "⏰ Completed at: $(date -u)"
