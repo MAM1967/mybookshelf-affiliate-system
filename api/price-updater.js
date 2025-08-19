@@ -2,14 +2,18 @@ import { createClient } from "@supabase/supabase-js";
 import { AmazonScraper } from "./amazon-scraper.js";
 
 // Environment variables for security
-const supabaseUrl = process.env.SUPABASE_URL || "https://ackcgrnizuhauccnbiml.supabase.co";
-const supabaseKey = process.env.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFja2Nncm5penVoYXVjY25iaW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMjc4MzEsImV4cCI6MjA2NjgwMzgzMX0.SXpIMuNBgUhcEQUHzpEB1zZAdF-UTGvmY81EFUtsAwc";
+const supabaseUrl =
+  process.env.SUPABASE_URL || "https://ackcgrnizuhauccnbiml.supabase.co";
+const supabaseKey =
+  process.env.SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFja2Nncm5penVoYXVjY25iaW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMjc4MzEsImV4cCI6MjA2NjgwMzgzMX0.SXpIMuNBgUhcEQUHzpEB1zZAdF-UTGvmY81EFUtsAwc";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Amazon API credentials from environment
 const AMAZON_ACCESS_KEY = process.env.AMAZON_ACCESS_KEY;
 const AMAZON_SECRET_KEY = process.env.AMAZON_SECRET_KEY;
-const AMAZON_ASSOCIATE_TAG = process.env.AMAZON_ASSOCIATE_TAG || "mybookshelf-20";
+const AMAZON_ASSOCIATE_TAG =
+  process.env.AMAZON_ASSOCIATE_TAG || "mybookshelf-20";
 
 class PriceUpdater {
   constructor() {
@@ -157,7 +161,7 @@ class PriceUpdater {
   async fetchAmazonPAAPI(asin) {
     try {
       console.log(`   🔍 Trying Amazon PA API for ASIN: ${asin}`);
-      
+
       // TODO: Implement real Amazon PA API
       // This would use the Amazon Product Advertising API
       // For now, return null to indicate no real pricing
@@ -183,10 +187,10 @@ class PriceUpdater {
   async scrapeAmazonPrice(asin) {
     try {
       console.log(`   🔍 Using Amazon scraper for ASIN: ${asin}`);
-      
+
       // Use the real Amazon scraper
       const result = await this.amazonScraper.scrapePrice(asin);
-      
+
       if (result.price) {
         console.log(`   ✅ Scraped price: $${result.price} for ${asin}`);
         return result;
@@ -331,7 +335,10 @@ class PriceUpdater {
       await this.processItems(items);
 
       this.stats.endTime = Date.now();
-      const duration = ((this.stats.endTime - this.stats.startTime) / 1000).toFixed(2);
+      const duration = (
+        (this.stats.endTime - this.stats.startTime) /
+        1000
+      ).toFixed(2);
 
       console.log("\n📊 Update Complete!");
       console.log("=" * 30);
@@ -380,4 +387,4 @@ export default async function handler(req, res) {
       message: error.message,
     });
   }
-} 
+}

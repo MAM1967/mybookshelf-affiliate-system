@@ -1,0 +1,97 @@
+name: Price Update Backup (Every 6 Hours)
+
+on:
+  schedule:
+    - cron: "0 */6 * * *" # Every 6 hours
+  workflow_dispatch: # Allow manual triggers
+  push:
+    branches: [main]
+    paths: ['.github/workflows/price-updater-backup.yml']
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  price-update-backup:
+    runs-on: ubuntu-latest
+    name: Backup Price Update
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check if daily update ran recently
+        id: check-recent
+        run: |
+          echo "🔍 Checking if daily update ran recently..."
+          
+          # Check if we're within 12 hours of the last successful run
+          # This prevents duplicate runs if the daily workflow is working
+          last_run_file="last_daily_run.txt"
+          
+          if [ -f "$last_run_file" ]; then
+            last_run=$(cat "$last_run_file")
+            current_time=$(date +%s)
+            time_diff=$((current_time - last_run))
+            hours_diff=$((time_diff / 3600))
+            
+            echo "Last daily run was $hours_diff hours ago"
+            
+            if [ $hours_diff -lt 12 ]; then
+              echo "✅ Daily update ran recently, skipping backup"
+              echo "skip=true" >> $GITHUB_OUTPUT
+            else
+              echo "⚠️ No recent daily update, running backup"
+              echo "skip=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "⚠️ No record of recent daily update, running backup"
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Trigger Backup Price Update
+        if: steps.check-recent.outputs.skip != 'true'
+        run: |
+          echo "🚀 Triggering backup price update..."
+          echo "⏰ Started at: $(date -u)"
+
+          # Make the API call to our single consolidated endpoint
+          response=$(curl -s -w "\nHTTP_STATUS:%{http_code}\nTIME:%{time_total}s" \
+            -X GET "https://mybookshelf-affiliate-system.vercel.app/api/price-updater" \
+            -H "User-Agent: github-actions-backup/1.0" \
+            -H "Accept: application/json" \
+            --max-time 300)  # 5 minute timeout
+
+          # Extract response and status
+          http_status=$(echo "$response" | grep "HTTP_STATUS:" | cut -d: -f2)
+          response_time=$(echo "$response" | grep "TIME:" | cut -d: -f2)
+          response_body=$(echo "$response" | sed '/HTTP_STATUS:/d' | sed '/TIME:/d')
+
+          echo "📊 Response Status: $http_status"
+          echo "⏱️ Response Time: ${response_time}s"
+          echo "📄 Response Body: $response_body"
+
+          # Check if the request was successful
+          if [ "$http_status" = "200" ]; then
+            echo "✅ Backup price update triggered successfully"
+            # Record this as a successful run
+            date +%s > last_daily_run.txt
+          else
+            echo "❌ Backup price update failed with status: $http_status"
+            echo "📄 Full response: $response_body"
+            exit 1
+          fi
+
+      - name: Skip backup (daily update ran recently)
+        if: steps.check-recent.outputs.skip == 'true'
+        run: |
+          echo "⏭️ Skipping backup - daily update ran recently"
+          echo "✅ System is healthy, no backup needed"
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Backup price update failed!"
+          echo "Check the logs above for details."
+          echo "Manual trigger available at: https://github.com/${{ github.repository }}/actions"

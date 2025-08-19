@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: "0 1 * * *" # 1 AM UTC daily
   workflow_dispatch: # Allow manual triggers
+  push:
+    branches: [main]
+    paths: ['.github/workflows/price-updater.yml']
 
 permissions:
   contents: read
@@ -22,7 +25,7 @@ jobs:
         run: |
           echo "🚀 Triggering daily price update..."
           echo "⏰ Started at: $(date -u)"
-          
+
           # Make the API call to our single consolidated endpoint
           response=$(curl -s -w "\nHTTP_STATUS:%{http_code}\nTIME:%{time_total}s" \
             -X GET "https://mybookshelf-affiliate-system.vercel.app/api/price-updater" \
