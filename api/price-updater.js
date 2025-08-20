@@ -34,14 +34,13 @@ class PriceUpdater {
     try {
       console.log("🔍 Fetching items for price update...");
 
-      // Get items that need updates - prioritize error and out_of_stock items
+      // Get items that need updates - include all items, not just error/out_of_stock
       const { data: items, error } = await supabase
         .from("books_accessories")
         .select(
           "id, title, affiliate_link, price, price_status, last_price_check, price_fetch_attempts"
         )
-        .or("price_status.eq.error,price_status.eq.out_of_stock")
-        .limit(20); // Process more items
+        .limit(50); // Process more items to ensure we get a good sample
 
       if (error) throw error;
 
@@ -61,17 +60,19 @@ class PriceUpdater {
           shouldUpdate = true;
           reason = `Status: ${item.price_status}`;
         } else {
-          // For other items, check time
+          // For other items, check time - use a longer cutoff for daily updates
+          const dailyCutoff = new Date(Date.now() - 24 * 60 * 60 * 1000); // 24 hours
+          
           if (!item.last_price_check || item.last_price_check === null) {
             shouldUpdate = true;
             reason = "No last_price_check";
           } else {
             const lastCheck = new Date(item.last_price_check);
-            if (isNaN(lastCheck.getTime()) || lastCheck < cutoffTime) {
+            if (isNaN(lastCheck.getTime()) || lastCheck < dailyCutoff) {
               shouldUpdate = true;
               reason = isNaN(lastCheck.getTime())
                 ? "Invalid date"
-                : "Older than cutoff";
+                : "Older than 24 hours";
             }
           }
         }
@@ -224,6 +225,7 @@ class PriceUpdater {
         price: newPrice,
         price_status: priceData.inStock ? "in_stock" : "out_of_stock",
         last_price_check: new Date().toISOString(),
+        price_updated_at: new Date().toISOString(), // Add this to update the timestamp
         price_fetch_attempts: 0, // Reset attempts on success
         validation_notes: `Updated via Amazon API - ${priceData.source}`,
       };
